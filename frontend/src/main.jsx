@@ -6,7 +6,6 @@ import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import Login from './components/Login/login.jsx'
 import Signup from './components/Signup/Signup.jsx'
-import Achievement from './components/Achievement/Achievement.jsx'
 import Transactions from './components/Trasnsaction/Transaction.jsx'
 
 // create a router
@@ -32,8 +31,8 @@ const router = createBrowserRouter([
         element: <Signup />
       },
       {
-        path: "achievements",
-        element: <Achievement />
+        path: "Home",
+        element: <Home />
       }
     ]
   }

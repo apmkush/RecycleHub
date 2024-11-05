@@ -39,7 +39,7 @@ function Navbar() {
 
         {/* Navigation Links */}
         <nav className={`flex-1 flex justify-center ${isLoggedIn ? 'space-x-12' : 'space-x-10'} lg:space-x-16`}>
-          <Link to="/dashboard" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
+          <Link to="/Home" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaHome className="mr-1" /> Home
           </Link>
           <Link to="/planner" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">

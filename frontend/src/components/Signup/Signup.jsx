@@ -63,7 +63,7 @@ const Signup = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold text-center text-blue-600">Sign Up for VidyaSetu</h2>
+        <h2 className="text-2xl font-bold text-center text-blue-600">Sign Up for Recycle Hub</h2>
         {message && <p className="text-red-500 text-sm text-center">{message}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
