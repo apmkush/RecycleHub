@@ -28,7 +28,51 @@ const userSchema=new mongoose.Schema({
     },
 });
 
+const rateSchema=new mongoose.Schema({
+    name:{
+        type:String,
+        require:true    
+    },
+    rate:{
+        type:Number,
+        require:true
+    },
+});
+
+const pickupScheduleSchema = new mongoose.Schema({
+  item: {
+    type: String, 
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  pickupDate: {
+    type: Date,
+    required: true,
+  },
+  pincode: {
+    type: Number,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['scheduled', 'picked up', 'canceled'],
+    default: 'scheduled',
+  },
+  notes: {
+    type: String,
+    default: '',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 const UserModel=mongoose.model("User",userSchema);
+const RateModel=mongoose.model("Rate",userSchema);
+const PickupModel=mongoose.model("Pickup",userSchema);
 
-export{UserModel};
+export{UserModel,RateModel,PickupModel};
