@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "RecycleHub connects customers with local scrap dealers, providing a convenient and transparent platform for recycling. Schedule pickups, track your scrap's journey, and earn rewards for your eco-friendly actions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "anupam",
+  "license": "ISC"
+}
