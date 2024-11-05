@@ -61,9 +61,9 @@ const pickupScheduleSchema = new mongoose.Schema({
     enum: ['scheduled', 'picked up', 'canceled'],
     default: 'scheduled',
   },
-  notes: {
-    type: String,
-    default: '',
+  phone: {
+    type: Number,
+    required: true,
   },
   createdAt: {
     type: Date,
