@@ -11,7 +11,7 @@ function Footer() {
           {/* Footer Section 1 */}
           <div className="flex flex-col items-center">
               <h1 className="text-3xl font-bold text-white">Recycle Hub</h1>
-              <p className="text-md text-gray-300 mt-1">Guiding Every Step to Success</p>
+              <p className="text-md text-gray-300 mt-1">Recycle, Earn, Repeat</p>
 
               <div className="mt-4">
                 <h4 className="text-white font-semibold text-xl mb-2">Social Media</h4>
@@ -20,7 +20,6 @@ function Footer() {
                   <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faTwitter} /></a>
                   <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faPinterest} /></a>
                   <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faInstagram} /></a>
-                  <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faLinkedin} /></a>
                 </div>
 
               </div>
