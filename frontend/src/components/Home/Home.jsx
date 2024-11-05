@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Hero() {
+function Home() {
   return (
     <section className="bg-blue-100 py-20 min-h-screen"> // Add min-h-screen class
       <div className="container mx-auto px-4 text-center">
@@ -14,4 +14,4 @@ function Hero() {
   );
 }
 
-export default Hero;
+export default Home;
