@@ -21,7 +21,7 @@ const SignupButton = ({isLoggedIn}) => {
                     Logout
                 </Link>
             </>
-          )} 
+          )}
         </div>
     ) ; 
 }

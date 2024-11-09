@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHome, FaTruck, FaReceipt, FaTags, FaUserCircle } from 'react-icons/fa';
+import { FaHome, FaTruck, FaReceipt, FaTags, FaUserCircle , FaEnvelopeOpenText } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import LogoImage from './logo.jpeg';
 import SignupButton from './SignupButton';
@@ -48,16 +48,20 @@ function Navbar() {
           <Link to="/Transactions" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaReceipt className="mr-1" /> Transactions
           </Link>
-          <Link to="/rewards" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
+          <Link to="/Pricing" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaTags className="mr-1" /> Pricing
           </Link>
           <Link to="/profile" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaUserCircle className="mr-1" /> Account
           </Link>
+          <Link to="/Request" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
+            <FaEnvelopeOpenText className="mr-1" /> Request
+          </Link>
         </nav>
 
         {/* Right Side - Dark Mode Toggle & Auth Options */}
-        <SignupButton isLoggedIn={isLoggedIn} />
+        <SignupButton isLoggedIn={isLoggedIn}
+        />
       </div>
     </header>
   );
