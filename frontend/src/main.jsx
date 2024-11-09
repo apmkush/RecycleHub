@@ -7,6 +7,7 @@ import Home from './components/Home/Home.jsx'
 import Login from './components/Login/login.jsx'
 import Signup from './components/Signup/Signup.jsx'
 import Transactions from './components/Trasnsaction/Transaction.jsx'
+import PickupForm from './components/Pickup/Pickup.jsx'
 
 // create a router
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "Home",
         element: <Home />
+      },
+      {
+        path: "Pickup",
+        element: <PickupForm />
       }
     ]
   }

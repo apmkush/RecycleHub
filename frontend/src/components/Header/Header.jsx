@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FaHome, FaTruck, FaReceipt, FaTags, FaUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import DarkMode from './DarkMode';
 import LogoImage from './logo.jpeg';
+import SignupButton from './SignupButton';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const savedStatus = sessionStorage.getItem('isLoggedIn');
-    return savedStatus === 'true';
+    return savedStatus === 'false';
   });
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function Navbar() {
           <Link to="/Home" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaHome className="mr-1" /> Home
           </Link>
-          <Link to="/planner" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
+          <Link to="/Pickup" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaTruck className="mr-1" /> Request Pickup
           </Link>
           <Link to="/Transactions" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
@@ -57,19 +57,7 @@ function Navbar() {
         </nav>
 
         {/* Right Side - Dark Mode Toggle & Auth Options */}
-        <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-          <DarkMode />
-          {!isLoggedIn && (
-            <>
-              <Link to="/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 shadow-md">
-                Login
-              </Link>
-              <Link to="/signup" className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 shadow-md">
-                Signup
-              </Link>
-            </>
-          )}
-        </div>
+        <SignupButton isLoggedIn={isLoggedIn} />
       </div>
     </header>
   );
