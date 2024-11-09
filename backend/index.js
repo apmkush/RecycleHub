@@ -10,7 +10,6 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 app.post("/sendSingup",async(req,res)=>{
     const data = {
         name:req.body.name,
