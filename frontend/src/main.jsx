@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: "Pricing",
-        element: <Pricing/>
+        element: <Pricing userRole={'admin'}/>
       }
     ]
   }
