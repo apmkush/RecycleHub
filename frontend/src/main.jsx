@@ -8,6 +8,8 @@ import Login from './components/Login/login.jsx'
 import Signup from './components/Signup/Signup.jsx'
 import Transactions from './components/Trasnsaction/Transaction.jsx'
 import PickupForm from './components/Pickup/Pickup.jsx'
+import Request from './components/Request/Request.jsx'
+import Pricing from './components/Pricing/Pricing.jsx' 
 
 // create a router
 const router = createBrowserRouter([
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path: "Pickup",
         element: <PickupForm />
+      },
+      {
+        path: "Request",
+        element: <Request />
+      },
+      {
+        path: "Pricing",
+        element: <Pricing/>
       }
     ]
   }

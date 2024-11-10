@@ -10,6 +10,7 @@ const PickupForm = () => {
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
+  const [image, setImage] = useState(null); // New state for image
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -23,7 +24,13 @@ const PickupForm = () => {
       weight,
       address,
       email,
+      image, // Include image in form data
     });
+  };
+
+  // Handle image selection
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]); // Set the selected image file
   };
 
   return (
@@ -62,7 +69,7 @@ const PickupForm = () => {
             <div>
               <label className="block text-blue-800 font-semibold mb-2">Pincode</label>
               <input
-                type="text"
+                type="number"
                 className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 placeholder="Enter area pincode"
                 value={pincode}
@@ -89,7 +96,7 @@ const PickupForm = () => {
 
             {/* Email (optional) */}
             <div>
-              <label className="block text-blue-800 font-semibold mb-2">Email (optional)</label>
+              <label className="block text-blue-800 font-semibold mb-2">Email</label>
               <input
                 type="email"
                 className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
@@ -102,7 +109,7 @@ const PickupForm = () => {
 
           {/* Weight and Address */}
           <div className="mb-8">
-            <label className="block text-blue-800 font-semibold mb-2">Weight (optional)</label>
+            <label className="block text-blue-800 font-semibold mb-2">Approximate Weight</label>
             <input
               type="number"
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
@@ -113,13 +120,24 @@ const PickupForm = () => {
           </div>
 
           <div className="mb-8">
-            <label className="block text-blue-800 font-semibold mb-2">Address (optional)</label>
+            <label className="block text-blue-800 font-semibold mb-2">Address </label>
             <textarea
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-              placeholder="Detailed address if needed"
+              placeholder="Address of pickup"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             ></textarea>
+          </div>
+
+          {/* Scrap Image */}
+          <div className="mb-8">
+            <label className="block text-blue-800 font-semibold mb-2">Scrap Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            />
           </div>
 
           {/* Description */}

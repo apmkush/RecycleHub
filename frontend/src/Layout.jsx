@@ -8,8 +8,8 @@ import { Outlet } from 'react-router-dom'   // => this helps to keep all compone
 export default function Layout() {
   return (
     <>
-       <Header/>
-        <Outlet/>
+      <Header/>
+      <Outlet/>
       <Footer/>
     </>
   )
