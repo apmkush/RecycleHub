@@ -1,4 +1,8 @@
 import React, { useState , useEffect } from 'react';
+import axios, { Axios } from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const PickupForm = ({itemValue = ''}) => {
   // State for each form field
@@ -10,35 +14,76 @@ const PickupForm = ({itemValue = ''}) => {
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(null); // New state for image
+  const [image, setImage] = useState(''); // New state for image
+  const navigate = useNavigate();
+
+  const  DisplayMessage=(text)=>{
+    toast.success(text, {
+        position: "top-center",
+        autoClose: 3000, // Auto-close after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {marginTop: "10px" },
+    });
+};
 
   useEffect(() => {
     setItem(itemValue);
   }, [itemValue]);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      item,
-      description,
-      pickupDate,
-      pincode,
-      contactNumber,
-      weight,
-      address,
-      email,
-      image, // Include image in form data
+
+    const formData = new FormData();
+    formData.append('item', item);
+    formData.append('description', description);
+    formData.append('pickupDate', pickupDate);
+    formData.append('pincode', pincode);
+    formData.append('contactNumber', contactNumber);
+    formData.append('weight', weight);
+    formData.append('address', address);
+    formData.append('email', email);
+    if (image) formData.append('image', image);
+
+    try {
+      const response=await axios.post('http://localhost:5000/addPickup',formData,{
+        headers:{
+            'Content-Type':'application/json'
+        }
     });
+    if(response.data.success){
+        DisplayMessage(response.data.message);
+
+    }else{
+        DisplayMessage(response.data.message, "error");
+    }
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   // Handle image selection
+  // Base 64 conversion
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Set the selected image file
+    var imgData = new FileReader();
+    imgData.readAsDataURL(e.target.files[0]);
+    imgData.onload = () => {
+      setImage(imgData.result);
+      console.log(imgData.result);
+    }
+    imgData.onerror = () => {
+      console.log("Error: ",Error);
+    }
   };
 
   return (
     <div className="flex justify-center pt-24 pb-12 bg-gradient-to-r from-blue-100 to-blue-200 min-h-screen">
+      <ToastContainer />
       <div className="w-full max-w-5xl p-10 lg:p-16 bg-white shadow-2xl rounded-lg border-t-4 border-blue-600">
         <h2 className="text-4xl font-bold mb-10 text-center text-blue-700">Scrap Pickup Form</h2>
         <form onSubmit={handleSubmit}>
@@ -142,7 +187,9 @@ const PickupForm = ({itemValue = ''}) => {
               onChange={handleImageChange}
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
+            {image==""||image==null?<p className="text-red-500">Please upload an image</p>:<img width={100} height={100} src={image} />}
           </div>
+          
 
           {/* Description */}
           <div className="mb-8">

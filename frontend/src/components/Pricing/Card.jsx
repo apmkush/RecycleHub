@@ -26,7 +26,7 @@ const Card = ({ id,image, price, material, userRole, description }) => {
       {/* Card */}
       <div className="w-32 bg-white rounded-lg shadow-lg p-3 border border-gray-300 shadow-gray-400 mx-auto">
         {/* Image section */}
-        <img src={imageTest} alt={material} className="w-full h-24 object-cover rounded-t-lg" />
+        <img src={image} alt={material} className="w-full h-24 object-cover rounded-t-lg" />
 
         {/* Card content */}
         <div className="mt-2">

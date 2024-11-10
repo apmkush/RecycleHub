@@ -20,5 +20,4 @@ const ScrapItemSchema = new mongoose.Schema({
 });
 
 const RateModel=mongoose.model("Rate",ScrapItemSchema);
-
-export  {RateModel};
+export {RateModel};

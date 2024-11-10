@@ -22,13 +22,6 @@ const userSchema=new mongoose.Schema({
         require:true,
         min:0
     },
-    auraPoints:{
-        type:Number,
-        default:0,
-    },
-    achievements:{
-        type: [String],
-    },
     dark:{
         type:Boolean,
         default:false,
