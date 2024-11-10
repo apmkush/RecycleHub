@@ -54,8 +54,8 @@ function Navbar() {
           <Link to="/profile" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
             <FaUserCircle className="mr-1" /> Account
           </Link>
-          <Link to="/Request" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
-            <FaEnvelopeOpenText className="mr-1" /> Request
+          <Link to="/Dashboard" className="flex items-center text-gray-600 dark:text-gray-300 font-semibold text-lg">
+            <FaEnvelopeOpenText className="mr-1" /> Dashboard
           </Link>
         </nav>
 
