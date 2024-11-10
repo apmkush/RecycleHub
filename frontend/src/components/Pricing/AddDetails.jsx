@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AddDetails = ({ setShowAddDetails }) => {
+const AddDetails = ({ setShowAddDetails , category }) => {
   const [image, setImage] = useState(null);
   const [scrapType, setScrapType] = useState('');
   const [price, setPrice] = useState('');

@@ -32,7 +32,6 @@ const Pricing = ({userRole}) => {
   
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <AddItem setShowAddDetails = {setShowAddDetails} />
       {Object.entries(groupedItems).map(([category, items], index) => (
         <section className="mb-8" key={index}>
           <h2 className="text-2xl font-semibold mb-4 text-center">{category}</h2>
@@ -48,19 +47,18 @@ const Pricing = ({userRole}) => {
               />
             ))}
             <AddItem setShowAddDetails = {setShowAddDetails} />
+            {showAddDetails && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <AddDetails 
+                  setShowAddDetails={setShowAddDetails}
+                  category = {category}
+                />
+              </div>
+            )}
           </div>
         </section>
       ))} 
-      {showAddDetails && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <AddDetails 
-            setShowAddDetails={setShowAddDetails}
-          />
-        </div>
-      )}
     </div>
-
-
   );
 };
 
