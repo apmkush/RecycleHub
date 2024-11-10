@@ -1,10 +1,13 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect , useState } from 'react';
 import axios, { Axios } from 'axios';;
 import Card from './Card';
+import AddItem from './AddItem';
+import AddDetails from './AddDetails';
 
 const Pricing = ({userRole}) => {
   const [scrapItems, setScrapItems] = React.useState([]);
+  const [showAddDetails, setShowAddDetails] = useState(false);
 
   useEffect(() => {
     const fetchScrapItems = async () => {
@@ -15,7 +18,7 @@ const Pricing = ({userRole}) => {
         console.error('Error fetching scrap items:', error);
       }
     };
-    fetchScrapItems();
+    fetchScrapItems();  
   }, []);
 
   const groupedItems = scrapItems.reduce((acc, item) => {
@@ -43,21 +46,21 @@ const Pricing = ({userRole}) => {
                 userRole={userRole}
               />
             ))}
+            <AddItem setShowAddDetails = {setShowAddDetails} />
+            {showAddDetails && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <AddDetails 
+                  setShowAddDetails={setShowAddDetails}
+                  category = {category}
+                />
+              </div>
+            )}
           </div>
         </section>
-      ))}
+      ))} 
     </div>
-
-
   );
 };
 
 export default Pricing;
 
-
-
-{/* <Card image = {'./images/NonRecyclable/Aluminium.png'} 
-                price = {10}
-                material={'Aluminium'}
-                userRole={'customer'}
-            />  */}

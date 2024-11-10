@@ -1,6 +1,6 @@
 import React from 'react';
 import GetStat from "./GetStat";
-import GetYearlyGraph from "./GetYearlyGraph";
+import GetYearlyGraph from "./GetYearlyGraph.jsx";
 
 const Dashboard = () => {
   const data = {
@@ -63,7 +63,7 @@ const Dashboard = () => {
   return (
     <div>
       <GetStat data={data} />
-      <GetYearlyGraph history={data.History} />
+      <GetYearlyGraph data={data} />
     </div>
   );
 };
