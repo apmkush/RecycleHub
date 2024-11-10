@@ -9,11 +9,12 @@ const Pricing = ({userRole}) => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-center">Non Recyclables</h2>
         <Card
-          image={'./images/NonRecyclable/Aluminium.png'}
+          image={'./images/NonRecyclable/Bottles.png'}
           price={10}
           scrapType={'Aluminium'}
           userRole={'admin'}
         />
+        
       </section>
 
       {/* Large Appliances Section */}

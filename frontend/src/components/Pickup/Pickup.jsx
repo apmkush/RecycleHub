@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 
-const PickupForm = () => {
+const PickupForm = ({itemValue = ''}) => {
   // State for each form field
-  const [item, setItem] = useState('');
+  const [item, setItem] = useState(itemValue);
   const [description, setDescription] = useState('');
   const [pickupDate, setPickupDate] = useState('');
   const [pincode, setPincode] = useState('');
@@ -11,6 +11,10 @@ const PickupForm = () => {
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(null); // New state for image
+
+  useEffect(() => {
+    setItem(itemValue);
+  }, [itemValue]);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -45,7 +49,7 @@ const PickupForm = () => {
               type="text"
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               placeholder="e.g., Metal, Plastic"
-              value={item}
+              value={item || ''}
               onChange={(e) => setItem(e.target.value)}
               required
             />
