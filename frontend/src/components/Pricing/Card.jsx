@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import imageTest from "./images/NonRecyclable/Aluminium.png";
 
-const ScrapCard = ({ image, price, scrapType, userRole, description }) => {
+const Card = ({ image, price, scrapType, userRole, description }) => {
   // State to handle price editing
   const [isEditing, setIsEditing] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
@@ -62,4 +62,4 @@ const ScrapCard = ({ image, price, scrapType, userRole, description }) => {
   );
 };
 
-export default ScrapCard;
+export default Card;
