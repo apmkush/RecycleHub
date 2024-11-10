@@ -5,7 +5,7 @@ import GetYearlyGraph from "./GetYearlyGraph";
 const Dashboard = () => {
   const data = {
     totalRevenue: 2100,
-    totalScrapsSold: 100,
+    totalScrapsSold: 99,
     totalRequests: 3,
     totalAwaitingPickup: 2,
     History: [

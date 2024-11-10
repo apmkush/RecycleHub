@@ -5,7 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 // Register the necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const GetYearlyGraph = ({ data }) => {
+const GetYearlyGraph = ({ data }) => { console.log(data) ; 
   const [history , setHistory] = useState(data.History || []);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [chartData, setChartData] = useState({
@@ -33,7 +33,7 @@ const GetYearlyGraph = ({ data }) => {
     const filteredData = history.filter(item => {
         console.log(item) ; 
         const year = new Date(item.date).getFullYear();
-        console.log(year);  // This will log the year for each transaction
+        // console.log(year);  // This will log the year for each transaction
         if(year == selectedYear){
             console.log(item) ; 
             return item ; 
