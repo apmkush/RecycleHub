@@ -109,7 +109,7 @@ const Dashboard = () => {
   }, [history, selectedYear, selectedMonth]);
 
   return (
-    <div className="p-5 bg-gray-150">
+    <div className="p-5 bg-gray-200">
       {/* Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-blue-100 p-6 rounded-lg shadow-xl text-center">

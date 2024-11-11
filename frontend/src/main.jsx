@@ -11,6 +11,7 @@ import PickupForm from './components/Pickup/Pickup.jsx'
 import Request from './components/Request/Request.jsx'
 import Pricing from './components/Pricing/Pricing.jsx' 
 import Dashboard from './components/Dashboard/Dashboard.jsx'
+import Account from './components/Account/Account.jsx'
 
 // create a router
 const router = createBrowserRouter([
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
         path: "Dashboard",
         element: <Dashboard/>
       },
+      {
+        path: "Account",
+        element: <Account />
+      }
     ]
   }
 ]);
