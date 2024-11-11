@@ -69,9 +69,7 @@ function Account() {
             >
               <FiMenu size={24} />
             </button>
-            <h1 className="text-xl font-semibold">Account Section</h1>
           </div>
-          <div className="text-teal-700"> {/* Placeholder for account icon */}</div>
         </header>
 
         {/* Content Area - Define Routes here */}
