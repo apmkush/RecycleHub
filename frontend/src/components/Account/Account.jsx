@@ -3,7 +3,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { FiUser, FiLock, FiLogOut, FiMenu } from 'react-icons/fi';
 import { HiOutlineClock } from 'react-icons/hi';
 import Home from '../Home/Home.jsx'
-import App from '../Profile/Profile.jsx';
+import MyProfile from '../Profile/Profile.jsx';
 
 // Placeholder components for each page section
 function Profile() {
@@ -76,9 +76,9 @@ function Account() {
         {/* Content Area - Define Routes here */}
         <main className="flex-1 p-4 bg-gray-50">
           <Routes>
-            <Route path="Profile" element={<App />} />
+            <Route path="Profile" element={<MyProfile/>} />
             <Route path="request-history" element={<RequestHistory />} />
-            <Route path="privacy-history" element={<PrivacySetting />} />
+            <Route path="privacy-Setting" element={<PrivacySetting />} />
             <Route path="/logout" element={<Home />} />
           </Routes>
         </main>

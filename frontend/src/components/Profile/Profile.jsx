@@ -1,90 +1,137 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-// Profile component that takes props for user type and details
-const Profile = ({ userType, userDetails, profilePicture }) => {
+function MyProfile({ user = {} }) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const defaultUser = {
+    name: 'John Doe',
+    email: 'johndoe@example.com',
+    contact: '123-456-7890',
+    address: '123 Main Street, City, Country',
+    profilePicture: 'https://via.placeholder.com/150'
+  };
+
+  // Merge `user` with `defaultUser` to fill in missing data
+  const initialData = { ...defaultUser, ...user };
+  const [profileData, setProfileData] = useState(initialData);
+  const [editData, setEditData] = useState(initialData);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({ ...editData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setProfileData(editData);
+    setIsEditing(false);
+  };
+
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      {/* Profile Header */}
-      <div className="flex items-center space-x-4 mb-6">
-        <img
-          src={profilePicture}
-          alt="Profile"
-          className="w-24 h-24 rounded-full object-cover border border-gray-300"
-        />
-        <div>
-          <h1 className="text-2xl font-bold">{userDetails.name}</h1>
-          <p className="text-gray-600">{userDetails.email}</p>
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* Profile Card */}
+      <div className="bg-white shadow-lg rounded-lg p-6 relative">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">My Profile</h2>
+          <button
+            className="text-teal-600 border border-teal-600 px-4 py-2 rounded hover:bg-teal-600 hover:text-white transition"
+            onClick={handleEditClick}
+          >
+            Edit Profile
+          </button>
+        </div>
+        <div className="space-y-4">
+          <div className="flex items-center">
+            <img
+              src={profileData.profilePicture}
+              alt="Profile"
+              className="w-24 h-24 rounded-full mr-4"
+            />
+            <div>
+              <p className="text-lg font-semibold">{profileData.name}</p>
+              <p className="text-gray-600">{profileData.email}</p>
+              <p className="text-gray-600">{profileData.contact}</p>
+              <p className="text-gray-600">{profileData.address}</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Common Profile Details */}
-      <div className="mb-4">
-        <p><span className="font-semibold">Contact Number:</span> {userDetails.contactNumber}</p>
-        {userType === 'customer' && (
-          <p><span className="font-semibold">Home Address/Preferred Pickup Location:</span> {userDetails.address}</p>
-        )}
-      </div>
-
-      {/* User-Specific Details */}
-      {userType === 'dealer' && (
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Operational Details</h2>
-          <p><span className="font-semibold">Operational Areas:</span> {userDetails.operationalAreas.join(', ')}</p>
-          <p><span className="font-semibold">Dealer License Number:</span> {userDetails.licenseNumber}</p>
-          <p><span className="font-semibold">Certifications:</span> {userDetails.certifications.join(', ')}</p>
-        </div>
-      )}
-
-      {userType === 'admin' && (
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Admin Settings</h2>
-          <p><span className="font-semibold">Notification Management:</span> {userDetails.notificationManagement}</p>
+      {/* Edit Profile Overlay */}
+      {isEditing && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={editData.name}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={editData.email}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="contact">Contact Number</label>
+                <input
+                  type="text"
+                  id="contact"
+                  name="contact"
+                  value={editData.contact}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={editData.address}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 p-2 rounded"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  className="text-gray-600 mr-4"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
   );
-};
+}
 
-// Sample props for demonstration purposes
-const sampleCustomer = {
-  name: 'John Doe',
-  contactNumber: '123-456-7890',
-  email: 'john.doe@example.com',
-  address: '123 Main St, Anytown, USA',
-};
-
-const sampleDealer = {
-  name: 'Jane Smith',
-  contactNumber: '987-654-3210',
-  email: 'jane.smith@example.com',
-  operationalAreas: ['Area 1', 'Area 2'],
-  licenseNumber: 'DL-12345',
-  certifications: ['Certification A', 'Certification B'],
-};
-
-const sampleAdmin = {
-  name: 'Admin User',
-  contactNumber: '555-000-1234',
-  email: 'admin.user@example.com',
-  notificationManagement: 'Enabled',
-};
-
-// Main function to render based on user type
-const App = () => {
-  // Change this variable to 'customer', 'dealer', or 'admin' for testing
-  const userType = 'customer'; 
-  const profilePicture = 'https://via.placeholder.com/150'; // Replace with actual URL
-
-  let userDetails;
-  if (userType === 'customer') {
-    userDetails = sampleCustomer;
-  } else if (userType === 'dealer') {
-    userDetails = sampleDealer;
-  } else if (userType === 'admin') {
-    userDetails = sampleAdmin;
-  }
-
-  return <Profile userType={userType} userDetails={userDetails} profilePicture={profilePicture} />;
-};
-
-export default App;
+export default MyProfile;
