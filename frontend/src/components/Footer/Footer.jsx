@@ -5,7 +5,7 @@ import { faFacebook, faTwitter, faPinterest, faInstagram, faLinkedin } from '@fo
 
 function Footer() {
   return (
-    <footer className="bg-gray-800 text-gray-300 py-8">
+    <footer className="bg-brandDark text-gray-300 py-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Footer Section 1 */}

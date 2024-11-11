@@ -12,29 +12,29 @@ function Navbar() {
   };
 
   return (
-    <header className="bg-white shadow-lg py-4 dark:bg-gray-800">
-      <div className="container mx-auto flex justify-between items-center px-4">
+    <header className="bg-brandDark shadow-lg py-4 dark:bg-gray-800 text-white">
+      <div className=" container mx-auto flex justify-between items-center px-4">
         {/* Logo and Brand */}
         <div className="flex items-center space-x-3"> 
           <img src={LogoImage} alt="Logo" className="h-10 w-10" />
-          <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">Recycle Hub</span>
+          <span className="text-3xl font-bold text-white dark:text-gray-200">Recycle Hub</span>
         </div>
 
         {/* Desktop Links */}
         <nav className="hidden lg:flex space-x-10">
-          <Link to="/Home" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Home" className="text-white dark:text-white hover:text-white dark:hover:text-white font-semibold text-lg flex items-center">
             <FaHome className="mr-2" /> Home
           </Link>
-          <Link to="/Pickup" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Pickup" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTruck className="mr-2" /> Request Pickup
           </Link>
-          <Link to="/Transactions" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Transactions" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaMoneyCheck className="mr-2" /> Transactions
           </Link>
-          <Link to="/Pricing" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Pricing" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTag className="mr-2" /> Pricing
           </Link>
-          <Link to="/Dashboard" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Dashboard" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTachometerAlt className="mr-2" /> Dashboard
           </Link>
           <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
@@ -44,7 +44,7 @@ function Navbar() {
               <FaCartPlus  className="mr-2" /> Cart
             </Link>
           {isLoggedIn && (
-            <Link to="/Account" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Account" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaUser className="mr-2" /> Account
             </Link>
           )}
