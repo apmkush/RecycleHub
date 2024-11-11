@@ -12,6 +12,7 @@ import Request from './components/Request/Request.jsx'
 import Pricing from './components/Pricing/Pricing.jsx' 
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import Account from './components/Account/Account.jsx'
+import Payment from './components/Payment/payment.jsx'
 
 // create a router
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "Account",
         element: <Account />
+      },
+      {
+        path: "payment",
+        element: <Payment />
       }
     ]
   }
