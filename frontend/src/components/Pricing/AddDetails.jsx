@@ -1,27 +1,64 @@
 import React, { useState } from 'react';
+import axios, { Axios } from 'axios';
 
-const AddDetails = ({ setShowAddDetails , category }) => {
+const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
   const [image, setImage] = useState(null);
-  const [scrapType, setScrapType] = useState('');
-  const [price, setPrice] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const [formInput,setFormInput]=useState({
+    price:"",
+    material:"",
+    category:category,
+    image:"",
+});
+
+  const handleInput=(event)=>{
+    const{name,value}=event.target;
+
+    let obj={[name]:value};
+
+    setFormInput((prev)=>({...prev,...obj}));
+  };
+
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    
-    if (!image || !scrapType || !price) {
+    console.log(formInput.category);
+    if (formInput.price==""||formInput.material=="") {
       setError('Please fill out all fields.');
       return;
     }
-    
+    try {
+      const response=await axios.post('http://localhost:5000/addItem',formInput,{
+        headers:{
+            'Content-Type':'application/json'
+        }
+    });
+    if(response.data.success){
+      console.log('Item added:', response.data);
+      refreshItems();
+    }
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
     setError('');
     // Handle the form submission logic here (e.g., uploading the data)
     setShowAddDetails(false); // Close the form after successful submission
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
+    var imgData = new FileReader();
+    imgData.readAsDataURL(e.target.files[0]);
+    imgData.onload = () => {
+      let obj = { image: imgData.result };
+
+      setFormInput((prev)=>({...prev,...obj}));
+      // setImage(imgData.result);
+      console.log(imgData.result);
+      console.log(obj);
+    }
+    imgData.onerror = () => {
+      console.log("Error: ",Error);
+    }
   };
 
   return (
@@ -40,11 +77,11 @@ const AddDetails = ({ setShowAddDetails , category }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Scrap Type</label>
+          <label className="block text-sm font-medium text-gray-700">Item</label>
           <input
             type="text"
-            value={scrapType}
-            onChange={(e) => setScrapType(e.target.value)}
+            name="material"
+            onChange={handleInput}
             className="w-full p-2 border border-gray-300 rounded mt-1"
             placeholder="Enter scrap type"
           />
@@ -53,8 +90,8 @@ const AddDetails = ({ setShowAddDetails , category }) => {
           <label className="block text-sm font-medium text-gray-700">Price</label>
           <input
             type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            name="price"
+            onChange={handleInput}
             className="w-full p-2 border border-gray-300 rounded mt-1"
             placeholder="Enter price"
           />
@@ -62,7 +99,7 @@ const AddDetails = ({ setShowAddDetails , category }) => {
         <div className="flex justify-end space-x-4 mt-4">
           <button 
             type="button" 
-            onClick={() => setShowAddDetails(false)} 
+            onClick={handleInput} 
             className="text-red-500 font-semibold"
           >
             Cancel

@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 
 const ScrapItemSchema = new mongoose.Schema({
-    image: {
-        type: String,
-        required: true,
-    },
     price: {
         type: Number,
         required: true,
@@ -14,6 +10,10 @@ const ScrapItemSchema = new mongoose.Schema({
         required: true,
     },
     category: {
+        type: String,
+        required: true,
+    },
+    image: {
         type: String,
         required: true,
     },

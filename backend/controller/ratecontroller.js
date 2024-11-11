@@ -24,3 +24,15 @@ export const editPrice=async(req,res)=>{
         res.json({ message: 'Failed to update price' });
   }
 }
+
+export const addItem = async (req, res) => {
+    const {price , image, material, category} = req.body;
+    try {
+        const newItem = await RateModel.create({ price, image, material, category });
+        console.log(newItem);
+        res.json({success: true, data: newItem});
+    } catch (err) {
+        console.log(err);
+        res.json({success: false, message: 'Failed to add item' });
+    }
+}

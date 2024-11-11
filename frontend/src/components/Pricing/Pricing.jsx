@@ -8,16 +8,18 @@ import AddDetails from './AddDetails';
 const Pricing = ({userRole}) => {
   const [scrapItems, setScrapItems] = React.useState([]);
   const [showAddDetails, setShowAddDetails] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const fetchScrapItems = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/getPrice');
+      setScrapItems(response.data);
+    } catch (error) {
+      console.error('Error fetching scrap items:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchScrapItems = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/getPrice');
-        setScrapItems(response.data);
-      } catch (error) {
-        console.error('Error fetching scrap items:', error);
-      }
-    };
     fetchScrapItems();  
   }, []);
 
@@ -29,6 +31,10 @@ const Pricing = ({userRole}) => {
     return acc;
   }, {});
 
+  const handleAddItemClick = (category) => {
+    setSelectedCategory(category);
+    setShowAddDetails(true);
+  };
   
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
@@ -46,12 +52,13 @@ const Pricing = ({userRole}) => {
                 userRole={userRole}
               />
             ))}
-            <AddItem setShowAddDetails = {setShowAddDetails} />
-            {showAddDetails && (
+            <AddItem setShowAddDetails = {setShowAddDetails} setSelectedCategory = {setSelectedCategory} category={category}/>
+            {showAddDetails && selectedCategory && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <AddDetails 
                   setShowAddDetails={setShowAddDetails}
-                  category = {category}
+                  category = {selectedCategory}
+                  refreshItems={fetchScrapItems}
                 />
               </div>
             )}

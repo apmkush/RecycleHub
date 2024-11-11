@@ -10,7 +10,7 @@ const Signup = () => {
   const [formInput,setFormInput]=useState({
       name:"",
       email:"",
-      tel:"",
+      phone:"",
       password:"",
       confirm_password:"",
   });
@@ -26,7 +26,7 @@ const Signup = () => {
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
-    if(formInput.name==""||formInput.email==""||formInput.password==""||formInput.tel==""||formInput.confirm_password==""){
+    if(formInput.name==""||formInput.email==""||formInput.password==""||formInput.phone==""||formInput.confirm_password==""){
         toast.error("Please fill all credentials");
     }
     else try{
@@ -91,8 +91,8 @@ const Signup = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700">Tel</label>
             <input
-              type="text"
-              name="tel"
+              type="Number"
+              name="phone"
               onChange={handleInput}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your mobile number"
