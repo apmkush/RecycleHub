@@ -48,7 +48,7 @@ function Account() {
           </Link>
           <Link to="privacy-history" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiLock />
-            <span>Privacy and History</span>
+            <span>Privacy and Setting</span>
           </Link>
           <Link to="/logout" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiLogOut />

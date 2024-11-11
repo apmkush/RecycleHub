@@ -8,7 +8,7 @@ import Login from './components/Login/login.jsx'
 import Signup from './components/Signup/Signup.jsx'
 import Transactions from './components/Trasnsaction/Transaction.jsx'
 import PickupForm from './components/Pickup/Pickup.jsx'
-import Request from './components/Request/Request.jsx'
+import Requests from './components/Request/Requests.jsx'
 import Pricing from './components/Pricing/Pricing.jsx' 
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import Account from './components/Account/Account.jsx'
@@ -58,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "Account",
         element: <Account />
+      },
+      {
+        path: "Requests",
+        element: <Requests />
       }
     ]
   }

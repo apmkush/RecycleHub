@@ -32,6 +32,8 @@ const Dashboard = () => {
         totalAwaitingPickup: 2,
         History: [
           { transactionId: 'T0001', date: '2022-12-12', status: 'sold' },
+          { transactionId: 'T0002', date: '2022-2-12', status: 'sold' },
+          { transactionId: 'T0003', date: '2022-12-12', status: 'sold' },
           { transactionId: 'T0002', date: '2023-12-13', status: 'awaiting pickup' },
           // More transactions here...
         ],

@@ -37,6 +37,9 @@ function Navbar() {
           <Link to="/Dashboard" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTachometerAlt className="mr-2" /> Dashboard
           </Link>
+          <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <FaTachometerAlt className="mr-2" /> Requests
+          </Link>
           {isLoggedIn && (
             <Link to="/Account" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaUser className="mr-2" /> Account
@@ -75,6 +78,9 @@ function Navbar() {
             </Link>
             <Link to="/Dashboard" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaTachometerAlt className="mr-2" /> Dashboard
+            </Link>
+            <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+              <FaTachometerAlt className="mr-2" /> Requests
             </Link>
             {isLoggedIn && (
               <Link to="/Account" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
