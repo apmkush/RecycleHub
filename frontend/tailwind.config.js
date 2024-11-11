@@ -7,6 +7,13 @@ export default {
   ],
   theme: {
     extend: {
+
+      colors: {
+        primary: "#854d3d",
+        secondary: "#4a1e1b",
+        brandDark: "#270c03",
+      },
+
       animation: {
         'color-change-green': 'colorChangeGreen 5s ease-in-out infinite',
         'color-change-red': 'colorChangeRed 5s ease-in-out infinite',

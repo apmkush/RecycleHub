@@ -29,7 +29,7 @@ function ImageCarousel() {
   }, []);
 
   return (
-    <div className="w-full h-full overflow-hidden rounded-lg shadow-lg mx-auto">
+    <div className=" w-full h-full overflow-hidden rounded-lg shadow-lg mx-auto">
       <img
         src={images[currentIndex]}
         alt="Slideshow"
@@ -41,13 +41,13 @@ function ImageCarousel() {
 
 const Top = () => {
   return (
-    <div className="w-full bg-gray-100 flex items-center justify-center py-10 md:py-20">
-      <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-lg shadow-lg">
+    <div className="w-full bg-brandDark flex items-center justify-center py-10 md:py-20">
+      <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center bg-brandDark text-white p-6 rounded-lg shadow-lg">
         <div className="md:w-1/2 p-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl font-bold text-primary mb-4">
             RecycleHub: The Global Platform for Buying and Selling Scrap Metals
           </h2>
-          <p className="text-gray-700 text-lg">
+          <p className="text-gray-700 text-white">
             RecycleHub simplifies the buying and selling of scrap and recyclable metals across more than 100 countries. Our platform
             provides a secure environment where businesses can verify materials, secure advance payments, and manage logistics without
             travel or language barriers. Find, negotiate, and connect with verified companies in the industry for the materials you need,
@@ -64,8 +64,8 @@ const Top = () => {
 
 const HowItWorks = () => {
   return (
-    <div className="bg-gray-100 py-10 px-6 rounded-lg shadow-lg text-center">
-      <h2 className="text-3xl font-semibold mb-8 text-gray-800">How It Works</h2>
+    <div className="bg-brandDark py-10 px-6 rounded-lg shadow-lg text-center">
+      <h2 className="text-3xl font-semibold mb-8 text-white">How It Works</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
           <img src={scheduleImage} alt="Schedule Pickup" className="w-[75%] h-30 mx-auto mb-4" />
@@ -89,8 +89,8 @@ const HowItWorks = () => {
 
 const WhyUs = () => {
   return (
-    <div className="bg-red-50 py-10 px-6 rounded-lg shadow-lg text-center">
-      <h2 className="text-3xl font-semibold mb-8 text-gray-800">Why Us</h2>
+    <div className="bg-brandDark py-10 px-6 rounded-lg shadow-lg text-center">
+      <h2 className="text-3xl  font-semibold mb-8 text-white">Why Us</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
           <img src={weight} alt="Accurate Weight" className="w-[60%] h-22 mx-auto mb-4" />
@@ -114,7 +114,7 @@ const WhyUs = () => {
 
 const Home = () => {
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 bg-brandDark " >
       <Top />
       <HowItWorks />
       <WhyUs />
