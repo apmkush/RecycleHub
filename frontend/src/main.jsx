@@ -12,6 +12,7 @@ import Requests from './components/Request/Requests.jsx'
 import Pricing from './components/Pricing/Pricing.jsx' 
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import Account from './components/Account/Account.jsx'
+import Cart from './components/Cart/Cart.jsx'
 import App from './components/Profile/Profile.jsx'
 
 // create a router
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "Requests",
         element: <Requests />
+      },
+      {
+        path: "Cart",
+        element: <Cart />
       }
     ]
   }
