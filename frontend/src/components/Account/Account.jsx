@@ -3,6 +3,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { FiUser, FiLock, FiLogOut, FiMenu } from 'react-icons/fi';
 import { HiOutlineClock } from 'react-icons/hi';
 import Home from '../Home/Home.jsx'
+import App from '../Profile/Profile.jsx';
 
 // Placeholder components for each page section
 function Profile() {
@@ -13,7 +14,7 @@ function RequestHistory() {
   return <div>Request History Content</div>;
 }
 
-function PrivacyHistory() {
+function PrivacySetting() {
   return <div>Privacy and History Content</div>;
 }
 
@@ -38,7 +39,7 @@ function Account() {
       >
         <h2 className="text-2xl font-semibold mb-6">Account Portal</h2>
         <nav className="flex flex-col gap-4">
-          <Link to="profile" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
+          <Link to="Profile" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiUser />
             <span>My Profile</span>
           </Link>
@@ -48,7 +49,7 @@ function Account() {
           </Link>
           <Link to="privacy-history" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiLock />
-            <span>Privacy and History</span>
+            <span>Privacy and Setting</span>
           </Link>
           <Link to="/logout" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiLogOut />
@@ -75,9 +76,9 @@ function Account() {
         {/* Content Area - Define Routes here */}
         <main className="flex-1 p-4 bg-gray-50">
           <Routes>
-            <Route path="profile" element={<Profile />} />
+            <Route path="Profile" element={<App />} />
             <Route path="request-history" element={<RequestHistory />} />
-            <Route path="privacy-history" element={<PrivacyHistory />} />
+            <Route path="privacy-history" element={<PrivacySetting />} />
             <Route path="/logout" element={<Home />} />
           </Routes>
         </main>
