@@ -12,6 +12,7 @@ import Requests from './components/Request/Requests.jsx'
 import Pricing from './components/Pricing/Pricing.jsx' 
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import Account from './components/Account/Account.jsx'
+import Payment from './components/Payment/payment.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import App from './components/Profile/Profile.jsx'
 
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "Account/*",
         element: <Account />
+      },
+      {
+        path: "payment",
+        element: <Payment />
       },
       {
         path: "Requests",
