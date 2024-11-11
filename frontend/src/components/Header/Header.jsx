@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt , FaEnvelopeOpenText , FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
 
 function Navbar() {
@@ -37,6 +37,12 @@ function Navbar() {
           <Link to="/Dashboard" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTachometerAlt className="mr-2" /> Dashboard
           </Link>
+          <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <FaEnvelopeOpenText  className="mr-2" /> Requests
+          </Link>
+          <Link to="/Cart" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+              <FaCartPlus  className="mr-2" /> Cart
+            </Link>
           {isLoggedIn && (
             <Link to="/Account" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaUser className="mr-2" /> Account
@@ -75,6 +81,12 @@ function Navbar() {
             </Link>
             <Link to="/Dashboard" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaTachometerAlt className="mr-2" /> Dashboard
+            </Link>
+            <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+              <FaEnvelopeOpenText  className="mr-2" /> Requests
+            </Link>
+            <Link to="/Cart" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+              <FaCartPlus  className="mr-2" /> Cart
             </Link>
             {isLoggedIn && (
               <Link to="/Account" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
