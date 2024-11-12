@@ -6,7 +6,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   // State to handle price editing
   const [isEditing, setIsEditing] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
-  const [isVisible, setIsVisible] = useState(true);                    //  ------------------                // jaise hi ye false ho to isko database se nikal do 
+  const [isVisible, setIsVisible] = useState(true);               // jaise hi ye false ho to isko database se nikal do 
 
   // Function to toggle edit mode
   const toggleEdit = () => setIsEditing(!isEditing);
@@ -23,6 +23,14 @@ const Card = ({ id, image, price, material, userRole, description }) => {
       console.error('Error updating price:', error);
     }
   };
+  const deleteCard = async () => {
+    try {
+      await axios.put(`http://localhost:5000/deleteItem/${id}`); 
+      setIsVisible(false); 
+    } catch (error) {
+      console.error('Error deleting card:', error);
+    }
+  };
 
   // Return null if isVisible is false to hide the card
   if (!isVisible) return null;
@@ -34,7 +42,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
         {/* Cross icon for admin to hide card */}
         {userRole === 'admin' && (
           <button
-            onClick={() => setIsVisible(false)} // Set isVisible to false when clicked
+            onClick={deleteCard} // Set isVisible to false when clicked
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           >
             &times;
