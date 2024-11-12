@@ -15,7 +15,7 @@ import Account from './components/Account/Account.jsx'
 import Payment from './components/Payment/payment.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import PayoutForm from './components/Payment/payout.jsx'
-import App from './components/Profile/Profile.jsx'
+import App, { UserProvider } from './App';
 
 // create a router
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: "Home",
         element: <Home />
       },
       {
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: "Pricing",
-        element: <Pricing userRole={'admin'}/>
+        element: <Pricing />
       },
       {
         path: "Dashboard",
@@ -85,6 +85,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+    <UserProvider> {/* Wrap with UserProvider to provide context */}
+      <RouterProvider router={router} />
+    </UserProvider>
+  </React.StrictMode>
+);

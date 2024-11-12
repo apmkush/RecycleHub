@@ -1,16 +1,26 @@
-import React from 'react'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-import { Outlet } from 'react-router-dom'   // => this helps to keep all components (like-> header, footer, etc..) of webpage (fix)same i.e, uses this layout as base UI of webPage , and components inside outlet get changes in this webPage
-
-
+import React, { useContext, useEffect } from 'react';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { UserContext } from './App'; // Import the context
 
 export default function Layout() {
+  const { user, isAuthenticated } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/Home');
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <>
-      <Header/>
-      <Outlet/>
-      <Footer/>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
