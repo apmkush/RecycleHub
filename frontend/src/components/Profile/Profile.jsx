@@ -1,144 +1,166 @@
 import React, { useState } from 'react';
 
-function MyProfile({ user = {} }) {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const defaultUser = {
+const MyProfile = () => {
+  // Initial user data with profile image, name, age, and email
+  const [user, setUser] = useState({
     name: 'John Doe',
     email: 'johndoe@example.com',
-    contact: '123-456-7890',
-    address: '123 Main Street, City, Country',
-    profilePicture: 'https://via.placeholder.com/150',
-    gender: 'Male',
+    phone: '123-456-7890',
+    address: '1234 Elm Street, Springfield, IL',
+    age: 30,
+    profileImage: 'https://via.placeholder.com/150' // Placeholder profile image
+  });
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({ ...user });
 
-  };
-
-  // Merge `user` with `defaultUser` to fill in missing data
-  const initialData = { ...defaultUser, ...user };
-  const [profileData, setProfileData] = useState(initialData);
-  const [editData, setEditData] = useState(initialData);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditData({ ...editData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setProfileData(editData);
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setFormData({ ...formData, profileImage: imageUrl });
+    }
+  };
+
+  // Save changes to profile
+  const saveChanges = () => {
+    setUser(formData);
     setIsEditing(false);
   };
 
   return (
-    <div className=" p-6 max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto p-6">
       {/* Profile Card */}
-      <div className="bg-white shadow-lg rounded-lg p-6 relative">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">My Profile</h2>
-          <button
-            className="text-teal-600 border border-teal-600 px-4 py-2 rounded hover:bg-teal-600 hover:text-white transition"
-            onClick={handleEditClick}
-          >
-            Edit Profile
-          </button>
-        </div>
-        <div className="space-y-4">
-          <div className="flex items-center">
+      <div className="bg-white shadow-xl rounded-lg p-8 mb-8">
+        <h2 className="text-3xl font-bold mb-6 text-center">Profile Information</h2>
+
+        {/* Profile Image and Name Section */}
+        <div className="flex flex-col md:flex-row items-center space-x-6 mb-8">
+          {/* Profile Image */}
+          <div className="flex flex-col items-center mb-6 md:mb-0">
             <img
-              src={profileData.profilePicture}
+              src={formData.profileImage}
               alt="Profile"
-              className="w-24 h-24 rounded-full mr-4"
+              className="h-40 w-40 rounded-full object-cover mb-4"
             />
-            <div>
-              <p className="text-lg font-semibold">{profileData.name}</p>
-              <p className="text-gray-600">{profileData.gender}</p>
-              <p className="text-gray-600">{profileData.email}</p>
-              <p className="text-gray-600">{profileData.contact}</p>
-              <p className="text-gray-600">{profileData.address}</p>
-             
-            </div>
+            {isEditing ? (
+              <input
+                type="file"
+                onChange={handleImageChange}
+                className="border py-2 px-4 rounded-md"
+              />
+            ) : null}
           </div>
+
+          {/* Name and Email */}
+          <div className="flex flex-col">
+            {isEditing ? (
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="text-2xl font-semibold border p-2 mb-2 rounded-md"
+              />
+            ) : (
+              <h3 className="text-2xl font-semibold mb-2">{user.name}</h3>
+            )}
+            {isEditing ? (
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="text-lg font-semibold border p-2 mb-4 rounded-md"
+              />
+            ) : (
+              <p className="text-lg text-gray-500 mb-4">{user.email}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Profile Details Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
+          {/* Age */}
+          <div className="flex items-center space-x-2">
+            <h3 className="font-semibold text-lg">Age:</h3>
+            {isEditing ? (
+              <input
+                type="number"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                className="border p-2 rounded-md"
+              />
+            ) : (
+              <p>{user.age}</p>
+            )}
+          </div>
+
+          {/* Phone */}
+          <div className="flex items-center space-x-2">
+            <h3 className="font-semibold text-lg">Phone:</h3>
+            {isEditing ? (
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="border p-2 rounded-md"
+              />
+            ) : (
+              <p>{user.phone}</p>
+            )}
+          </div>
+
+          {/* Address */}
+          <div className="flex items-center space-x-2">
+            <h3 className="font-semibold text-lg">Address:</h3>
+            {isEditing ? (
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="border p-2 rounded-md"
+              />
+            ) : (
+              <p>{user.address}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Edit Button */}
+        <div className="flex justify-center">
+          {isEditing ? (
+            <button
+              onClick={saveChanges}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+            >
+              Save Changes
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+            >
+              Edit Profile
+            </button>
+          )}
         </div>
       </div>
-
-      {/* Edit Profile Overlay */}
-      {isEditing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={editData.name}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 p-2 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={editData.email}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 p-2 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="contact">Contact Number</label>
-                <input
-                  type="text"
-                  id="contact"
-                  name="contact"
-                  value={editData.contact}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 p-2 rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="address">Address</label>
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={editData.address}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 p-2 rounded"
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  className="text-gray-600 mr-4"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      
     </div>
-    
   );
-}
+};
 
 export default MyProfile;

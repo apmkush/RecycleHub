@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faTwitter, faPinterest, faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
+import { faFacebook, faTwitter, faPinterest, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 function Footer() {
   return (
@@ -28,17 +29,17 @@ function Footer() {
             <h4 className="font-semibold text-2xl mb-2 text-white">Company</h4>
             <div className="grid grid-cols-2 gap-2 text-md text-gray-300">
               <ul className="space-y-2">
-                <li><a href="/" className="hover:underline hover:text-maroon">Home</a></li>
+                <li><Link to="/Home" className="hover:underline hover:text-maroon">Home</Link></li>
                 <li><a href="#" className="hover:underline hover:text-maroon">About Us</a></li>
                 <li><a href="#" className="hover:underline hover:text-maroon">FAQ</a></li>
                 <li><a href="#" className="hover:underline hover:text-maroon">Privacy Policy</a></li>
                 <li><a href="#" className="hover:underline hover:text-maroon">Services</a></li>
               </ul>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:underline hover:text-maroon">Copper Scrap</a></li>
-                <li><a href="#" className="hover:underline hover:text-maroon">Brass Scrap</a></li>
-                <li><a href="#" className="hover:underline hover:text-maroon">Electronic Scrap</a></li>
-                <li><a href="#" className="hover:underline hover:text-maroon">Best Steel Scrap Buyers in India</a></li>
+                <li><Link to="/CopperScrapInfo" className="hover:underline hover:text-maroon">Copper Scrap</Link></li>
+                <li><Link to="/BrassScrapInfo" className="hover:underline hover:text-maroon">Brass Scrap</Link></li>
+                <li><Link to="/ElectronicScrapInfo" className="hover:underline hover:text-maroon">Electronic Scrap</Link></li>
+                <li><Link to="/Best" className="hover:underline hover:text-maroon">Best Steel Scrap Buyers in India</Link></li>
               </ul>
             </div>
           </div>

@@ -1,10 +1,11 @@
-import React, { useState , useEffect } from 'react';
-import axios, { Axios } from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../../App';
 
-const PickupForm = ({itemValue = ''}) => {
+const PickupForm = ({ itemValue = '' }) => {
   // State for each form field
   const [item, setItem] = useState(itemValue);
   const [description, setDescription] = useState('');
@@ -16,19 +17,20 @@ const PickupForm = ({itemValue = ''}) => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(''); // New state for image
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useContext(UserContext); // Get user context from App.jsx
 
-  const  DisplayMessage=(text)=>{
+  const DisplayMessage = (text) => {
     toast.success(text, {
-        position: "top-center",
-        autoClose: 3000, // Auto-close after 3 seconds
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        style: {marginTop: "10px" },
+      position: "top-center",
+      autoClose: 3000, // Auto-close after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: { marginTop: "10px" },
     });
-};
+  };
 
   useEffect(() => {
     setItem(itemValue);
@@ -37,6 +39,13 @@ const PickupForm = ({itemValue = ''}) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the user is logged in
+    if (!isAuthenticated) {
+      // If not logged in, redirect to login page
+      navigate('/login');
+      return; // Stop further execution
+    }
 
     const formData = new FormData();
     formData.append('item', item);
@@ -50,35 +59,34 @@ const PickupForm = ({itemValue = ''}) => {
     if (image) formData.append('image', image);
 
     try {
-      const response=await axios.post('http://localhost:5000/addPickup',formData,{
-        headers:{
-            'Content-Type':'application/json'
-        }
-    });
-    if(response.data.success){
-        DisplayMessage(response.data.message);
+      const response = await axios.post('http://localhost:5000/addPickup', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    }else{
+      if (response.data.success) {
+        DisplayMessage(response.data.message);
+      } else {
         DisplayMessage(response.data.message, "error");
-    }
+      }
       console.log('Response:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
 
-  // Handle image selection
-  // Base 64 conversion
+  // Handle image selection and base64 conversion
   const handleImageChange = (e) => {
-    var imgData = new FileReader();
+    const imgData = new FileReader();
     imgData.readAsDataURL(e.target.files[0]);
     imgData.onload = () => {
       setImage(imgData.result);
       console.log(imgData.result);
-    }
+    };
     imgData.onerror = () => {
-      console.log("Error: ",Error);
-    }
+      console.log("Error: ", Error);
+    };
   };
 
   return (
@@ -187,9 +195,12 @@ const PickupForm = ({itemValue = ''}) => {
               onChange={handleImageChange}
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
-            {image==""||image==null?<p className="text-red-500">Please upload an image</p>:<img width={100} height={100} src={image} />}
+            {image == "" || image == null ? (
+              <p className="text-red-500">Please upload an image</p>
+            ) : (
+              <img width={100} height={100} src={image} />
+            )}
           </div>
-          
 
           {/* Description */}
           <div className="mb-8">

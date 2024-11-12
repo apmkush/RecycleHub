@@ -6,14 +6,21 @@ import { UserContext } from '../../App';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, isAuthenticated } = useContext(UserContext); // Get user context from App.jsx
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Simulated state for authentication
+  const [user, setUser] = useState({});
   const location = useLocation(); // Get the current path to track the active link
   const navigate = useNavigate(); // Used for navigation
+
+
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/Home'); // Redirect to home if not authenticated
     }
+
+    setIsAuthenticated(true);
+    setUser({ type: 'admin' });
+
   }, [isAuthenticated, navigate]);
 
   const toggleMobileMenu = () => {

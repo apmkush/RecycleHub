@@ -6,6 +6,7 @@ import Home from '../Home/Home.jsx'
 import MyProfile from '../Profile/Profile.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
+import SettingsPage from '../Setting/Setting.jsx';
 
 // Placeholder components for each page section
 function Profile() {
@@ -53,7 +54,7 @@ function Account() {
             <FiShoppingCart />
             <span>Orders</span>
           </Link>
-          <Link to="privacy-history" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
+          <Link to="Settings" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiLock />
             <span>Privacy and Setting</span>
           </Link>
@@ -85,7 +86,7 @@ function Account() {
             <Route path="Profile" element={<MyProfile/>} />
             <Route path="Requestory" element={<Requestory />} />
             <Route path="Orders" element={<Orders />} />
-            <Route path="privacy-Setting" element={<PrivacySetting />} />
+            <Route path="Settings" element={<SettingsPage />} />
             <Route path="/logout" element={<Home />} />
           </Routes>
         </main>
