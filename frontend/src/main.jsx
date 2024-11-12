@@ -16,6 +16,11 @@ import Payment from './components/Payment/payment.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import PayoutForm from './components/Payment/payout.jsx'
 import App, { UserProvider } from './App';
+import CopperScrapInfo from './components/Footer/CopperScrapInfo.jsx'
+import BrassScrapInfo from './components/Footer/BrassScrapInfo.jsx'
+import ElectronicScrapInfo from './components/Footer/ElectronicScrapInfo.jsx'
+import Best from './components/Footer/Best.jsx'
+
 
 // create a router
 const router = createBrowserRouter([
@@ -78,6 +83,22 @@ const router = createBrowserRouter([
       {
         path: "payout",
         element: <PayoutForm />
+      },
+      {
+        path: "CopperScrapInfo",
+        element: <CopperScrapInfo />
+      },
+      {
+        path: "BrassScrapInfo",
+        element: <BrassScrapInfo />
+      },
+      {
+        path: "ElectronicScrapInfo",
+        element: <ElectronicScrapInfo />
+      },
+      {
+        path: "Best",
+        element: <Best />
       }
     ]
   }
