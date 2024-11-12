@@ -38,7 +38,12 @@ const PickupSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    status: { 
+        type: String, 
+        enum: ['awaiting pickup', 'completed', 'added to cart'], 
+        default: 'awaiting pickup' 
+    },
 });
 
 export const Pickup = mongoose.model('Pickup', PickupSchema);

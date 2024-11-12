@@ -9,6 +9,7 @@ import scheduleImage from './images/schedule.jpg';
 import weight from './whyus/images/weight.png';
 import instantPayment from './whyus/images/moneyTransfer.png';
 import convenience from './whyus/images/convenience.png';
+import backgroundImage from './images/transparent-bg.jpg'; // Add your transparent background image here
 import bg from './images/bg.jpg';
 import bg2 from './images/bg_top.jpg';
 import bg3 from './images/bg3.jpg';
@@ -32,7 +33,7 @@ function ImageCarousel() {
   }, []);
 
   return (
-    <div className=" w-full h-full overflow-hidden rounded-lg shadow-lg mx-auto">
+    <div className="w-full h-full overflow-hidden rounded-lg shadow-lg mx-auto">
       <img
         src={images[currentIndex]}
         alt="Slideshow"
@@ -41,6 +42,12 @@ function ImageCarousel() {
     </div>
   );
 }
+
+const SectionWrapper = ({ children }) => (
+  <div className="w-full py-10 px-6 rounded-lg shadow-lg text-center">
+    {children}
+  </div>
+);
 
 const Top = () => {
   return (
@@ -58,7 +65,7 @@ const Top = () => {
           <h2 className="text-3xl font-bold text-primary mb-4">
             RecycleHub: The Global Platform for Buying and Selling Scrap Metals
           </h2>
-          <p className="text-gray-700 text-white">
+          <p className="text-gray-700">
             RecycleHub simplifies the buying and selling of scrap and recyclable metals across more than 100 countries. Our platform
             provides a secure environment where businesses can verify materials, secure advance payments, and manage logistics without
             travel or language barriers. Find, negotiate, and connect with verified companies in the industry for the materials you need,
@@ -69,7 +76,7 @@ const Top = () => {
           <ImageCarousel />
         </div>
       </div>
-    </div>
+    </SectionWrapper>
   );
 };
 
@@ -99,14 +106,14 @@ const HowItWorks = () => {
           <p className="text-gray-600">Receive payment on the spot.</p>
         </div>
       </div>
-    </div>
+    </SectionWrapper>
   );
 };
 
 const WhyUs = () => {
   return (
-    <div className="bg-brandDark py-10 px-6 rounded-lg shadow-lg text-center">
-      <h2 className="text-3xl  font-semibold mb-8 text-white">Why Us</h2>
+    <SectionWrapper>
+      <h2 className="text-3xl font-semibold mb-8 text-white">Why Us</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
           <img src={weight} alt="Accurate Weight" className="w-[60%] h-22 mx-auto mb-4" />
@@ -124,13 +131,22 @@ const WhyUs = () => {
           <p className="text-gray-600">Easy pickups across Hyderabad.</p>
         </div>
       </div>
-    </div>
+    </SectionWrapper>
   );
 };
 
 const Home = () => {
   return (
-    <div className="space-y-10 bg-brandDark " >
+    <div
+      className="space-y-10"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        opacity: 0.9, // Adjust transparency here
+      }}
+    >
       <Top />
       <HowItWorks />
       <WhyUs />
