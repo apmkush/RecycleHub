@@ -41,9 +41,6 @@ function CopperScrapInfo() {
         </p>
       </section>
 
-      <footer className="text-center mt-12">
-        <p className="text-gray-600 text-sm">&copy; 2024 Recycle Hub. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

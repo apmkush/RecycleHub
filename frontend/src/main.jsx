@@ -20,6 +20,7 @@ import CopperScrapInfo from './components/Footer/CopperScrapInfo.jsx'
 import BrassScrapInfo from './components/Footer/BrassScrapInfo.jsx'
 import ElectronicScrapInfo from './components/Footer/ElectronicScrapInfo.jsx'
 import Best from './components/Footer/Best.jsx'
+import SettingsPage from './components/Setting/Setting.jsx'
 
 
 // create a router

@@ -189,7 +189,7 @@ const login = () => {
                     {/* Forgot Email & OTP Verification */}
                     {isForgotEmail && !isOtpVerified && (
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Forgot Email</h2>
+                            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Forgot Password</h2>
                             <p className="text-gray-500 text-center mb-6">Enter OTP sent to your email</p>
                             <input
                                 type="number"

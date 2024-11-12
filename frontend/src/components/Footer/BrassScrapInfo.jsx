@@ -62,9 +62,7 @@ function BrassScrapInfo() {
         </p>
       </section>
 
-      <footer className="text-center mt-12 text-sm text-gray-600">
-        <p>&copy; 2024 Recycle Hub. All rights reserved.</p>
-      </footer>
+      
     </div>
   );
 }
