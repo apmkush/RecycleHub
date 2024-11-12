@@ -208,3 +208,62 @@ export const resetPassword = async (req, res) => {
       return res.json({ message: "Internal server error" });
     }
   };
+
+export const getData = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.id);
+    if (!user) return res.json({ message: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    res.json({ message: 'Server error' });
+  }
+}
+
+export const updateData = async (req, res) => {
+  const { name, email, phone, address, age, profileImage } = req.body;
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      { name, email, phone, address, age, profileImage },
+      { new: true }
+    );
+    res.json(user);
+  } catch (error) {
+    res.json({ message: 'Server error' });
+  }
+}
+
+export const changePassword = async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) return res.json({ message: 'User not found' });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.json({ message: 'Current password is incorrect' });
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    res.json({ message: 'Error changing password', error });
+  }
+};
+
+// Update Preferences (Dark Mode, Language)
+export const updateMode = async (req, res) => {
+  const { userId, darkMode } = req.body;
+
+  try {
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { darkMode },
+      { new: true }
+    );
+    res.json({ message: 'Preferences updated successfully', user });
+  } catch (error) {
+    res.json({ message: 'Error updating preferences', error });
+  }
+};

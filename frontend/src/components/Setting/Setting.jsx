@@ -1,50 +1,73 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const SettingsPage = () => {
-  const [isPasswordEditing, setIsPasswordEditing] = useState(false); // Toggle password edit mode
+  const [isPasswordEditing, setIsPasswordEditing] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
-  
-  const [darkMode, setDarkMode] = useState(false); // Dark Mode toggle
-  const [language, setLanguage] = useState('English'); // Language preference
+  const [darkMode, setDarkMode] = useState(false);
+
+  const userId = 'user123'; // Replace with actual user ID
+  const  DisplayMessage=(text)=>{
+    toast.success(text, {
+        position: "top-center",
+        autoClose: 3000, // Auto-close after 3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {marginTop: "10px" },
+    });
+};
 
   // Handle password input changes
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setPasswordData({
-      ...passwordData,
-      [name]: value,
-    });
+    setPasswordData({ ...passwordData, [name]: value });
   };
 
-  // Save password change (mocked functionality)
-  const savePasswordChange = () => {
+  // Save password change
+  const savePasswordChange = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('Passwords do not match!');
+      DisplayMessage('Passwords do not match!');
       return;
     }
-    // Assuming the password change is successful:
-    alert('Password changed successfully!');
-    setIsPasswordEditing(false);
+
+    try {
+      const response = await axios.post('http://localhost:5000/change-password', {
+        userId,
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+      DisplayMessage(response.data.message);
+      setIsPasswordEditing(false);
+    } catch (error) {
+      DisplayMessage(error.response.data.message || 'Failed to change password');
+    }
   };
 
   // Toggle Dark Mode
-  const toggleDarkMode = () => {
+  const toggleDarkMode = async () => {
     setDarkMode(!darkMode);
-    document.body.classList.toggle('dark', !darkMode); // Switch dark mode on/off globally
+    document.body.classList.toggle('dark', !darkMode);
+    try {
+      await axios.put('http://localhost:5000/update-mode', { userId, darkMode: !darkMode });
+    } catch (error) {
+      console.error('Error updating dark mode:', error);
+    }
   };
 
   // Handle language change
-  const handleLanguageChange = (e) => {
-    setLanguage(e.target.value);
-  };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Settings Card */}
+      <ToastContainer />
       <div className="bg-white shadow-xl rounded-lg p-8 mb-8 w-full">
         <h2 className="text-3xl font-bold mb-6 text-center">Account Settings</h2>
 
@@ -84,7 +107,6 @@ const SettingsPage = () => {
             )}
           </div>
 
-          {/* Edit Button for Password */}
           {isPasswordEditing ? (
             <button
               onClick={savePasswordChange}
@@ -114,25 +136,6 @@ const SettingsPage = () => {
               onChange={toggleDarkMode}
               className="rounded-lg"
             />
-          </div>
-        </div>
-
-        {/* Language Preferences Section */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-semibold mb-4">Language Preferences</h3>
-          <div className="flex flex-row items-center mb-6">
-            <label htmlFor="language" className="text-lg mr-4">Preferred Language:</label>
-            <select
-              id="language"
-              value={language}
-              onChange={handleLanguageChange}
-              className="border p-2 rounded-md w-full"
-            >
-              <option value="English">English</option>
-              <option value="Spanish">Spanish</option>
-              <option value="French">French</option>
-              <option value="German">German</option>
-            </select>
           </div>
         </div>
 
