@@ -5,7 +5,7 @@ import LogoImage from './logo.jpeg';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual authentication logic
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace this with actual authentication logic
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
