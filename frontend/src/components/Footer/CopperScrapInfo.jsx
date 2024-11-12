@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function CopperScrapInfo() {
   return (
-    <div className="container mx-auto p-8 bg-gray-100 min-h-screen">
+    <div className="container mx-auto p-8 bg-gray-200 min-h-screen">
       <h1 className="text-4xl font-bold text-center text-green-700 mb-8 sm:mb-12">Copper Scrap</h1>
 
       <section className="bg-white shadow-md rounded-lg p-6 mb-8">

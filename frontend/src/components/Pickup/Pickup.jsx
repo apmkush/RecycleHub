@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../App';
+import { UserContext } from '../Login/login';
 
 const PickupForm = ({ itemValue = '' }) => {
   // State for each form field
@@ -17,12 +17,12 @@ const PickupForm = ({ itemValue = '' }) => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(''); // New state for image
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useContext(UserContext); // Get user context from App.jsx
+  const { userId, userType, isLoggedIn } = useContext(UserContext); // Access context variables
 
-  const DisplayMessage = (text) => {
-    toast.success(text, {
+  const DisplayMessage = (text, type = "success") => {
+    toast[type](text, {
       position: "top-center",
-      autoClose: 3000, // Auto-close after 3 seconds
+      autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -41,12 +41,12 @@ const PickupForm = ({ itemValue = '' }) => {
     e.preventDefault();
 
     // Check if the user is logged in
-    if (!isAuthenticated) {
-      // If not logged in, redirect to login page
+    if (!isLoggedIn) {
       navigate('/login');
       return; // Stop further execution
     }
 
+    // Include userId in the data if necessary
     const formData = new FormData();
     formData.append('item', item);
     formData.append('description', description);
@@ -56,6 +56,7 @@ const PickupForm = ({ itemValue = '' }) => {
     formData.append('weight', weight);
     formData.append('address', address);
     formData.append('email', email);
+    if (userId) formData.append('userId', userId); // Include userId
     if (image) formData.append('image', image);
 
     try {
@@ -73,6 +74,7 @@ const PickupForm = ({ itemValue = '' }) => {
       console.log('Response:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
+      DisplayMessage("An error occurred while submitting the form", "error");
     }
   };
 

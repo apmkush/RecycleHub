@@ -1,14 +1,14 @@
 import React from 'react';
-// import steelScrapImage from ''; // Replace with your actual image path
+import steel from './steel.png';
 
 function BestSteelScrapBuyers() {
   return (
-    <div className="container mx-auto p-8 bg-gray-50 min-h-screen">
+    <div className="container mx-auto p-8 bg-gray-200 min-h-screen">
       <h1 className="text-5xl font-bold text-center text-blue-800 mb-8 sm:mb-12">Best Steel Scrap Buyers in India</h1>
       
       <section className="bg-white shadow-lg rounded-lg p-6 flex flex-col md:flex-row items-center mb-8">
         <img 
-          src='' 
+          src={steel} 
           alt="Steel Scrap" 
           className="w-full md:w-1/3 rounded-lg shadow-md mb-4 md:mb-0 md:mr-6" 
         />
