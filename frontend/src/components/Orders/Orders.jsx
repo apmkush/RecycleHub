@@ -19,7 +19,7 @@ const items = [
     address: '456 Mobile Avenue, Townsville',
     price: 200,
     status: 'sold',
-    date: '2023-06-15',
+    date: '2021-06-15',
     weight: '0.3 kg',
     pickupTime: '02:00 PM',
     description: 'A functional smartphone with minor scratches.',
@@ -39,9 +39,9 @@ const items = [
     itemName: 'Headphones',
     image: './headphones.png',
     address: '101 Audio Lane, Sound City',
-    price: 80,
+    price: 800,
     status: 'awaiting pickup',
-    date: '2023-08-05',
+    date: '2022-08-05',
     weight: '0.2 kg',
     pickupTime: '11:30 AM',
     description: 'Noise-canceling headphones with minimal wear.',
@@ -50,6 +50,7 @@ const items = [
 
 const Orders = () => {
   const [filter, setFilter] = useState('all'); // Filter state for All, Ready to be Picked Up, or Completed
+  const [sortOption, setSortOption] = useState(''); // Sort state for Date or Price
   const [selectedItem, setSelectedItem] = useState(null); // State for the selected item
 
   // Filtered items based on selected filter
@@ -58,6 +59,16 @@ const Orders = () => {
     if (filter === 'ready') return item.status === 'awaiting pickup';
     if (filter === 'completed') return item.status === 'sold';
     return false;
+  });
+
+  // Sorting items based on sort option
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    if (sortOption === 'date') {
+      return new Date(a.date) - new Date(b.date); // Sort by earliest date first
+    } else if (sortOption === 'price') {
+      return b.price - a.price; // Sort by highest price first
+    }
+    return 0;
   });
 
   return (
@@ -84,6 +95,20 @@ const Orders = () => {
         </button>
       </div>
 
+      {/* Sort Options */}
+      <div className="flex gap-4 mb-4">
+        <label>Sort by:</label>
+        <select
+          className="border border-gray-300 p-2 rounded"
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="">Select</option>
+          <option value="date">Date (Earliest First)</option>
+          <option value="price">Price (High to Low)</option>
+        </select>
+      </div>
+
       {/* Table of Items */}
       <table className="w-full border-collapse border text-left">
         <thead>
@@ -96,7 +121,7 @@ const Orders = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map((item, index) => (
+          {sortedItems.map((item, index) => (
             <tr
               key={index}
               className="border-b cursor-pointer"
