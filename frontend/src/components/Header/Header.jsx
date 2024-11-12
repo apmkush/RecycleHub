@@ -1,50 +1,56 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt , FaEnvelopeOpenText , FaCartPlus } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt, FaEnvelopeOpenText, FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual authentication logic
+  const location = useLocation(); // Get the current path to track the active link
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const linkClasses = (path) =>
+    `text-gray-700 border-2 border-transparent hover:border-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white font-semibold text-lg flex items-center px-4 py-2 rounded-md ${
+      location.pathname === path ? 'bg-gray-300 border-gray-400' : ''
+    }`;
+
   return (
-    <header className="bg-brandDark shadow-lg py-4 dark:bg-gray-800 text-white">
-      <div className=" container mx-auto flex justify-between items-center px-4">
+    <header className="bg-gray-50 bg-opacity-90 shadow-lg py-4 dark:bg-gray-800 text-gray-800">
+      <div className="container mx-auto flex justify-between items-center px-4">
         {/* Logo and Brand */}
         <div className="flex items-center space-x-3">
           <img src={LogoImage} alt="Logo" className="h-10 w-10" />
-          <span className="text-3xl font-bold text-white dark:text-gray-200">Recycle Hub</span>
+          <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">Recycle Hub</span>
         </div>
 
         {/* Desktop Links */}
-        <nav className="hidden lg:flex space-x-10">
-          <Link to="/Home" className="text-white dark:text-white hover:text-white dark:hover:text-white font-semibold text-lg flex items-center">
+        <nav className="hidden lg:flex space-x-4">
+          <Link to="/Home" className={linkClasses('/Home')}>
             <FaHome className="mr-2" /> Home
           </Link>
-          <Link to="/Pickup" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Pickup" className={linkClasses('/Pickup')}>
             <FaTruck className="mr-2" /> Request Pickup
           </Link>
-          <Link to="/Transactions" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Transactions" className={linkClasses('/Transactions')}>
             <FaMoneyCheck className="mr-2" /> Transactions
           </Link>
-          <Link to="/Pricing" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Pricing" className={linkClasses('/Pricing')}>
             <FaTag className="mr-2" /> Pricing
           </Link>
-          <Link to="/Dashboard" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Dashboard" className={linkClasses('/Dashboard')}>
             <FaTachometerAlt className="mr-2" /> Dashboard
           </Link>
-          <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
-            <FaEnvelopeOpenText  className="mr-2" /> Requests
+          <Link to="/Requests" className={linkClasses('/Requests')}>
+            <FaEnvelopeOpenText className="mr-2" /> Requests
           </Link>
-          <Link to="/Cart" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
-              <FaCartPlus  className="mr-2" /> Cart
-            </Link>
+          <Link to="/Cart" className={linkClasses('/Cart')}>
+            <FaCartPlus className="mr-2" /> Cart
+          </Link>
           {isLoggedIn && (
-            <Link to="/Account" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Account" className={linkClasses('/Account')}>
               <FaUser className="mr-2" /> Account
             </Link>
           )}
@@ -65,31 +71,31 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white dark:bg-gray-800 mt-4">
+        <div className="lg:hidden bg-gray-50 bg-opacity-90 dark:bg-gray-800 mt-4">
           <div className="flex flex-col items-start px-6 py-4 space-y-4">
-            <Link to="/Home" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Home" className={linkClasses('/Home')}>
               <FaHome className="mr-2" /> Home
             </Link>
-            <Link to="/Pickup" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Pickup" className={linkClasses('/Pickup')}>
               <FaTruck className="mr-2" /> Request Pickup
             </Link>
-            <Link to="/Transactions" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Transactions" className={linkClasses('/Transactions')}>
               <FaMoneyCheck className="mr-2" /> Transactions
             </Link>
-            <Link to="/Pricing" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Pricing" className={linkClasses('/Pricing')}>
               <FaTag className="mr-2" /> Pricing
             </Link>
-            <Link to="/Dashboard" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+            <Link to="/Dashboard" className={linkClasses('/Dashboard')}>
               <FaTachometerAlt className="mr-2" /> Dashboard
             </Link>
-            <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
-              <FaEnvelopeOpenText  className="mr-2" /> Requests
+            <Link to="/Requests" className={linkClasses('/Requests')}>
+              <FaEnvelopeOpenText className="mr-2" /> Requests
             </Link>
-            <Link to="/Cart" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
-              <FaCartPlus  className="mr-2" /> Cart
+            <Link to="/Cart" className={linkClasses('/Cart')}>
+              <FaCartPlus className="mr-2" /> Cart
             </Link>
             {isLoggedIn && (
-              <Link to="/Account" className="w-full text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+              <Link to="/Account" className={linkClasses('/Account')}>
                 <FaUser className="mr-2" /> Account
               </Link>
             )}
