@@ -49,7 +49,7 @@ const Pricing = ({userRole}) => {
                 image={item.image}
                 price={item.price}
                 material={item.material}
-                userRole={userRole}
+                userRole="admin"
               />
             ))}
             <AddItem setShowAddDetails = {setShowAddDetails} setSelectedCategory = {setSelectedCategory} category={category}/>

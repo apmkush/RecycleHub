@@ -17,6 +17,7 @@ import Cart from './components/Cart/Cart.jsx'
 import PayoutForm from './components/Payment/payout.jsx'
 import App, { UserProvider } from './App';
 
+
 // create a router
 const router = createBrowserRouter([
   {
