@@ -8,7 +8,10 @@ function MyProfile({ user = {} }) {
     email: 'johndoe@example.com',
     contact: '123-456-7890',
     address: '123 Main Street, City, Country',
-    profilePicture: 'https://via.placeholder.com/150'
+    profilePicture: 'https://via.placeholder.com/150',
+    gender: 'Male',
+
+
   };
 
   // Merge `user` with `defaultUser` to fill in missing data
@@ -32,7 +35,7 @@ function MyProfile({ user = {} }) {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className=" p-6 max-w-4xl mx-auto">
       {/* Profile Card */}
       <div className="bg-white shadow-lg rounded-lg p-6 relative">
         <div className="flex items-center justify-between mb-4">
@@ -53,9 +56,11 @@ function MyProfile({ user = {} }) {
             />
             <div>
               <p className="text-lg font-semibold">{profileData.name}</p>
+              <p className="text-gray-600">{profileData.gender}</p>
               <p className="text-gray-600">{profileData.email}</p>
               <p className="text-gray-600">{profileData.contact}</p>
               <p className="text-gray-600">{profileData.address}</p>
+             
             </div>
           </div>
         </div>
@@ -130,7 +135,9 @@ function MyProfile({ user = {} }) {
           </div>
         </div>
       )}
+      
     </div>
+    
   );
 }
 

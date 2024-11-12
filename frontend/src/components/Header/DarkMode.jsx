@@ -8,8 +8,8 @@ function Darkmode() {
   useEffect(() => {
     const fetchUserTheme = async () => {
       try {
-        const response = await axios.get('/api/user/theme'); // Replace it with your API endpoint
-        const userTheme = response.data.theme; // Assume the API returns { theme: 'dark' | 'light' }
+        const response = await axios.get('/api/user/theme'); 
+        const userTheme = response.data.theme; // API returns { theme: 'dark' | 'light' }
         
         // Set the theme based on the backend response
         if (userTheme === 'dark') {
@@ -36,7 +36,7 @@ function Darkmode() {
 
     // Save the new theme to the backend
     try {
-      await axios.post('/api/user/theme', { theme: newTheme }); // Replace with your API endpoint
+      await axios.post('/api/user/theme', { theme: newTheme }); 
     } catch (error) {
       console.error('Error saving user theme:', error);
     }
