@@ -9,11 +9,10 @@ const ShowDetails = ({ details, setAccept, setReject, onClose }) => {
       <img src={details.image} alt={details.itemName} className="w-full h-40 object-cover rounded-lg mb-4" />
 
       {/* Item Details */}
-      <h3 className="text-2xl font-semibold text-gray-800 mb-2 text-center">{details.itemName}</h3>
-      <p className="text-sm text-gray-600 mb-2"><strong>Weight:</strong> {details.weight}</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Price:</strong> ${details.price}</p>
+      <h3 className="text-2xl font-semibold text-gray-800 mb-2 text-center">{details.item}</h3>
+      <p className="text-sm text-gray-600 mb-2"><strong>Weight:</strong> {details.weight} kg</p>
+      <p className="text-sm text-gray-600 mb-2"><strong>Price:</strong> ₹{details.price}</p>
       <p className="text-sm text-gray-600 mb-2"><strong>Date of Pickup:</strong> {details.pickupDate}</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Time of Pickup:</strong> {details.pickupTime}</p>
       <p className="text-sm text-gray-600 mb-2"><strong>Address:</strong> {details.address}</p>
       <p className="text-sm text-gray-600 mb-2"><strong>Description:</strong> {details.description}</p>
 
