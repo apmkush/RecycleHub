@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import imageTest from "./images/NonRecyclable/Aluminium.png";
 
-const Card = ({ id,image, price, material, userRole, description }) => {
+const Card = ({ id, image, price, material, userRole, description }) => {
   // State to handle price editing
   const [isEditing, setIsEditing] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
+  const [isVisible, setIsVisible] = useState(true);                    //  ------------------                // jaise hi ye false ho to isko database se nikal do 
 
   // Function to toggle edit mode
   const toggleEdit = () => setIsEditing(!isEditing);
 
   // Function to handle price change
   const handlePriceChange = (e) => setCurrentPrice(e.target.value);
+
+  // Function to save the updated price
   const savePrice = async () => {
     try {
       await axios.put(`http://localhost:5000/editPrice/${id}`, { price: currentPrice });
@@ -21,16 +24,28 @@ const Card = ({ id,image, price, material, userRole, description }) => {
     }
   };
 
+  // Return null if isVisible is false to hide the card
+  if (!isVisible) return null;
+
   return (
-    <div className="text-center p-4">
+    <div className="text-center p-4 relative">
       {/* Card */}
-      <div className="w-32 bg-white rounded-lg shadow-lg p-3 border border-gray-300 shadow-gray-400 mx-auto">
+      <div className="w-32 bg-white rounded-lg shadow-lg p-3 border border-gray-300 shadow-gray-400 mx-auto relative">
+        {/* Cross icon for admin to hide card */}
+        {userRole === 'admin' && (
+          <button
+            onClick={() => setIsVisible(false)} // Set isVisible to false when clicked
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          >
+            &times;
+          </button>
+        )}
+
         {/* Image section */}
         <img src={image} alt={material} className="w-full h-24 object-cover rounded-t-lg" />
 
         {/* Card content */}
         <div className="mt-2">
-
           {/* Price section */}
           <div className="mt-2">
             {userRole === 'admin' ? (

@@ -48,7 +48,7 @@ const RequestCard = ({ details }) => { console.log(details);
             }} 
             className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition"
           >
-            Cancel 
+            Reject 
           </button>
         </div>
       </div>
