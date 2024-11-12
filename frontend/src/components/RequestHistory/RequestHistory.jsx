@@ -1,65 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ShowDetails from '../Cart/ShowDetails';
 
 const Requestory = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [removeItem, setRemoveItem] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [items, setItems] = useState([]);
   const [sortOption, setSortOption] = useState('date');
 
-  // Collection of items
-  const items = [
-    {
-      itemName: 'Laptop',
-      image: './laptop.png',
-      address: '123 Tech Street, Cityville',
-      price: 500,
-      status: 'awaiting pickup',
-      date: '2023-05-21',
-      weight: '2 kg',
-      pickupTime: '10:00 AM',
-      description: 'A slightly used laptop, ready for recycling.',
-    },
-    {
-      itemName: 'Smartphone',
-      image: './smartphone.png',
-      address: '456 Mobile Avenue, Townsville',
-      price: 200,
-      status: 'sold',
-      date: '2023-06-15',
-      weight: '0.3 kg',
-      pickupTime: '02:00 PM',
-      description: 'A functional smartphone with minor scratches.',
-    },
-    {
-      itemName: 'Tablet',
-      image: './tablet.png',
-      address: '789 Gadget Street, Metropolis',
-      price: 300,
-      status: 'added to cart',
-      date: '2023-07-10',
-      weight: '0.5 kg',
-      pickupTime: '09:00 AM',
-      description: 'A tablet in good condition, ready for use or recycling.',
-    },
-    {
-      itemName: 'Headphones',
-      image: './headphones.png',
-      address: '101 Audio Lane, Sound City',
-      price: 80,
-      status: 'awaiting pickup',
-      date: '2023-08-05',
-      weight: '0.2 kg',
-      pickupTime: '11:30 AM',
-      description: 'Noise-canceling headphones with minimal wear.',
-    },
-  ];
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/get-requests');
+      setItems(response.data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
+  };
+
+  // Use useEffect to fetch items on component mount
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   // Map item statuses for display purposes
   const displayStatus = {
     'awaiting pickup': 'Not Accepted',
-    'sold': 'Sold',
-    'added to cart': 'Accepted',
+    'completed': 'Sold',
+    'accepted': 'Accepted',
   };
 
   // Filter items based on status
@@ -74,9 +43,15 @@ const Requestory = () => {
 
   const handleRowClick = (item) => setSelectedItem(item);
 
-  const handleRemoveClick = (item) => {
-    if (item.status === 'awaiting pickup' || item.status === 'added to cart') {
-      setRemoveItem(item);
+  const handleRemoveClick =async (item) => {
+    if (item.status === 'awaiting pickup' || item.status === 'accepted') {
+      try {
+        await axios.delete(`http://localhost:5000/delete-request/${item._id}`);
+        setRemoveItem(item);
+        fetchItems(); // Refresh the items list
+      } catch (error) {
+        console.error('Error removing item:', error);
+      }
     }
   };
 
@@ -88,7 +63,7 @@ const Requestory = () => {
 
       {/* Filter Buttons */}
       <div className="flex space-x-4 justify-center mb-4">
-        {['all', 'Accepted', 'Not Accepted', 'Sold'].map(status => (
+        {['All', 'Accepted', 'Not Accepted', 'Completed'].map(status => (
           <button
             key={status}
             onClick={() => setFilter(status)}
@@ -111,7 +86,7 @@ const Requestory = () => {
           />
           Sort by Date
         </label>
-        <label>
+        {/* <label>
           <input
             type="radio"
             value="price"
@@ -120,7 +95,7 @@ const Requestory = () => {
             className="mr-2"
           />
           Sort by Price
-        </label>
+        </label> */}
       </div>
 
       <div className="overflow-auto">
@@ -130,7 +105,7 @@ const Requestory = () => {
               <th className="py-3 px-6 text-left">Item</th>
               <th className="py-3 px-6 text-left">Address</th>
               <th className="py-3 px-6 text-center">Date</th>
-              <th className="py-3 px-6 text-center">Price</th>
+              <th className="py-3 px-6 text-center">Pincode</th>
               <th className="py-3 px-6 text-center">Status</th>
               <th className="py-3 px-6 text-center">Remove</th>
             </tr>
@@ -143,17 +118,19 @@ const Requestory = () => {
                 onClick={() => handleRowClick(item)}
               >
                 <td className="py-3 px-6 flex items-center space-x-3">
-                  <img src={item.image} alt={item.itemName} className="w-8 h-8 rounded-full" />
-                  <span>{item.itemName}</span>
+                  <img src={item.image} alt={item.item} className="w-8 h-8 rounded-full" />
+                  <span>{item.item}</span>
                 </td>
                 <td className="py-3 px-6">{item.address}</td>
-                <td className="py-3 px-6 text-center">{item.date}</td>
-                <td className="py-3 px-6 text-center">${item.price}</td>
+                <td className="py-3 px-6 text-center">
+                  {new Date(item.pickupDate).toLocaleDateString('en-CA')} {/* Outputs YYYY-MM-DD */}
+                </td>
+                <td className="py-3 px-6 text-center">{item.pincode}</td>
                 <td className="py-3 px-6 text-center">
                   {displayStatus[item.status]}
                 </td>
                 <td className="py-3 px-6 text-center">
-                  {(item.status === 'awaiting pickup' || item.status === 'added to cart') ? (
+                  {(item.status === 'awaiting pickup' || item.status === 'accepted') ? (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();

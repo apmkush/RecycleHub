@@ -41,7 +41,7 @@ const PickupSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ['awaiting pickup', 'completed', 'added to cart'], 
+        enum: ['awaiting pickup', 'completed', 'accepted'], 
         default: 'awaiting pickup' 
     },
 });

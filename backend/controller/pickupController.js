@@ -57,24 +57,35 @@ export const acceptPickup = async (req, res) => {
         res.json({ success: false, message: 'Server error' });
       }
 }
-export const rejectPickup = async (req, res) => {
-    try {
-        const { requestId } = req.body;
+// export const rejectPickup = async (req, res) => {
+//     try {
+//         const { requestId } = req.body;
         
-        // Find the request by ID and update it to rejected
-        const updatedRequest = await Pickup.findByIdAndUpdate(
-          requestId,
-          { status: 'rejected' },
-          { new: true }
-        );
+//         // Find the request by ID and update it to rejected
+//         const updatedRequest = await Pickup.findByIdAndUpdate(
+//           requestId,
+//           { status: 'rejected' },
+//           { new: true }
+//         );
     
-        if (!updatedRequest) {
-          return res.json({ success: false, message: 'Request not found' });
-        }
+//         if (!updatedRequest) {
+//           return res.json({ success: false, message: 'Request not found' });
+//         }
     
-        res.json({ success: true, message: 'Request rejected successfully', updatedRequest });
-      } catch (error) {
-        console.error('Error rejecting request:', error);
-        res.json({ success: false, message: 'Server error' });
-      }
+//         res.json({ success: true, message: 'Request rejected successfully', updatedRequest });
+//       } catch (error) {
+//         console.error('Error rejecting request:', error);
+//         res.json({ success: false, message: 'Server error' });
+//       }
+// }
+
+
+export const deletePickup = async (req, res) => {
+    try {
+        await Pickup.findByIdAndDelete(req.params.id);
+        res.json({success: true, message: 'Item deleted successfully' });
+    } catch (err) {
+        console.log(err);
+        res.json({success: false, message: 'Failed to delete item' });
+    }
 }

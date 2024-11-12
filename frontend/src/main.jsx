@@ -27,6 +27,7 @@ function ProtectedRoute({ element }) {
   return isLoggedIn ? element : <Navigate to="/Login" />;
 }
 
+
 // create a router
 const router = createBrowserRouter([
   {
