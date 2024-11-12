@@ -3,7 +3,7 @@ import ShowDetails from '../Cart/ShowDetails';
 
 const Requestory = () => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [removeItem, setRemoveItem] = useState(null); // Tracks item to be removed
+  const [removeItem, setRemoveItem] = useState(null);                     // agr removeItem null nhi h to isko database se hatao
 
   // Collection of items
   const items = [
