@@ -41,3 +41,10 @@
     color: #888;
   }
   
+  .bg-light-transparent {
+    background-image: url('./components/Home/images/bg7.jpeg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.7; /* Adjust opacity here */
+  }
+  

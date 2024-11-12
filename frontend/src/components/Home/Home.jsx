@@ -13,6 +13,10 @@ import backgroundImage from './images/transparent-bg.jpg'; // Add your transpare
 import bg from './images/bg.jpg';
 import bg2 from './images/bg_top.jpg';
 import bg3 from './images/bg3.jpg';
+import bg4 from './images/bg4.jpg';
+import bg5 from './images/bg5.jpg';
+import bg7 from './images/bg7.jpeg';
+
 
 const images = [image1, image2, image3, image4];
 
@@ -51,21 +55,23 @@ const SectionWrapper = ({ children }) => (
 
 const Top = () => {
   return (
-    <div className="w-full  flex items-center justify-center py-10 md:py-20"
+    <div className="w-full  flex items-center justify-center py-10 md:py-20 relative w-full h-screen "
     style={{
-      backgroundImage: `url('${bg3}')`,
+      backgroundImage: `url('${bg7}')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-    }}>
+      opacity: 0.9,
+    }}
+    >
       <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center 
         
-      text-white p-6 rounded-lg shadow-lg"
+      p-6 rounded-lg shadow-lg"
      >
-        <div className="md:w-1/2 p-6">
-          <h2 className="text-3xl font-bold text-primary mb-4">
+        <div className="md:w-1/2 p-6 ">
+          <h2 className="text-3xl font-bold text-Rose-950 mb-4">
             RecycleHub: The Global Platform for Buying and Selling Scrap Metals
           </h2>
-          <p className="text-gray-700">
+          <p className="text-white font-bold">
             RecycleHub simplifies the buying and selling of scrap and recyclable metals across more than 100 countries. Our platform
             provides a secure environment where businesses can verify materials, secure advance payments, and manage logistics without
             travel or language barriers. Find, negotiate, and connect with verified companies in the industry for the materials you need,
@@ -76,7 +82,7 @@ const Top = () => {
           <ImageCarousel />
         </div>
       </div>
-    </SectionWrapper>
+    </div>
   );
 };
 
@@ -106,13 +112,19 @@ const HowItWorks = () => {
           <p className="text-gray-600">Receive payment on the spot.</p>
         </div>
       </div>
-    </SectionWrapper>
+    </div>
   );
 };
 
 const WhyUs = () => {
   return (
-    <SectionWrapper>
+    <div className='py-10 px-6 rounded-lg shadow-lg text-center'
+    style={{
+      backgroundImage: `url('${bg2}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      opacity: 0.9,
+    }}>
       <h2 className="text-3xl font-semibold mb-8 text-white">Why Us</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
@@ -131,21 +143,16 @@ const WhyUs = () => {
           <p className="text-gray-600">Easy pickups across Hyderabad.</p>
         </div>
       </div>
-    </SectionWrapper>
+      </div>
+    
   );
 };
 
 const Home = () => {
   return (
     <div
-      className="space-y-10"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        opacity: 0.9, // Adjust transparency here
-      }}
+      
+      
     >
       <Top />
       <HowItWorks />
