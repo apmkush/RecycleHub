@@ -36,3 +36,13 @@ export const addItem = async (req, res) => {
         res.json({success: false, message: 'Failed to add item' });
     }
 }
+
+export const deleteItem = async (req, res) => {
+    try {
+        await RateModel.findByIdAndDelete(req.params.id);
+        res.json({success: true, message: 'Item deleted successfully' });
+    } catch (err) {
+        console.log(err);
+        res.json({success: false, message: 'Failed to delete item' });
+    }
+}

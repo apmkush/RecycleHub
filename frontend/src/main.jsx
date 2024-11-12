@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: "Pricing",
-        element: <Pricing userRole={''}/>
+        element: <Pricing userRole={'admin'}/>
       },
       {
         path: "Dashboard",
