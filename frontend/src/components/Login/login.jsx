@@ -1,13 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import axios, { Axios } from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; 
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../../App';
 import './../../index.css';
+// import { set } from "mongoose";
 // import { set } from "mongoose";
 
 const login = () => {
+    const { user,setUser, isAuthenticated,setIsAuthenticated } = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [otp, setotp] = useState('');
     const [password, setPassword] = useState('');
@@ -62,6 +65,11 @@ const login = () => {
             });
             if(response.data.success){
                 DisplayMessage(response.data.message);
+                // isAuthenticated=true;
+                setIsAuthenticated(true);
+                // user=response.data.user;
+                setUser(response.data.user);
+                console.log(user);
             }else{
                 DisplayMessage(response.data.message, "error");
             }
