@@ -1,16 +1,16 @@
 import React from 'react';
-// import electronicScrapImage from ''; // Replace with your actual image path
+import electronics from './electronics.png';
 
 function ElectronicScrapInfo() {
   return (
-    <div className="container mx-auto p-8 bg-gray-50 min-h-screen">
+    <div className="container mx-auto p-8 bg-gray-200 min-h-screen">
       <h1 className="text-4xl font-bold text-center text-green-700 mb-8 sm:mb-12">Electronic Scrap</h1>
       
       <section className="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row items-center mb-8">
         <img 
-          src='' 
-          alt="Electronic Scrap" 
-          className="w-full md:w-1/3 rounded-lg shadow-lg mb-4 md:mb-0 md:mr-6" 
+          src={electronics}
+          alt="Electronic Scrap"
+          className="w-full md:w-1/3 rounded-lg shadow-lg mb-4 md:mb-0 md:mr-6"
         />
         <div className="text-gray-700 md:flex-1">
           <p className="text-lg leading-relaxed mb-4">
