@@ -22,6 +22,10 @@ const userSchema=new mongoose.Schema({
         require:true,
         min:0
     },
+    profileImage:{
+        type:String,
+        default:"",
+    },
     dark:{
         type:Boolean,
         default:false,
