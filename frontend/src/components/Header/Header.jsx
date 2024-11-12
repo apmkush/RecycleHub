@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt, FaEnvelopeOpenText, FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
-import Aos from 'aos';
-
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual authentication logic
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace this with actual authentication logic
   const location = useLocation(); // Get the current path to track the active link
 
   const toggleMobileMenu = () => {
