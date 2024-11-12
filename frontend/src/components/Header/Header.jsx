@@ -5,7 +5,7 @@ import LogoImage from './logo.jpeg';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Replace this with actual authentication logic
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with actual authentication logic
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -15,7 +15,7 @@ function Navbar() {
     <header className="bg-brandDark shadow-lg py-4 dark:bg-gray-800 text-white">
       <div className=" container mx-auto flex justify-between items-center px-4">
         {/* Logo and Brand */}
-        <div className="flex items-center space-x-3"> 
+        <div className="flex items-center space-x-3">
           <img src={LogoImage} alt="Logo" className="h-10 w-10" />
           <span className="text-3xl font-bold text-white dark:text-gray-200">Recycle Hub</span>
         </div>
