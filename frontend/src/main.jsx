@@ -13,6 +13,7 @@ import Pricing from './components/Pricing/Pricing.jsx'
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import Account from './components/Account/Account.jsx'
 import Payment from './components/Payment/payment.jsx'
+import PayoutForm from './components/Payment/payout.jsx'
 import App from './components/Profile/Profile.jsx'
 
 // create a router
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: "Requests",
         element: <Requests />
+      },
+      {
+        path: "payout",
+        element: <PayoutForm />
       }
     ]
   }
