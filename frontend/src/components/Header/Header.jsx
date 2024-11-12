@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt , FaEnvelopeOpenText , FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
+import Aos from 'aos';
+
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,14 +17,15 @@ function Navbar() {
     <header className="bg-brandDark shadow-lg py-4 dark:bg-gray-800 text-white">
       <div className=" container mx-auto flex justify-between items-center px-4">
         {/* Logo and Brand */}
-        <div className="flex items-center space-x-3"> 
+        <div className="flex items-center space-x-3 "
+        data-aos="fade-down" data-aos-once="true"> 
           <img src={LogoImage} alt="Logo" className="h-10 w-10" />
           <span className="text-3xl font-bold text-white dark:text-gray-200">Recycle Hub</span>
         </div>
 
         {/* Desktop Links */}
         <nav className="hidden lg:flex space-x-10">
-          <Link to="/Home" className="text-white dark:text-white hover:text-white dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Home" className="text-white dark:text-white hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaHome className="mr-2" /> Home
           </Link>
           <Link to="/Pickup" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
@@ -37,10 +40,10 @@ function Navbar() {
           <Link to="/Dashboard" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaTachometerAlt className="mr-2" /> Dashboard
           </Link>
-          <Link to="/Requests" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Requests" className="text-white dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
             <FaEnvelopeOpenText  className="mr-2" /> Requests
           </Link>
-          <Link to="/Cart" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
+          <Link to="/Cart" className="text-white  dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-semibold text-lg flex items-center">
               <FaCartPlus  className="mr-2" /> Cart
             </Link>
           {isLoggedIn && (
