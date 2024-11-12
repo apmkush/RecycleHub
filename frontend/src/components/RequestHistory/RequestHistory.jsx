@@ -3,7 +3,9 @@ import ShowDetails from '../Cart/ShowDetails';
 
 const Requestory = () => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [removeItem, setRemoveItem] = useState(null);                     // agr removeItem null nhi h to isko database se hatao
+  const [removeItem, setRemoveItem] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [sortOption, setSortOption] = useState('date');
 
   // Collection of items
   const items = [
@@ -53,27 +55,73 @@ const Requestory = () => {
     },
   ];
 
-  // Filter items to only those with status other than "sold"
-  const availableItems = items.filter((item) => item.status !== 'sold');
-
-  const handleRowClick = (item) => {
-    setSelectedItem(item); // Set the clicked item for the modal
+  // Map item statuses for display purposes
+  const displayStatus = {
+    'awaiting pickup': 'Not Accepted',
+    'sold': 'Sold',
+    'added to cart': 'Accepted',
   };
+
+  // Filter items based on status
+  const filteredItems = items
+    .filter(item => filter === 'all' || displayStatus[item.status] === filter || item.status === filter)
+    .sort((a, b) => {
+      if (sortOption === 'date') {
+        return new Date(a.date) - new Date(b.date);
+      }
+      return b.price - a.price;
+    });
+
+  const handleRowClick = (item) => setSelectedItem(item);
 
   const handleRemoveClick = (item) => {
     if (item.status === 'awaiting pickup' || item.status === 'added to cart') {
-      setRemoveItem(item); // Set item to be removed
-      // Additional remove logic can go here if needed
+      setRemoveItem(item);
     }
   };
 
-  const closeModal = () => {
-    setSelectedItem(null); // Close the ShowDetails modal
-  };
+  const closeModal = () => setSelectedItem(null);
 
   return (
     <div className="p-6">
       <h2 className="text-center text-2xl font-semibold mb-6">Request History</h2>
+
+      {/* Filter Buttons */}
+      <div className="flex space-x-4 justify-center mb-4">
+        {['all', 'Accepted', 'Not Accepted', 'Sold'].map(status => (
+          <button
+            key={status}
+            onClick={() => setFilter(status)}
+            className={`px-4 py-2 rounded-lg font-semibold ${filter === status ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+          >
+            {status}
+          </button>
+        ))}
+      </div>
+
+      {/* Sort Options */}
+      <div className="flex space-x-4 justify-center mb-4">
+        <label>
+          <input
+            type="radio"
+            value="date"
+            checked={sortOption === 'date'}
+            onChange={() => setSortOption('date')}
+            className="mr-2"
+          />
+          Sort by Date
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="price"
+            checked={sortOption === 'price'}
+            onChange={() => setSortOption('price')}
+            className="mr-2"
+          />
+          Sort by Price
+        </label>
+      </div>
 
       <div className="overflow-auto">
         <table className="min-w-full bg-white rounded-lg shadow-md">
@@ -83,11 +131,12 @@ const Requestory = () => {
               <th className="py-3 px-6 text-left">Address</th>
               <th className="py-3 px-6 text-center">Date</th>
               <th className="py-3 px-6 text-center">Price</th>
+              <th className="py-3 px-6 text-center">Status</th>
               <th className="py-3 px-6 text-center">Remove</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm font-light">
-            {availableItems.map((item, index) => (
+            {filteredItems.map((item, index) => (
               <tr
                 key={index}
                 className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
@@ -101,10 +150,13 @@ const Requestory = () => {
                 <td className="py-3 px-6 text-center">{item.date}</td>
                 <td className="py-3 px-6 text-center">${item.price}</td>
                 <td className="py-3 px-6 text-center">
-                  {item.status === 'awaiting pickup' || item.status === 'added to cart' ? (
+                  {displayStatus[item.status]}
+                </td>
+                <td className="py-3 px-6 text-center">
+                  {(item.status === 'awaiting pickup' || item.status === 'added to cart') ? (
                     <button
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent triggering row click event
+                        e.stopPropagation();
                         handleRemoveClick(item);
                       }}
                       className="bg-red-500 text-white px-3 py-1 rounded-lg font-semibold hover:bg-red-600"
