@@ -9,6 +9,9 @@ import scheduleImage from './images/schedule.jpg';
 import weight from './whyus/images/weight.png';
 import instantPayment from './whyus/images/moneyTransfer.png';
 import convenience from './whyus/images/convenience.png';
+import bg from './images/bg.jpg';
+import bg2 from './images/bg_top.jpg';
+import bg3 from './images/bg3.jpg';
 
 const images = [image1, image2, image3, image4];
 
@@ -41,8 +44,16 @@ function ImageCarousel() {
 
 const Top = () => {
   return (
-    <div className="w-full bg-brandDark flex items-center justify-center py-10 md:py-20">
-      <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center bg-brandDark text-white p-6 rounded-lg shadow-lg">
+    <div className="w-full  flex items-center justify-center py-10 md:py-20"
+    style={{
+      backgroundImage: `url('${bg3}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}>
+      <div className="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center 
+        
+      text-white p-6 rounded-lg shadow-lg"
+     >
         <div className="md:w-1/2 p-6">
           <h2 className="text-3xl font-bold text-primary mb-4">
             RecycleHub: The Global Platform for Buying and Selling Scrap Metals
@@ -64,7 +75,12 @@ const Top = () => {
 
 const HowItWorks = () => {
   return (
-    <div className="bg-brandDark py-10 px-6 rounded-lg shadow-lg text-center">
+    <div className=" py-10 px-6 rounded-lg shadow-lg text-center"
+    style={{
+      backgroundImage: `url('${bg2}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}>
       <h2 className="text-3xl font-semibold mb-8 text-white">How It Works</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
