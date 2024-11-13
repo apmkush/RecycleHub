@@ -53,7 +53,7 @@ const Signup = () => {
         console.log(error);
       }
       setTimeout(() => {
-        navigate('/');
+        navigate('/Home');
       }, 3000);
     }
   };

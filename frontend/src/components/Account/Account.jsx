@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useContext } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import { FiUser, FiLock, FiLogOut, FiMenu , FiShoppingCart } from 'react-icons/fi';
 import { HiOutlineClock } from 'react-icons/hi';
@@ -7,6 +7,7 @@ import MyProfile from '../Profile/Profile.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
+import { UserContext } from '../../App';
 
 // Placeholder components for each page section
 function Profile() {
@@ -21,15 +22,25 @@ function PrivacySetting() {
   return <div>Privacy and History Content</div>;
 }
 
-function Logout() {
-  return <div>Logging Out...</div>;
-}
+//function Logout() {
+
+
+//}
 
 function Account() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { userId, userType, isLoggedin, setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserId(null);
+    setUserType(null);
+    localStorage.removeItem('user'); // Clear specific item
+    console.log("Logout successful");
+  // or use localStorage.clear() to remove everything if needed
   };
 
   return (
@@ -58,10 +69,10 @@ function Account() {
             <FiLock />
             <span>Privacy and Setting</span>
           </Link>
-          <Link to="/logout" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
-            <FiLogOut />
-            <span>Logout</span>
-          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600"
+          >Logout</button>
         </nav>
       </div>
 

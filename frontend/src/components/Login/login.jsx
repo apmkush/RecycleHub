@@ -8,7 +8,7 @@ import './../../index.css';
 import { UserContext } from "../../App";
 
 const Login = () => {
-    const { setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);  // Access setters from context
+    const { setIsLoggedIn, setUserId, setUserType,userId, userType } = useContext(UserContext);  // Access setters from context
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isForgotEmail, setIsForgotEmail] = useState(false);
@@ -65,16 +65,14 @@ const Login = () => {
             if (response.data.success) {
                 DisplayMessage(response.data.message);
                 setIsLoggedIn(true);
-
-                // Assuming response.data contains userId and userType
-                const { userId, userType } = response.data;
+                // localStorage.setItem("user", response.data.user);
                 
                 // Correctly update context values using setter functions
-                setUserId(userId);
-                setUserType(userType);
+                setUserId(response.data.user.id);
+                setUserType(response.data.user.userRole);
 
-                console.log("User ID:", userId);
-                console.log("User Type:", userType);
+                localStorage.setItem('user', JSON.stringify({ userId, userType }));
+
             } else {
                 DisplayMessage(response.data.message, "error");
             }
@@ -84,7 +82,7 @@ const Login = () => {
             DisplayMessage("An error has occurred!", "error");
         }
         setTimeout(() => {
-            navigate('/');
+            navigate('/Home');
         }, 3000);
     };
     useEffect(() => {
