@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
@@ -15,17 +15,11 @@ import Account from './components/Account/Account.jsx';
 import Payment from './components/Payment/payment.jsx';
 import Cart from './components/Cart/Cart.jsx';
 import PayoutForm from './components/Payment/payout.jsx';
-import { UserProvider, UserContext } from './components/Login/login.jsx';
 import CopperScrapInfo from './components/Footer/CopperScrapInfo.jsx';
 import BrassScrapInfo from './components/Footer/BrassScrapInfo.jsx';
 import ElectronicScrapInfo from './components/Footer/ElectronicScrapInfo.jsx';
 import Best from './components/Footer/Best.jsx';
-
-// Create a function to handle route protection
-function ProtectedRoute({ element }) {
-  const { isLoggedIn } = useContext(UserContext);
-  return isLoggedIn ? element : <Navigate to="/Login" />;
-}
+import { UserProvider } from './App.jsx';
 
 
 // create a router

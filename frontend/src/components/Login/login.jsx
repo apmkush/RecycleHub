@@ -1,34 +1,14 @@
-import React, { useRef, useState, useEffect, createContext, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../App';
 import './../../index.css';
-
-// Context to provide global state (userId, userType, isLoggedIn)
-export const UserContext = createContext({
-    userId: null,
-    userType: null,
-    isLoggedIn: false,
-    setIsLoggedIn: () => {},
-});
-
-export const UserProvider = ({ children }) => {
-    const [userId, setUserId] = useState(null);
-    const [userType, setUserType] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    return (
-        <UserContext.Provider value={{ userId, userType, isLoggedIn, setIsLoggedIn }}>
-            {children}
-        </UserContext.Provider>
-    );
-};
+import { UserContext } from "../../App";
 
 const Login = () => {
-    const { setIsLoggedIn } = useContext(UserContext);
+    const { setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);  // Access setters from context
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isForgotEmail, setIsForgotEmail] = useState(false);
@@ -87,8 +67,10 @@ const Login = () => {
 
                 // Assuming response.data contains userId and userType
                 const { userId, userType } = response.data;
-                UserContext.userId = userId;  // Set globally without a setter
-                UserContext.userType = userType;  // Set globally without a setter
+                
+                // Correctly update context values using setter functions
+                setUserId(userId);
+                setUserType(userType);
 
                 console.log("User ID:", userId);
                 console.log("User Type:", userType);

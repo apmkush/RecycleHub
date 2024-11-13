@@ -1,10 +1,8 @@
-// Navbar.jsx
-
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt, FaEnvelopeOpenText, FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
-import { UserContext } from '../Login/login'; // Ensure this path is correct
+import { UserContext } from '../../App';
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -14,20 +12,22 @@ function Navbar() {
 
   useEffect(() => {
     if (!isLoggedin) {
-      navigate('/Home');
+      navigate('/Home'); // Redirect if not logged in
     }
-    userType : {type:'admin'}
   }, [isLoggedin, navigate]);
 
+  // Toggle for mobile menu
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen(prev => !prev);
   };
 
-  const linkClasses = (path) =>
+  // Helper function to determine active link style
+  const linkClasses = (path) => 
     `text-gray-700 border-2 border-transparent hover:border-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white font-semibold text-lg flex items-center px-4 py-2 rounded-md ${
       location.pathname === path ? 'bg-gray-300 border-gray-400' : ''
     }`;
 
+  // Render navigation links based on user type
   const renderLinks = () => {
     if (!isLoggedin) {
       return (
