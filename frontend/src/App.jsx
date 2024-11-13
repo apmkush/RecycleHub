@@ -1,49 +1,28 @@
 import React, { createContext, useState, useEffect } from 'react';
-import 'aos/dist/aos.css'; // Importing AOS (if you are using it for animations)
 
-// Create a context for user information
+// Create context for user state
 export const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState(null); // Holds user type and login status
-  const [isAuthenticated,setIsAuthenticated] = useState(false); // Determine if a user is logged in
+  const [userId, setUserId] = useState(null);
+  const [userType, setUserType] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  
-
-  // Fetch user type and login status from the backend
+  // useEffect to load user data from localStorage on app load
   useEffect(() => {
-    const fetchUserType = async () => {
-      // try {
-      //   const response = await fetch('/api/getUserType'); // Replace with your actual API endpoint
-      //   if (!response.ok) {
-      //     throw new Error('Failed to fetch user data');
-      //   }
-      //   const data = await response.json();
-      //   setUser(data.type ? data : null); // Set user type or null if not logged in
-      // } catch (error) {
-      //   console.error('Error fetching user type:', error);
-      //   setUser(null); // Ensure no user state is set in case of error
-      // }
-      setUser({type : "admin"});
-      setIsAuthenticated(true);
-    };
-
-    fetchUserType();
-  }, []);
+    const storedUser = localStorage.getItem('user'); // Check for user data in localStorage
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUserId(user.userId);
+      setUserType(user.userType);
+      setIsLoggedIn(true);
+    }
+  }, []); // Empty dependency array means this runs on initial load only
 
   return (
-    <UserContext.Provider value={{ user,setUser, isAuthenticated,setIsAuthenticated }}>
+    <UserContext.Provider value={{ userId, userType, isLoggedIn, setUserId, setUserType, setIsLoggedIn }}>
       {children}
     </UserContext.Provider>
   );
 }
 
-function App() {
-  return (
-    <>
-      {/* App-level global state like theme handling can be added here */}
-    </>
-  );
-}
-
-export default App;
