@@ -4,16 +4,18 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../App';
 import './../../index.css';
 
 // Context to provide global state (userId, userType, isLoggedIn)
 export const UserContext = createContext({
     userId: null,
     userType: null,
+    setUserId: () => {},
+    setUserType: () => {},
     isLoggedIn: false,
     setIsLoggedIn: () => {},
 });
+
 
 export const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
@@ -21,14 +23,15 @@ export const UserProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
-        <UserContext.Provider value={{ userId, userType, isLoggedIn, setIsLoggedIn }}>
+        <UserContext.Provider value={{ userId, userType, isLoggedIn, setIsLoggedIn, setUserId, setUserType }}>
             {children}
         </UserContext.Provider>
     );
 };
 
 const Login = () => {
-    const { setIsLoggedIn } = useContext(UserContext);
+    const {userId, userType, setUserId, setUserType, setIsLoggedIn } = useContext(UserContext);
+    // const { setIsLoggedIn } = useContext(UserContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isForgotEmail, setIsForgotEmail] = useState(false);
@@ -47,6 +50,7 @@ const Login = () => {
         email: "",
         password: "",
     });
+
 
     const DisplayMessage = (text) => {
         toast.success(text, {
@@ -84,25 +88,33 @@ const Login = () => {
             if (response.data.success) {
                 DisplayMessage(response.data.message);
                 setIsLoggedIn(true);
+                // console.log(response.data.id);
+                // UserContext.userId = response.data.user._id;  // Set globally without a setter
+                // UserContext.userType = response.data.user.userRole;  // Set globally without a setter
 
-                // Assuming response.data contains userId and userType
-                const { userId, userType } = response.data;
-                UserContext.userId = userId;  // Set globally without a setter
-                UserContext.userType = userType;  // Set globally without a setter
-
-                console.log("User ID:", userId);
-                console.log("User Type:", userType);
+                setUserId(response.data.user._id);
+                setUserType(response.data.user.userRole);
+                // console.log("User Data :", response.data.user.userRole);
+                // console.log("User ID:", userId);
+                // console.log("User Type:", userType);
             } else {
                 DisplayMessage(response.data.message, "error");
             }
             console.log(response.data.message);
         } catch (e) {
+            console.log(e);
             DisplayMessage("An error has occurred!", "error");
         }
         setTimeout(() => {
             navigate('/');
         }, 3000);
     };
+    useEffect(() => {
+        if (userId && userType) {
+            console.log("User ID:", userId);
+            console.log("User Type:", userType);
+        }
+    }, [userId, userType]);
 
     const handleNextClick = (e) => {
         e.preventDefault();

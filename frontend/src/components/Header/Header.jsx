@@ -16,9 +16,11 @@ function Navbar() {
     if (!isLoggedin) {
       navigate('/Home');
     }
-    userType : {type:'admin'}
+    console.log("userType:",userType);
+    // userType : {type:'admin'}
   }, [isLoggedin, navigate]);
 
+  
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
