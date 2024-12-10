@@ -44,8 +44,9 @@ export const signup = async (req, res) => {
         phone:req.body.phone,
         password:req.body.password,
         confirm_password:req.body.confirm_password,
-        regno:req.body.regno,
+        userRole:req.body.role,
     };
+    console.log(data);
     try{
         const existingUser = await UserModel.findOne({email: data.email});
         if(data.password!=data.confirm_password){
@@ -67,7 +68,7 @@ export const signup = async (req, res) => {
         console.log(e);
         res.json({success:false,message:"Something went wrong!!"});
     }
-    };
+  };
 
 
 //Authenticate the email id and password from which mail will be sent
@@ -211,7 +212,7 @@ export const resetPassword = async (req, res) => {
 
 export const getData = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.params.id);
+    const user = await UserModel.findById(req.params.userId);
     if (!user) return res.json({ message: 'User not found' });
     res.json(user);
   } catch (error) {

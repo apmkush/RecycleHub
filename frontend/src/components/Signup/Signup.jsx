@@ -8,13 +8,25 @@ const Signup = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
-    role: '', // Role is now the first field
+    role: '', 
     name: '',
     email: '',
     phone: '',
     password: '',
     confirm_password: '',
   });
+  const DisplayMessage = (text) => {
+    toast.success(text, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: { marginTop: "10px" },
+    });
+};
 
   const handleInput = (event) => {
     const { name, value } = event.target;
@@ -40,21 +52,19 @@ const Signup = () => {
           },
         });
         if (response.data.success) {
-          toast.success('SignUp successful!!', {
-            position: 'top-center',
-            autoClose: 3000, // Auto-close after 3 seconds
-          });
+          DisplayMessage('SignUp successful!!');
+          setTimeout(() => {
+            navigate('/Home');
+          }, 3000);
         } else {
-          toast.error(response.data.message);
+          DisplayMessage(response.data.message);
         }
         setMessage(response.data.message);
       } catch (error) {
-        setMessage('An error has occurred!!');
+        DisplayMessage('An error has occurred!!');
         console.log(error);
       }
-      setTimeout(() => {
-        navigate('/Home');
-      }, 3000);
+      
     }
   };
 

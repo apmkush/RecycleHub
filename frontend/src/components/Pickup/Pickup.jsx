@@ -68,6 +68,7 @@ const PickupForm = ({ itemValue = '' }) => {
 
       if (response.data.success) {
         DisplayMessage(response.data.message);
+        window.location.reload();
       } else {
         DisplayMessage(response.data.message, "error");
       }
