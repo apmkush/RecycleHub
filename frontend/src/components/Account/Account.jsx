@@ -7,7 +7,8 @@ import MyProfile from '../Profile/Profile.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
-import { UserContext } from '../../App';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice.js';
 
 // Placeholder components for each page section
 function Profile() {
@@ -29,17 +30,14 @@ function PrivacySetting() {
 
 function Account() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { userId, userType, isLoggedin, setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);
+  // const { userId, userType, isLoggedin, setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);
+  const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserId(null);
-    setUserType(null);
-    localStorage.removeItem('user'); // Clear specific item
-    console.log("Logout successful");
+    dispatch(logout());
   // or use localStorage.clear() to remove everything if needed
   };
 

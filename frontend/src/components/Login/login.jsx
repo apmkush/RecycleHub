@@ -1,14 +1,15 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../store/authSlice.js';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
 import './../../index.css';
-import { UserContext } from "../../App";
 
 const Login = () => {
-    const { setIsLoggedIn, setUserId, setUserType,userId, userType } = useContext(UserContext);  // Access setters from context
+    const [otp, setOtp] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isForgotEmail, setIsForgotEmail] = useState(false);
@@ -22,6 +23,7 @@ const Login = () => {
     const loginTitleRef = useRef(null);
     const userEmailRef = useRef(null);
     
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formInput, setFormInput] = useState({
         email: "",
@@ -64,14 +66,14 @@ const Login = () => {
             });
             if (response.data.success) {
                 DisplayMessage(response.data.message);
-                setIsLoggedIn(true);
                 // localStorage.setItem("user", response.data.user);
                 
                 // Correctly update context values using setter functions
-                setUserId(response.data.user.id);
-                setUserType(response.data.user.userRole);
+                // setUserId(response.data.user.id);
+                // setUserType(response.data.user.userRole);
 
-                localStorage.setItem('user', JSON.stringify({ userId, userType }));
+                // localStorage.setItem('user', JSON.stringify({ userId, userType }));
+                dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
 
             } else {
                 DisplayMessage(response.data.message, "error");
@@ -85,12 +87,12 @@ const Login = () => {
             navigate('/Home');
         }, 3000);
     };
-    useEffect(() => {
-        if (userId && userType) {
-            console.log("User ID:", userId);
-            console.log("User Type:", userType);
-        }
-    }, [userId, userType]);
+    // useEffect(() => {
+    //     if (userId && userType) {
+    //         console.log("User ID:", userId);
+    //         console.log("User Type:", userType);
+    //     }
+    // }, [userId, userType]);
 
     const handleNextClick = (e) => {
         e.preventDefault();
@@ -206,7 +208,7 @@ const Login = () => {
                                 className="w-full px-4 py-2 text-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter OTP"
                                 value={otp}
-                                onChange={(event) => setotp(event.target.value)}
+                                onChange={(event) => setOtp(event.target.value)}
                                 required
                             />
                             <button

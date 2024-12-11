@@ -1,37 +1,39 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaHome, FaTruck, FaMoneyCheck, FaTag, FaUser, FaTachometerAlt, FaEnvelopeOpenText, FaCartPlus } from 'react-icons/fa';
 import LogoImage from './logo.jpeg';
-import { UserContext } from '../../App';
 
 function Navbar() {
+  const { user,isAuthenticated } = useSelector((state) => state.auth);
+  const userType = user?.userRole || 'Guest';
+  // console.log(user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { userId, userType, isLoggedin, setIsLoggedIn, setUserId, setUserType } = useContext(UserContext);
   const location = useLocation();
   const navigate = useNavigate();
 
 
 
-  useEffect(() => {
-    // Check if user data is in localStorage and update context accordingly
-    const storedUserData = localStorage.getItem('user');
-    if (storedUserData) {
-      const { userId, userType } = JSON.parse(storedUserData);
-      setIsLoggedIn(true);
-      setUserId(userId);
-      setUserType(userType);
-    }
-  }, [setIsLoggedIn, setUserId, setUserType]);
+  // useEffect(() => {
+  //   // Check if user data is in localStorage and update context accordingly
+  //   const storedUserData = localStorage.getItem('user');
+  //   if (storedUserData) {
+  //     const { userId, userType } = JSON.parse(storedUserData);
+  //     setIsLoggedIn(true);
+  //     setUserId(userId);
+  //     setUserType(userType);
+  //   }
+  // }, [setIsLoggedIn, setUserId, setUserType]);
 
-  setIsLoggedIn(true);
-  setUserType('admin');
+  // setIsLoggedIn(true);
+  // setUserType('admin');
 
   useEffect(() => {
     // Redirect if not logged in
-    if (!isLoggedin) {
+    if (!isAuthenticated) {
       navigate('/Home'); // Redirect if not logged in
     }
-  }, [isLoggedin, navigate]);
+  }, [isAuthenticated, navigate]);
 
   // Toggle for mobile menu
   const toggleMobileMenu = () => {
@@ -46,7 +48,7 @@ function Navbar() {
 
   // Render navigation links based on user type
   const renderLinks = () => {
-    if (!isLoggedin) {
+    if (!isAuthenticated) {
       return (
         <>
           <Link to="/Home" className={linkClasses('/Home')}>
@@ -144,14 +146,14 @@ function Navbar() {
         </div>
 
         {/* Middle Section - Navigation Links for unauthenticated users */}
-        {!isLoggedin && (
+        {!isAuthenticated && (
           <div className="hidden lg:flex items-center space-x-4 lg:w-[60%] justify-end">
             {renderLinks()}
           </div>
         )}
 
         {/* Right Section - Login/Signup for unauthenticated users */}
-        {!isLoggedin && (
+        {!isAuthenticated && (
           <div className="hidden lg:flex items-center lg:w-[20%] justify-end">
             <Link to="/login" className="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600">
               Login/Register
@@ -160,7 +162,7 @@ function Navbar() {
         )}
 
         {/* Right Section - Navigation Links for authenticated users */}
-        {isLoggedin && (
+        {isAuthenticated && (
           <div className="hidden lg:flex items-center space-x-6 lg:w-[80%] justify-end">
             {renderLinks()}
           </div>
@@ -177,7 +179,7 @@ function Navbar() {
         <div className="lg:hidden bg-gray-50 bg-opacity-90 dark:bg-gray-800 mt-4">
           <div className="flex flex-col items-start px-6 py-4 space-y-4">
             {renderLinks()}
-            {!isLoggedin && (
+            {!isAuthenticated && (
               <Link to="/login" className="block w-full bg-purple-500 text-white text-center py-2 rounded-lg hover:bg-purple-600">
                 Login/Register
               </Link>
