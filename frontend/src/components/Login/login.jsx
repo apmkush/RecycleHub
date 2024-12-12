@@ -34,7 +34,7 @@ const Login = () => {
     const DisplayMessage = (text) => {
         toast.success(text, {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -96,9 +96,16 @@ const Login = () => {
 
     const handleNextClick = (e) => {
         e.preventDefault();
+
+        // Email validation
+        if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            DisplayMessage("Please enter a valid email address!", "error");
+            return;
+        }
+
         setIsPasswordPage(true);
         setTimeout(() => passwordInputRef.current.focus(), 500);
-        loginTitleRef.current.innerHTML = 'Welcome';
+        loginTitleRef.current.innerHTML = 'Welcome to RecycleHub';
         userEmailRef.current.innerHTML = email;
     };
 
@@ -106,8 +113,8 @@ const Login = () => {
         e.preventDefault();
         setIsPasswordPage(false);
         loginTitleRef.current.innerHTML = 'Login';
-        userEmailRef.current.innerHTML = 'Please login to use the platform';
-        emailInputRef.current.focus();
+        userEmailRef.current.innerHTML = 'Please login to use RecycleHub';
+        setTimeout(() => emailInputRef.current.focus(), 500); // Refocus on the email input
     };
 
     const handleLoginSuccess = (credentialResponse) => {
@@ -182,7 +189,7 @@ const Login = () => {
                 DisplayMessage(response.data.message);
                 setTimeout(() => {
                     navigate('/');
-                }, 4000);
+                }, 1500);
             } else {
                 DisplayMessage(response.data.message, "error");
             }
@@ -260,7 +267,7 @@ const Login = () => {
                         <div className={`transition-all duration-500 ${isPasswordPage ? 'transform scale-105' : ''}`}>
                             <div className="mb-6 text-center">
                                 <h2 className="text-2xl font-semibold text-gray-800" ref={loginTitleRef}>Login</h2>
-                                <p className="text-gray-500" ref={userEmailRef}>Please login to use the platform</p>
+                                <p className="text-gray-500" ref={userEmailRef}>Please login to use RecycleHub</p>
                             </div>
     
                             {/* Email Page */}
@@ -272,6 +279,7 @@ const Login = () => {
                                             className="w-full px-4 py-2 text-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             placeholder="Enter your email"
                                             name="email"
+                                            value={email}
                                             onChange={(e) => {setEmail(e.target.value);handleInput(e)}}
                                             ref={emailInputRef}
                                             required
@@ -350,7 +358,7 @@ const Login = () => {
                                         onError={handleLoginError}
                                         useOneTap
                                     />
-                                    <button onClick={() => googleLogout()}>Logout</button>
+                                    {/* <button onClick={() => googleLogout()}>Logout</button> */}
                                 </div>
                             </GoogleOAuthProvider>
                         </div>

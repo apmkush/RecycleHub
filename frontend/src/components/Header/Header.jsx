@@ -60,15 +60,6 @@ function Navbar() {
             <Link to="/Pricing" className={linkClasses('/Pricing')}>
               <FaTag className="mr-2" /> Pricing
             </Link>
-            <Link to="/Account" className={linkClasses('/Account')}>
-              <FaUser className="mr-2" /> Account
-            </Link>
-            <Link to="/Requests" className={linkClasses('/Requests')}>
-              <FaEnvelopeOpenText className="mr-2" /> Requests
-            </Link>
-            <Link to="/Dashboard" className={linkClasses('/Dashboard')}>
-              <FaTachometerAlt className="mr-2" /> Dashboard
-            </Link>
         </>
       );
     }
@@ -153,7 +144,7 @@ function Navbar() {
         )}
 
         {/* Right Section - Login/Signup for unauthenticated users */}
-        {!isAuthenticated && (
+        {!isAuthenticated && ( 
           <div className="hidden lg:flex items-center lg:w-[20%] justify-end">
             <Link to="/login" className="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600">
               Login/Register
