@@ -21,6 +21,7 @@ import ElectronicScrapInfo from './components/Footer/ElectronicScrapInfo.jsx';
 import Best from './components/Footer/Best.jsx';
 import { UserProvider } from './App.jsx';
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -35,7 +36,6 @@ const router = createBrowserRouter([
       { path: 'Pricing', element: <Pricing /> },
       { path: 'Dashboard', element: <Dashboard /> },
       { path: 'Account/*', element: <Account /> },
-      { path: 'payment', element: <Payment /> },
       { path: 'Cart', element: <Cart /> },
       { path: 'payout', element: <PayoutForm /> },
       { path: 'CopperScrapInfo', element: <CopperScrapInfo /> },
@@ -43,6 +43,10 @@ const router = createBrowserRouter([
       { path: 'ElectronicScrapInfo', element: <ElectronicScrapInfo /> },
       { path: 'Best', element: <Best /> },
     ],
+  },
+  {
+    path: 'payment',
+    element: <Payment />,
   },
 ]);
 

@@ -34,7 +34,7 @@ const Login = () => {
     const DisplayMessage = (text) => {
         toast.success(text, {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -85,7 +85,7 @@ const Login = () => {
         }
         setTimeout(() => {
             navigate('/Home');
-        }, 3000);
+        }, 2000);
     };
     // useEffect(() => {
     //     if (userId && userType) {

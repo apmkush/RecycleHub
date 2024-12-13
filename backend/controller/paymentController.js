@@ -2,6 +2,9 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import dotenv from "dotenv";
 dotenv.config();
+// import cors from 'cors';
+// app.use(cors());
+
 import {SubscriptionModel} from '../models/subscription.js';
 
 const razorpayInstance = new Razorpay({
@@ -9,11 +12,10 @@ const razorpayInstance = new Razorpay({
   key_secret: process.env.REACT_APP_RAZORPAY_SECRET,
 });
 
-// console.log(razorpayInstance);
-// console.log(razorpayInstance.payouts);
 
 // Generate a new order
 export const createOrder = async (req, res) => {
+  // console.log(req.body);
   try {
     const subscription = await razorpayInstance.subscriptions.create({
         plan_id: "plan_PKPBib2XkNce96", // Replace with your actual plan ID
@@ -38,7 +40,7 @@ export const createOrder = async (req, res) => {
         description: "Subscription payment link",
         customer: {
             name: req.body.name,
-            contact: req.body.contact,
+            contact: String(req.body.contact),
             email: req.body.email,
         },
         subscription_id: subscription.id,
@@ -47,7 +49,7 @@ export const createOrder = async (req, res) => {
     });
 
     // Send the subscription link URL back to the frontend
-    res.json({ paymentLink: subscriptionLink.short_url });
+    res.json({ paymentLink: subscriptionLink.short_url,subscription:subscription });
     } catch (error) {
         console.error('Error creating subscription link:', error);
         res.json({ message: 'Failed to create subscription link', error: error.message });
@@ -58,7 +60,7 @@ export const createOrder = async (req, res) => {
 // Verify payment
 export const verifyPayment = async (req, res) => {
     const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature } = req.body;
-    const secret = process.env.RAZORPAY_KEY_SECRET;
+    const secret = process.env.REACT_APP_RAZORPAY_SECRET;
 
     const generated_signature = crypto
       .createHmac('sha256', secret)
@@ -69,6 +71,23 @@ export const verifyPayment = async (req, res) => {
       res.json({ success: true, message: 'Payment verified' });
     } else {
       res.json({ success: false, message: 'Payment verification failed' });
+    }
+  };
+
+
+  // Fetch subscription details
+  export const fetchSubscriptions = async (req, res) => {
+    const { customer_id } = req.body;
+  
+    try {
+      const options = {
+        customer_id,
+      };
+      const subscriptions = razorpayInstance.subscriptions.all(options);
+      res.json(subscriptions);
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      res.status(500).json({ error: 'Failed to fetch subscriptions' });
     }
   };
 
