@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Payment = () => {
   const { user } = useSelector((state) => state.auth); // Assuming `user` is fetched from Redux
+  // console.log(user._id);
   const [amount, setAmount] = useState('');
   const [subscriptionId, setSubscriptionId] = useState(null);
   const[paymentLink,setpaymentLink]=useState('');
@@ -68,14 +69,21 @@ const Payment = () => {
       subscription_id: subscription.id,
       name: 'Recycle Hub',
       description: 'Subscription Payment',
+      prefill: {
+        email: user.email, // Prefill customer email
+        contact: user.phone, // Prefill customer contact
+      },
       handler: async (response) => {
         try {
-          await axios.post('http://localhost:5000/verify-payment', {
+          const res=await axios.post('http://localhost:5000/verify-payment', {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_subscription_id: response.razorpay_subscription_id,
             razorpay_signature: response.razorpay_signature,
+            customer_id:user._id,
           });
-          DisplayMessage('Payment verified and subscription activated.');
+          if(res.data.success){
+            DisplayMessage('Payment verified and subscription activated.');
+          }
         } catch (error) {
           console.error('Error in processing payment:', error);
           toast.error('Failed to verify payment. Please try again.');

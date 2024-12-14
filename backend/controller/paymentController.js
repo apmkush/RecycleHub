@@ -2,8 +2,6 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import dotenv from "dotenv";
 dotenv.config();
-// import cors from 'cors';
-// app.use(cors());
 
 import {SubscriptionModel} from '../models/subscription.js';
 
@@ -59,31 +57,75 @@ export const createOrder = async (req, res) => {
 
 // Verify payment
 export const verifyPayment = async (req, res) => {
-    const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature } = req.body;
+    const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature,customer_id } = req.body;
     const secret = process.env.REACT_APP_RAZORPAY_SECRET;
-
+    console.log('customer_id:',customer_id);
     const generated_signature = crypto
       .createHmac('sha256', secret)
-      .update(razorpay_subscription_id + '|' + razorpay_payment_id)
+      .update(razorpay_payment_id + '|' + razorpay_subscription_id)
       .digest('hex');
-
     if (generated_signature === razorpay_signature) {
+      try {
+        const newSubscription = new SubscriptionModel({
+          razorpay_subscription_id,
+          customer_id:customer_id, 
+        });
+    
+        const savedSubscription = await newSubscription.save();
+        console.log('Subscription saved:', savedSubscription);
+      } catch (error) {
+        console.error('Error saving subscription:', error);
+      }
       res.json({ success: true, message: 'Payment verified' });
     } else {
+      console.log('razorpay_subscription_id:', razorpay_subscription_id);
+      console.log('razorpay_payment_id:', razorpay_payment_id);
+
       res.json({ success: false, message: 'Payment verification failed' });
+      console.log ('Payment verification failed');
     }
   };
 
 
+
+  // const fetchCustomerByEmailOrContact = async (email, contact) => {
+  //   try {
+  //     const customers = await razorpayInstance.customers.all();
+  //     console.log(email);
+  //     const customer = customers.items.find(
+  //       (cust) => cust.email === email || cust.contact === contact
+  //     );
+  //     if (!customer) {
+  //       throw new Error('Customer not found');
+  //     }
+  //     return customer.id;
+  //   } catch (error) {
+  //     console.error('Error fetching customer:', error);
+  //     throw new Error('Failed to fetch customer');
+  //   }
+  // };
+
   // Fetch subscription details
   export const fetchSubscriptions = async (req, res) => {
-    const { customer_id } = req.body;
-  
+    var subscriptionId;
+    const { UserId } = req.query;
+    console.log(req.query);
+
     try {
-      const options = {
-        customer_id,
-      };
-      const subscriptions = razorpayInstance.subscriptions.all(options);
+      const subscriptions = await SubscriptionModel.find({customer_id:UserId});
+      subscriptionId=subscriptions[0].razorpay_subscription_id;
+      // console.log('Subscriptions:', subscriptionId);
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+    }
+    try {
+      const allSubscriptions = await razorpayInstance.subscriptions.all();
+
+      // Step 3: Filter subscriptions by customer_id locally
+      const subscriptions = allSubscriptions.items.filter(
+        (sub) => sub.id === subscriptionId
+      );
+      console.log('Subscriptions:', subscriptions);
       res.json(subscriptions);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
