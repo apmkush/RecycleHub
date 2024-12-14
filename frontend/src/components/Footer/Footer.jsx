@@ -21,7 +21,7 @@ function Footer() {
                 <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faPinterest} /></a>
                 <a href="/" className="text-white text-2xl"><FontAwesomeIcon icon={faInstagram} /></a>
               </div>
-            </div>
+            </div> 
           </div>
 
           {/* Footer Section 2 */}
