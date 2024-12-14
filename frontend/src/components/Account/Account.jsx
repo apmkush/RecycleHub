@@ -6,6 +6,8 @@ import Home from '../Home/Home.jsx'
 import MyProfile from '../Profile/Profile.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
+import Payment from '../Payment/payment.jsx';
+import PlansDisplay from '../Payment/plans.jsx';
 import SubscriptionStatus from '../Subscription/subscriptions.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
 import { useDispatch } from 'react-redux';
@@ -64,6 +66,14 @@ function Account() {
             <HiOutlineClock />
             <span>Subscription Status</span>
           </Link>
+          <Link to="payment" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
+            <HiOutlineClock />
+            <span>Payment</span>
+          </Link>
+          <Link to="plans" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
+            <HiOutlineClock />
+            <span>Plans</span>
+          </Link>
           <Link to="Orders" className="flex items-center gap-3 p-2 rounded-md hover:bg-teal-600 focus:bg-teal-600">
             <FiShoppingCart />
             <span>Orders</span>
@@ -101,6 +111,8 @@ function Account() {
             <Route path="Requestory" element={<Requestory />} />
             <Route path="Orders" element={<Orders />} />
             <Route path="subscriptions" element={<SubscriptionStatus />} />
+            <Route path="payment" element={<Payment />} />
+            <Route path="plans" element={<PlansDisplay />} />
             <Route path="Settings" element={<SettingsPage />} />
             <Route path="/logout" element={<Home />} />
           </Routes>

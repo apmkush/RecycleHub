@@ -16,38 +16,12 @@ export const createOrder = async (req, res) => {
   // console.log(req.body);
   try {
     const subscription = await razorpayInstance.subscriptions.create({
-        plan_id: "plan_PKPBib2XkNce96", // Replace with your actual plan ID
+        plan_id: req.body.plan_id, // Replace with your actual plan ID
         customer_notify: 0,
         total_count: 6,
     });
-    // console.log('Subscription:', subscription);
-    const plan = await razorpayInstance.plans.fetch(subscription.plan_id);
-        // console.log('Plan:', plan);
-        if (!plan || !plan.item.amount || !plan.item.currency) {
-            throw new Error('Plan amount or currency is missing');
-        }
-        const amount = plan.item.amount;         // The amount in paise (10000 means ₹100.00)
-        const currency = plan.item.currency;     // Currency code (INR)
 
-        // Log the amount and currency to check their values
-        console.log('Amount:', amount);  // This should show 10000
-        console.log('Currency:', currency);
-
-    const subscriptionLink = await razorpayInstance.invoices.create({
-        type: "link",
-        description: "Subscription payment link",
-        customer: {
-            name: req.body.name,
-            contact: String(req.body.contact),
-            email: req.body.email,
-        },
-        subscription_id: subscription.id,
-        amount: plan.item.amount,
-        currency: plan.item.currency,
-    });
-
-    // Send the subscription link URL back to the frontend
-    res.json({ paymentLink: subscriptionLink.short_url,subscription:subscription });
+    res.json({subscription:subscription });
     } catch (error) {
         console.error('Error creating subscription link:', error);
         res.json({ message: 'Failed to create subscription link', error: error.message });
@@ -78,32 +52,14 @@ export const verifyPayment = async (req, res) => {
       }
       res.json({ success: true, message: 'Payment verified' });
     } else {
-      console.log('razorpay_subscription_id:', razorpay_subscription_id);
-      console.log('razorpay_payment_id:', razorpay_payment_id);
+      // console.log('razorpay_subscription_id:', razorpay_subscription_id);
+      // console.log('razorpay_payment_id:', razorpay_payment_id);
 
       res.json({ success: false, message: 'Payment verification failed' });
       console.log ('Payment verification failed');
     }
   };
 
-
-
-  // const fetchCustomerByEmailOrContact = async (email, contact) => {
-  //   try {
-  //     const customers = await razorpayInstance.customers.all();
-  //     console.log(email);
-  //     const customer = customers.items.find(
-  //       (cust) => cust.email === email || cust.contact === contact
-  //     );
-  //     if (!customer) {
-  //       throw new Error('Customer not found');
-  //     }
-  //     return customer.id;
-  //   } catch (error) {
-  //     console.error('Error fetching customer:', error);
-  //     throw new Error('Failed to fetch customer');
-  //   }
-  // };
 
   // Fetch subscription details
   export const fetchSubscriptions = async (req, res) => {
@@ -120,8 +76,6 @@ export const verifyPayment = async (req, res) => {
     }
     try {
       const allSubscriptions = await razorpayInstance.subscriptions.all();
-
-      // Step 3: Filter subscriptions by customer_id locally
       const subscriptions = allSubscriptions.items.filter(
         (sub) => sub.id === subscriptionId
       );
@@ -135,5 +89,14 @@ export const verifyPayment = async (req, res) => {
 
 
 
-
+  export const fetchPlans = async (req, res) => {
+    try {
+      const plans = await razorpayInstance.plans.all();
+      console.log('All Plans:', plans.items);
+      res.json(plans.items);
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+      res.status(500).json({ error: 'Failed to fetch plans' });
+    }
+  }
 

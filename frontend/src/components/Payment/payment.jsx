@@ -4,13 +4,10 @@ import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Payment = () => {
+
+const Payment = (plan) => {
   const { user } = useSelector((state) => state.auth); // Assuming `user` is fetched from Redux
   // console.log(user._id);
-  const [amount, setAmount] = useState('');
-  const [subscriptionId, setSubscriptionId] = useState(null);
-  const[paymentLink,setpaymentLink]=useState('');
-//   console.log(import.meta.env.VITE_RAZORPAY_KEY);
 
   const DisplayMessage = (text) => {
     toast.success(text, {
@@ -28,7 +25,7 @@ const Payment = () => {
   const handlePayment = async () => {
     try {
       const response = await axios.post('http://localhost:5000/create-subscription', {
-        plan_id: 'plan_PKPBib2XkNce96',
+        plan_id: plan.plan.id,
         total_count: 12,
         quantity: 1,
         expire_by: Math.floor(Date.now() / 1000) + 86400 * 30, // 1 month expiry
@@ -47,15 +44,13 @@ const Payment = () => {
         contact: user.phone,
       });
 
-      console.log('Response Data:', response.data);
+      // console.log('Response Data:', response.data);
 
-      const subscription = response.data.subscription; // Assuming the subscription data is returned as the top-level object
+      const subscription = response.data.subscription; 
       if (!subscription || !subscription.id) {
         throw new Error('Subscription object is missing or invalid in the API response.');
       }
 
-      setpaymentLink(response.data.paymentLink);
-      setSubscriptionId(subscription.id);
       openRazorpay(subscription);
     } catch (error) {
       console.error('Error creating subscription:', error.response?.data || error.message);
@@ -99,40 +94,16 @@ const Payment = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <ToastContainer />
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Enter Amount for Payment</h2>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Enter amount"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-gray-700"
-        />
-        <button
-          onClick={handlePayment}
-          className="w-full mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-200"
-        >
-          Pay Now
-        </button>
-      
-        {paymentLink && (
-            <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 shadow-md w-full max-w-md">
-                <p className="text-green-700 font-semibold text-lg mb-2">Payment Link Generated:</p>
-                <a
-                href={paymentLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-green-500 text-white font-medium text-sm px-6 py-2 rounded-md shadow-md hover:bg-green-600 transition-all duration-200"
-                >
-                Click here to pay
-                </a>
-            </div>
-            )}
-
-      </div>
-    </div>
+    <div className="bg-white shadow-lg rounded-lg p-6 m-4 w-80 border border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-3">Payment Details</h2>
+            <p className="text-gray-700 mb-4">
+                <strong className="text-purple-700">Amount:</strong>{' '}
+                <span className="text-green-600 font-medium">₹{(plan.plan.item.amount / 100).toFixed(2)}</span>{' '}
+                {plan.plan.item.currency.toUpperCase()}
+            </p>
+            {/* Payment form can go here */}
+            <button onClick={handlePayment} className="bg-blue-500 text-white px-4 py-2 rounded-md">Proceed to Payment</button>
+        </div>
   );
 };
 
