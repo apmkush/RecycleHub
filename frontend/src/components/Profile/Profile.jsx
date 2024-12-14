@@ -21,18 +21,19 @@ const MyProfile = () => {
     };
     fetchUserData();
   }, []);
-  const  DisplayMessage=(text)=>{
+
+  const DisplayMessage = (text) => {
     toast.success(text, {
-        position: "top-center",
-        autoClose: 3000, // Auto-close after 3 seconds
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        style: {marginTop: "10px" },
+      position: "top-center",
+      autoClose: 3000, // Auto-close after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      style: { marginTop: "10px" },
     });
-};
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,15 +41,14 @@ const MyProfile = () => {
   };
 
   const handleImageChange = async (e) => {
-    var imgData = new FileReader();
+    const imgData = new FileReader();
     imgData.readAsDataURL(e.target.files[0]);
     imgData.onload = () => {
       let obj = { image: imgData.result };
 
-      setFormData((prev)=>({...prev,...obj}));
-      // setImage(imgData.result);
+      setFormData((prev) => ({ ...prev, ...obj }));
       console.log(imgData.result);
-      // console.log(obj);
+    };
   };
 
   const saveChanges = async () => {
@@ -57,13 +57,17 @@ const MyProfile = () => {
       const response = await axios.put(`http://localhost:5000/update-data/user-id`, formData);
       setUser(response.data); // Update local user state
       setIsEditing(false);
-      if(response.data.success){
+      if (response.data.success) {
         DisplayMessage(response.data.message);
       }
     } catch (error) {
       console.error('Error saving changes:', error);
     }
   };
+
+  if (!user) {
+    return <div>Loading...</div>;  // Show loading message until user data is fetched
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -150,5 +154,5 @@ const MyProfile = () => {
     </div>
   );
 };
-}
+
 export default MyProfile;
