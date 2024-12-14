@@ -13,6 +13,7 @@ import Pricing from './components/Pricing/Pricing.jsx';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 import Account from './components/Account/Account.jsx';
 import Payment from './components/Payment/payment.jsx';
+import Subscriptions from './components/Subscription/subscriptions.jsx';
 import Cart from './components/Cart/Cart.jsx';
 import PayoutForm from './components/Payment/payout.jsx';
 import CopperScrapInfo from './components/Footer/CopperScrapInfo.jsx';
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: 'payment',
     element: <Payment />,
+  },
+  {
+    path: 'subscriptions',
+    element: <Subscriptions />,
   },
 ]);
 
