@@ -6,6 +6,7 @@ import Home from '../Home/Home.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
 import PlansDisplay from '../Payment/plans.jsx';
+import BillGenerator from '../Billing/billing.jsx';
 import SubscriptionStatus from '../Subscription/subscriptions.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
 import { useDispatch } from 'react-redux';
@@ -74,6 +75,15 @@ function Account() {
             <span>Plans</span>
           </Link>
           <Link
+            to="billing"
+            className={`flex items-center gap-3 p-2 rounded-md ${
+              isActive('/billing') ? 'bg-teal-500' : 'hover:bg-teal-600'
+            }`}
+          >
+            <HiOutlineClock />
+            <span>Billing</span>
+          </Link>
+          <Link
             to="Orders"
             className={`flex items-center gap-3 p-2 rounded-md ${
               isActive('/Orders') ? 'bg-teal-500' : 'hover:bg-teal-600'
@@ -124,6 +134,7 @@ function Account() {
             <Route path="Orders" element={<Orders />} />
             <Route path="subscriptions" element={<SubscriptionStatus />} />
             <Route path="plans" element={<PlansDisplay />} />
+            <Route path="billing" element={<BillGenerator />} />
             <Route path="Settings" element={<SettingsPage />} />
             <Route path="/logout" element={<Home />} />
           </Routes>

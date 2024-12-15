@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@react-oauth/google": "^0.12.1",
+    "@react-pdf/renderer": "^4.1.5",
     "@reduxjs/toolkit": "^2.5.0",
     "aos": "^2.3.4",
     "axios": "^1.7.7",
