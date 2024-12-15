@@ -20,8 +20,8 @@ router.post("/signup", signup);
 router.post("/verify-otp", verifyotp);
 router.post("/send-otp", sendotp);
 router.post("/reset-password", resetPassword);
-router.put("/update-data", updateData);
-router.get("/get-data/:id", getData);
+router.put("/update-data/:UserId", updateData);
+router.get("/get-data/:UserId", getData);
 router.put("/change-password", changePassword);
 router.put("/update-mode", updateMode);
 

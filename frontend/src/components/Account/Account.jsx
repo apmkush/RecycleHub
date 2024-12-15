@@ -5,7 +5,6 @@ import { HiOutlineClock } from 'react-icons/hi';
 import Home from '../Home/Home.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
-import Payment from '../Payment/payment.jsx';
 import PlansDisplay from '../Payment/plans.jsx';
 import SubscriptionStatus from '../Subscription/subscriptions.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
@@ -66,15 +65,6 @@ function Account() {
             <span>Subscription Status</span>
           </Link>
           <Link
-            to="payment"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/payment') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
-            <HiOutlineClock />
-            <span>Payment</span>
-          </Link>
-          <Link
             to="plans"
             className={`flex items-center gap-3 p-2 rounded-md ${
               isActive('/plans') ? 'bg-teal-500' : 'hover:bg-teal-600'
@@ -133,7 +123,6 @@ function Account() {
             <Route path="Requestory" element={<Requestory />} />
             <Route path="Orders" element={<Orders />} />
             <Route path="subscriptions" element={<SubscriptionStatus />} />
-            <Route path="payment" element={<Payment />} />
             <Route path="plans" element={<PlansDisplay />} />
             <Route path="Settings" element={<SettingsPage />} />
             <Route path="/logout" element={<Home />} />
