@@ -5,8 +5,8 @@ import { HiOutlineClock } from 'react-icons/hi';
 import Home from '../Home/Home.jsx';
 import Requestory from '../RequestHistory/RequestHistory.jsx';
 import Orders from '../Orders/Orders.jsx';
-import Payment from '../Payment/payment.jsx';
 import PlansDisplay from '../Payment/plans.jsx';
+import BillGenerator from '../Billing/billing.jsx';
 import SubscriptionStatus from '../Subscription/subscriptions.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
 import { useDispatch } from 'react-redux';
@@ -66,15 +66,6 @@ function Account() {
             <span>Subscription Status</span>
           </Link>
           <Link
-            to="payment"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/payment') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
-            <HiOutlineClock />
-            <span>Payment</span>
-          </Link>
-          <Link
             to="plans"
             className={`flex items-center gap-3 p-2 rounded-md ${
               isActive('/plans') ? 'bg-teal-500' : 'hover:bg-teal-600'
@@ -82,6 +73,15 @@ function Account() {
           >
             <HiOutlineClock />
             <span>Plans</span>
+          </Link>
+          <Link
+            to="billing"
+            className={`flex items-center gap-3 p-2 rounded-md ${
+              isActive('/billing') ? 'bg-teal-500' : 'hover:bg-teal-600'
+            }`}
+          >
+            <HiOutlineClock />
+            <span>Billing</span>
           </Link>
           <Link
             to="Orders"
@@ -133,8 +133,8 @@ function Account() {
             <Route path="Requestory" element={<Requestory />} /> 
             <Route path="Orders" element={<Orders />} />
             <Route path="subscriptions" element={<SubscriptionStatus />} />
-            <Route path="payment" element={<Payment />} />
             <Route path="plans" element={<PlansDisplay />} />
+            <Route path="billing" element={<BillGenerator />} />
             <Route path="Settings" element={<SettingsPage />} />
             <Route path="/logout" element={<Home />} />
           </Routes>

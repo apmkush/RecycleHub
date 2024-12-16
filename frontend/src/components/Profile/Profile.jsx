@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePage = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useSelector((state) => state.auth);
+  const UserId = user._id;
+  const [User, setUser] = useState(null);
   const [formData, setFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -17,7 +20,8 @@ const ProfilePage = () => {
     // Fetch user data (replace 'user-id' with actual user ID)
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/get-data/user-id');
+        const response = await axios.get(`http://localhost:5000/get-data/${UserId}`);
+        console.log(response.data);
         setUser(response.data);
         setFormData(response.data);
         setAddresses(response.data.addresses || []);
@@ -39,7 +43,7 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-data/user-id`, formData);
+      const response = await axios.put(`http://localhost:5000/update-data/${UserId}`, formData);
       setUser(response.data);
       toast.success('Personal details updated successfully!', {
         position: 'top-center',
@@ -68,7 +72,7 @@ const ProfilePage = () => {
 
   const handleSaveAddresses = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-addresses/user-id`, { addresses });
+      const response = await axios.put(`http://localhost:5000/update-addresses/${UserId}`, { addresses });
       setAddresses(response.data.addresses);
       toast.success('Addresses updated successfully!', {
         position: 'top-center',
@@ -98,16 +102,29 @@ const ProfilePage = () => {
   // Handle image file selection and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log("Selected file:", file);
+  
     if (file) {
       const reader = new FileReader();
+  
       reader.onloadend = () => {
+        // console.log("FileReader result:", reader.result);
         setProfileImage(file); // Set the selected image file
         setImagePreview(reader.result); // Set the preview of the image
         setIsCustomImage(true); // Mark as custom image
+        console.log(imagePreview);
       };
-      reader.readAsDataURL(file);
+  
+      if (file.type.startsWith("image/")) {
+        reader.readAsDataURL(file);
+      } else {
+        console.error("Unsupported file type:", file.type);
+      }
+    } else {
+      console.error("No file selected");
     }
   };
+  
 
   // Handle predefined image selection
   const handlePredefinedImageSelect = (imageUrl) => {

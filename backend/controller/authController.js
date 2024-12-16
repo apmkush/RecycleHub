@@ -212,7 +212,7 @@ export const resetPassword = async (req, res) => {
 
 export const getData = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.params.userId);
+    const user = await UserModel.findById(req.params.UserId);
     if (!user) return res.json({ message: 'User not found' });
     res.json(user);
   } catch (error) {
@@ -222,9 +222,10 @@ export const getData = async (req, res) => {
 
 export const updateData = async (req, res) => {
   const { name, email, phone, address, age, profileImage } = req.body;
+  console.log("Profile image",address);
   try {
     const user = await UserModel.findByIdAndUpdate(
-      req.params.id,
+      req.params.UserId,
       { name, email, phone, address, age, profileImage },
       { new: true }
     );
