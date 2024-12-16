@@ -11,6 +11,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <PersistGate loading={null} persistor={persistor}>
         <Index />
       </PersistGate>
-    </Provider>
+    </Provider> 
   </React.StrictMode>
 );
