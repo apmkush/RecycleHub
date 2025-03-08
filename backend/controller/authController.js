@@ -1,10 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcryptjs";
+import axios from "axios";
 import { validationResult } from "express-validator";
 import nodemailer from "nodemailer";
 import {UserModel} from "../models/user.js";
 import { generateToken, verifyToken, generateTempToken } from "../config/secret.js";
+import { OAuth2Client } from "google-auth-library";
 
 export const login = async (req, res) => {
     const data={
@@ -211,14 +213,80 @@ export const resetPassword = async (req, res) => {
   };
 
 export const getData = async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.UserId);
-    if (!user) return res.json({ message: 'User not found' });
-    res.json(user);
-  } catch (error) {
-    res.json({ message: 'Server error' });
+  const token = req.headers.authorization;
+  // console.log(token);
+  if(token){
+    try {
+      const decoded = verifyToken(token);
+      // console.log(decoded);
+      if (!decoded) return res.status(401).json({success:false, message: 'Unauthorized' });
+
+      const userId = decoded.user.id;
+
+      const user = await UserModel.findById(userId);
+      if (!user) return res.status(404).json({success:false, message: 'User not found' });
+      user.password=undefined;
+      res.json({success:true,user:user});
+    } catch (error) {
+      res.json({success:false, message: 'Server error' });
+    }  
+  }else{
+    return res.status(401).json({success:false, message: "Token not provided" });
   }
 }
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+export const googleLogin = async (req, res) =>{
+  
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(400).json({ success: false, message: "Token missing" });
+    }
+
+    // Verify token using Google's API
+    // const googleResponse = await axios.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+    // const { email, name, picture, sub } = googleResponse.data; // Extract user info
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID, // Must match the frontend client ID
+    });
+
+    const { email, name, picture, sub } = ticket.getPayload();
+    // console.log(email);
+
+    if (!email) {
+        return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+
+    // Check if user exists in the database
+    let user = await UserModel.findOne({ email });
+
+    // if (!user) {
+    //     // If user does not exist, create a new one
+    //     user = await UserModel.create({
+    //         googleId: sub,  // Google unique ID
+    //         name,
+    //         email,
+    //         profilePicture: picture, 
+    //     });
+    // }
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    user.password=undefined;
+    const authToken = generateToken(user.id);
+    // Generate a new session token (optional, if you want to maintain session-based auth)
+    return res.json({ success: true, user:user,token:authToken });
+
+  } catch (error) {
+      console.error("Google Auth Error:", error);
+      return res.status(401).json({ success: false, message: "Invalid or expired token" });
+  }
+}
+
 
 export const updateData = async (req, res) => {
   const { name, email, phone, address, age, profileImage } = req.body;

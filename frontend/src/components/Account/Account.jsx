@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Route, Routes, useLocation, Navigate } from 'react-router-dom'; // Import Navigate
+import { Link, Route, Routes, useLocation, Navigate, useNavigate  } from 'react-router-dom'; // Import Navigate
 import { FiUser, FiLock, FiLogOut, FiMenu, FiShoppingCart } from 'react-icons/fi';
 import { HiOutlineClock } from 'react-icons/hi';
 import Home from '../Home/Home.jsx';
@@ -17,12 +17,14 @@ function Account() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation(); // Get current location
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   const handleLogout = () => {
+    navigate('/');
     dispatch(logout());
   };
 
@@ -136,7 +138,7 @@ function Account() {
             <Route path="plans" element={<PlansDisplay />} />
             <Route path="billing" element={<BillGenerator />} />
             <Route path="Settings" element={<SettingsPage />} />
-            <Route path="/logout" element={<Home />} />
+            {/* <Route path="/logout" element={<Navigate to="/" />} /> */}
           </Routes>
         </main>
       </div>
