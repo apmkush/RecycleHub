@@ -132,7 +132,7 @@ function Account() {
             <Route path="/*" element={<Navigate to="Profile" />} /> {/* Redirects if no section is clicked */}
 
             <Route path='Profile' element={<Profile />} />
-            <Route path="Requestory" element={<Requestory />} />
+            <Route path="Requestory" element={<Requestory />} /> 
             <Route path="Orders" element={<Orders />} />
             <Route path="subscriptions" element={<SubscriptionStatus />} />
             <Route path="plans" element={<PlansDisplay />} />

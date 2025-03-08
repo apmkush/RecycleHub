@@ -13,7 +13,7 @@ import Pricing from './components/Pricing/Pricing.jsx';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 import Account from './components/Account/Account.jsx';
 import Payment from './components/Payment/payment.jsx';
-import Subscriptions from './components/Subscription/subscriptions.jsx';
+import Subscriptions from './components/Subscription/subscriptions.jsx'; 
 import BillGenerator from './components/Billing/billing.jsx';
 import Cart from './components/Cart/Cart.jsx';
 import PayoutForm from './components/Payment/payout.jsx';

@@ -10,7 +10,7 @@ export default function Layout() {
       <main className="flex-grow overflow-y-auto p-0 m-0">
         {/* Full-width container */}
         <div className="w-full">
-          <Outlet />
+          <Outlet /> 
         </div>
       </main>
       <Footer />

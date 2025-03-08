@@ -18,7 +18,7 @@ export function UserProvider({ children }) {
         setIsLoggedIn(true);
       }
     } catch (error) {
-      console.error("Error parsing stored user data:", error);
+      console.error("Error parsing stored user data:", error); 
       localStorage.removeItem('user');
     }
     setIsLoading(false);
