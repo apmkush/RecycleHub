@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../store/authSlice.js';
 import { useNavigate, Link } from 'react-router-dom';
@@ -66,13 +67,7 @@ const Login = () => {
             });
             if (response.data.success) {
                 DisplayMessage(response.data.message);
-                // localStorage.setItem("user", response.data.user);
-                
-                // Correctly update context values using setter functions
-                // setUserId(response.data.user.id);
-                // setUserType(response.data.user.userRole);
 
-                // localStorage.setItem('user', JSON.stringify({ userId, userType }));
                 dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
 
             } else {
@@ -117,10 +112,28 @@ const Login = () => {
         setTimeout(() => emailInputRef.current.focus(), 500); // Refocus on the email input
     };
 
-    const handleLoginSuccess = (credentialResponse) => {
+    const handleLoginSuccess = async (credentialResponse) => {
         const token = credentialResponse.credential;
-        DisplayMessage("Login successfully!!");
+        // console.log(token);
+        const userDetails = jwtDecode(token);
+        console.log(userDetails);
         // Further token handling can be added here if necessary
+        const response = await axios.get(`http://localhost:5000/google-login`,
+            {
+              headers: {
+                  Authorization: `${token}`, // Send JWT token in headers
+              },
+          });
+          if(response.data.success){
+            console.log(response.data); 
+            dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
+            DisplayMessage("Login successfully!!");
+            setTimeout(() => {
+                navigate('/Home');
+            }, 2000);
+          }else{
+            console.log(response.data.message);
+          }
     };
 
     const handleLoginError = () => {

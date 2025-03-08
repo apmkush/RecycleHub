@@ -5,7 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePage = () => {
-  const { user } = useSelector((state) => state.auth);
+  const[message,setMesssage]=useState(null);
+  const { user,token } = useSelector((state) => state.auth);
   const UserId = user._id;
   const [User, setUser] = useState(null);
   const [formData, setFormData] = useState({});
@@ -20,15 +21,25 @@ const ProfilePage = () => {
     // Fetch user data (replace 'user-id' with actual user ID)
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/get-data/${UserId}`);
-        console.log(response.data);
-        setUser(response.data);
-        setFormData(response.data);
-        setAddresses(response.data.addresses || []);
-        if (response.data.addresses && response.data.addresses.length > 0) {
-          setSelectedAddress(response.data.addresses[0]); // Select the first address by default
+        const response = await axios.get(`http://localhost:5000/get-data`,
+          {
+            headers: {
+                Authorization: `Bearer ${token}`, // Send JWT token in headers
+            },
+        });
+        if(response.data.success){
+          console.log(response.data);
+          setUser(response.data.user);
+          setFormData(response.data.user);
+          setAddresses(response.data.user.addresses || []);
+          if (response.data.user.addresses && response.data.user.addresses.length > 0) {
+            setSelectedAddress(response.data.user.addresses[0]); // Select the first address by default
+          }
+          setImagePreview(response.data.user.profileImage || 'https://via.placeholder.com/150'); // Set initial image preview
+        }else{
+          setMesssage(response.data.message);
+          console.log(response.data.message);
         }
-        setImagePreview(response.data.profileImage || 'https://via.placeholder.com/150'); // Set initial image preview
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
