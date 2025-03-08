@@ -62,7 +62,7 @@ function Footer() {
             <p className="text-md text-white-400 mt-4">Get in touch through our social media channels or email.</p>
           </div>
         </div>
-        <div className="text-center mt-8 text-md">&copy; 2024 VidyaSetu. All rights reserved.</div>
+        <div className="text-center mt-8 text-md">&copy; 2025 VidyaSetu. All rights reserved.</div>
       </div>
     </footer>
   );
