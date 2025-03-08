@@ -121,7 +121,7 @@ var transporter = nodemailer.createTransport({
   
       //The mail content to be sent to user
       var mailOptions = {
-        from: `VidyaSetu <${process.env.email}>`,
+        from: `RecycleHub <${process.env.email}>`,
         to: `${email}`,
         subject: "Password Reset",
         text: `Dear User,
@@ -134,7 +134,7 @@ var transporter = nodemailer.createTransport({
         
         Regards,
         Web Team,
-        VidyaSetu`,
+        RecycleHub`,
       };
   
       //Function to send mail   
@@ -213,25 +213,16 @@ export const resetPassword = async (req, res) => {
   };
 
 export const getData = async (req, res) => {
-  const token = req.headers.authorization;
-  // console.log(token);
-  if(token){
-    try {
-      const decoded = verifyToken(token);
-      // console.log(decoded);
-      if (!decoded) return res.status(401).json({success:false, message: 'Unauthorized' });
+  try {
+    const userId = req.user.id; // Extracted from the decoded token in authMiddleware
 
-      const userId = decoded.user.id;
-
-      const user = await UserModel.findById(userId);
-      if (!user) return res.status(404).json({success:false, message: 'User not found' });
-      user.password=undefined;
-      res.json({success:true,user:user});
-    } catch (error) {
-      res.json({success:false, message: 'Server error' });
-    }  
-  }else{
-    return res.status(401).json({success:false, message: "Token not provided" });
+    const user = await UserModel.findById(userId).select("-password"); // Exclude password
+    // console.log(user);
+    if (!user) return res.status(404).json({success:false, message: 'User not found' });
+    
+    res.json({success:true,user:user});
+  } catch (error) {
+    res.json({success:false, message: 'Server error' });
   }
 }
 
@@ -290,10 +281,11 @@ export const googleLogin = async (req, res) =>{
 
 export const updateData = async (req, res) => {
   const { name, email, phone, address, age, profileImage } = req.body;
-  console.log("Profile image",address);
+  const UserId = req.user.id;
+  // console.log("Profile image",address);
   try {
     const user = await UserModel.findByIdAndUpdate(
-      req.params.UserId,
+      UserId,
       { name, email, phone, address, age, profileImage },
       { new: true }
     );
@@ -301,13 +293,13 @@ export const updateData = async (req, res) => {
   } catch (error) {
     res.json({ message: 'Server error' });
   }
+
 }
 
 export const changePassword = async (req, res) => {
-  const { userId, currentPassword, newPassword } = req.body;
-
+  const { currentPassword, newPassword } = req.body;
   try {
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(req.user.id);
     if (!user) return res.json({ message: 'User not found' });
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
@@ -324,11 +316,11 @@ export const changePassword = async (req, res) => {
 
 // Update Preferences (Dark Mode, Language)
 export const updateMode = async (req, res) => {
-  const { userId, darkMode } = req.body;
+  const {darkMode } = req.body;
 
   try {
     const user = await UserModel.findByIdAndUpdate(
-      userId,
+      req.user.id,
       { darkMode },
       { new: true }
     );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 
 const SettingsPage = () => {
   const [isPasswordEditing, setIsPasswordEditing] = useState(false);
@@ -11,6 +12,7 @@ const SettingsPage = () => {
     confirmPassword: '',
   });
   const [darkMode, setDarkMode] = useState(false);
+  const { user,token } = useSelector((state) => state.auth);
 
   const userId = 'user123'; // Replace with actual user ID
   const  DisplayMessage=(text)=>{
@@ -40,11 +42,14 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/change-password', {
-        userId,
+      const response = await axios.put('http://localhost:5000/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
-      });
+      },{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
       DisplayMessage(response.data.message);
       setIsPasswordEditing(false);
     } catch (error) {
@@ -57,7 +62,12 @@ const SettingsPage = () => {
     setDarkMode(!darkMode);
     document.body.classList.toggle('dark', !darkMode);
     try {
-      await axios.put('http://localhost:5000/update-mode', { userId, darkMode: !darkMode });
+      const response =await axios.put('http://localhost:5000/update-mode', { darkMode: !darkMode },{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
+    console.log(response.data.message);
     } catch (error) {
       console.error('Error updating dark mode:', error);
     }

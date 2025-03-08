@@ -54,7 +54,11 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-data/${UserId}`, formData);
+      const response = await axios.put(`http://localhost:5000/update-data`, formData,{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
       setUser(response.data);
       toast.success('Personal details updated successfully!', {
         position: 'top-center',
