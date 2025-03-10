@@ -7,7 +7,7 @@ export const addPickup = async (req, res) => {
             item, description, pickupDate, pincode,
             contactNumber, weight, address, email, image
         } = req.body;
-        // const userId = req.user.id;
+        const RequestedBy = req.user.id;
         
         const newPickup = new Pickup({
             item,
@@ -32,6 +32,17 @@ export const addPickup = async (req, res) => {
 export const getPickups = async (req, res) => {
     try{
         const data = await Pickup.find();
+        res.json(data);
+    }catch(e){
+        console.log(e);
+        res.json({ message: 'Error fetching scrap items' });
+    }
+}
+export const getOrders = async (req, res) => {
+    const userId = req.user.id;
+    try{
+        const data = await Pickup.find({ RequestedBy: userId });
+        // console.log(data);
         res.json(data);
     }catch(e){
         console.log(e);

@@ -1,61 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 import ShowDetails from '../Cart/ShowDetails';
 
-const items = [
-  {
-    itemName: 'Laptop',
-    image: './laptop.png',
-    address: '123 Tech Street, Cityville',
-    price: 500,
-    status: 'awaiting pickup',
-    date: '2023-05-21',
-    weight: '2 kg',
-    pickupTime: '10:00 AM',
-    description: 'A slightly used laptop, ready for recycling.',
-  },
-  {
-    itemName: 'Smartphone',
-    image: './smartphone.png',
-    address: '456 Mobile Avenue, Townsville',
-    price: 200,
-    status: 'sold',
-    date: '2021-06-15',
-    weight: '0.3 kg',
-    pickupTime: '02:00 PM',
-    description: 'A functional smartphone with minor scratches.',
-  },
-  {
-    itemName: 'Tablet',
-    image: './tablet.png',
-    address: '789 Gadget Street, Metropolis',
-    price: 300,
-    status: 'added to cart',
-    date: '2023-07-10',
-    weight: '0.5 kg',
-    pickupTime: '09:00 AM',
-    description: 'A tablet in good condition, ready for use or recycling.',
-  },
-  {
-    itemName: 'Headphones',
-    image: './headphones.png',
-    address: '101 Audio Lane, Sound City',
-    price: 800,
-    status: 'awaiting pickup',
-    date: '2022-08-05',
-    weight: '0.2 kg',
-    pickupTime: '11:30 AM',
-    description: 'Noise-canceling headphones with minimal wear.',
-  },
-];
-
 const Orders = () => {
-  const [filter, setFilter] = useState('all'); // Filter state for All, Ready to be Picked Up, or Completed
-  const [sortOption, setSortOption] = useState(''); // Sort state for Date or Price
+  const { token } = useSelector((state) => state.auth);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('all'); // Filter state
+  const [sortOption, setSortOption] = useState(''); // Sort state
   const [selectedItem, setSelectedItem] = useState(null); // State for the selected item
 
+  // Fetching data from the backend
+  const fetchOrders = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get('http://localhost:5000/get-orders', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Extracting only required fields
+      const formattedData = response.data.map((order) => ({
+        item: order.item,
+        date: new Date(order.pickupDate).toLocaleDateString(),
+        address: order.address,
+        price: order.weight, // Assuming weight is used as price
+        status: order.status,
+      }));
+
+      setItems(formattedData);
+    } catch (err) {
+      setError('Failed to load orders');
+      console.error('Error fetching orders:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch orders on component mount
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   // Filtered items based on selected filter
-  const filteredItems = items.filter(item => {
-    if (filter === 'all') return item.status === 'sold' || item.status === 'awaiting pickup';
+  const filteredItems = items.filter((item) => {
+    if (filter === 'all') return true; // Show all items
     if (filter === 'ready') return item.status === 'awaiting pickup';
     if (filter === 'completed') return item.status === 'sold';
     return false;
@@ -75,22 +67,13 @@ const Orders = () => {
     <div className="p-4 relative">
       {/* Filter Buttons */}
       <div className="flex gap-6 mb-4">
-        <button
-          className="py-2 px-4 bg-teal-500 text-white rounded"
-          onClick={() => setFilter('all')}
-        >
+        <button className="py-2 px-4 bg-teal-500 text-white rounded" onClick={() => setFilter('all')}>
           All
         </button>
-        <button
-          className="py-2 px-4 bg-teal-500 text-white rounded"
-          onClick={() => setFilter('ready')}
-        >
+        <button className="py-2 px-4 bg-teal-500 text-white rounded" onClick={() => setFilter('ready')}>
           Ready to be Picked Up
         </button>
-        <button
-          className="py-2 px-4 bg-teal-500 text-white rounded"
-          onClick={() => setFilter('completed')}
-        >
+        <button className="py-2 px-4 bg-teal-500 text-white rounded" onClick={() => setFilter('completed')}>
           Completed
         </button>
       </div>
@@ -98,16 +81,18 @@ const Orders = () => {
       {/* Sort Options */}
       <div className="flex gap-4 mb-4">
         <label>Sort by:</label>
-        <select
-          className="border border-gray-300 p-2 rounded"
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
-        >
+        <select className="border border-gray-300 p-2 rounded" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
           <option value="">Select</option>
           <option value="date">Date (Earliest First)</option>
           <option value="price">Price (High to Low)</option>
         </select>
       </div>
+
+      {/* Display loading state */}
+      {loading && <p>Loading orders...</p>}
+
+      {/* Display error message */}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Table of Items */}
       <table className="w-full border-collapse border text-left">
@@ -122,21 +107,12 @@ const Orders = () => {
         </thead>
         <tbody>
           {sortedItems.map((item, index) => (
-            <tr
-              key={index}
-              className="border-b cursor-pointer"
-              onClick={() => setSelectedItem(item)} // Set selected item on row click
-            >
-              <td className="px-4 py-2 flex items-center gap-3">
-                <img src={item.image} alt={item.itemName} className="w-12 h-12 object-cover" />
-                <span>{item.itemName}</span>
-              </td>
+            <tr key={index} className="border-b cursor-pointer" onClick={() => setSelectedItem(item)}>
+              <td className="px-4 py-2">{item.item}</td>
               <td className="px-4 py-2">{item.date}</td>
               <td className="px-4 py-2">{item.address}</td>
-              <td className="px-4 py-2">${item.price}</td>
-              <td className="px-4 py-2">
-                {item.status === 'awaiting pickup' ? 'Not Picked' : 'Bought'}
-              </td>
+              <td className="px-4 py-2">{item.price}</td>
+              <td className="px-4 py-2">{item.status}</td>
             </tr>
           ))}
         </tbody>
@@ -145,10 +121,7 @@ const Orders = () => {
       {/* Modal for Showing Details */}
       {selectedItem && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <ShowDetails
-            details={selectedItem}
-            onClose={() => setSelectedItem(null)} // Close modal on close button click
-          />
+          <ShowDetails details={selectedItem} onClose={() => setSelectedItem(null)} />
         </div>
       )}
     </div>

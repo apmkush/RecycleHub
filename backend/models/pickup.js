@@ -25,6 +25,9 @@ const PickupSchema = new mongoose.Schema({
         type: Number, 
         required: true 
     },
+    price: { 
+        type: Number, 
+    },
     address: { 
         type: String, 
         required: true 
