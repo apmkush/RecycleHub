@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
 
 
 const BillGenerator = () => {
-    const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
   const [customer, setCustomer] = useState({ name: '', phone: '', email: '', address: '' });
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '' });
@@ -114,7 +115,7 @@ const BillGenerator = () => {
   const total = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-md">
+    <div className={`p-6 max-w-4xl mx-auto shadow-md rounded-md ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white'}`}>
       <h1 className="text-2xl font-bold mb-4 text-center">Bill Generator</h1>
       <div className="space-y-4">
         <div>

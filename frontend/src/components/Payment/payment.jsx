@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Payment = (plan) => {
+  const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
   const { user } = useSelector((state) => state.auth); // Assuming `user` is fetched from Redux
   // console.log(user._id);
 
@@ -85,7 +86,7 @@ const Payment = (plan) => {
         }
       },
       theme: {
-        color: '#F37254',
+        color: isDarkMode ? '#1E293B' : '#F37254', 
       },
     };
 
@@ -94,7 +95,10 @@ const Payment = (plan) => {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 m-4 w-80 border border-gray-200">
+    <div 
+      className={`shadow-lg rounded-lg p-6 m-4 w-80 border 
+      ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-gray-800'}`}
+    >
             <h2 className="text-2xl font-semibold text-gray-800 mb-3">Payment Details</h2>
             <p className="text-gray-700 mb-4">
                 <strong className="text-purple-700">Amount:</strong>{' '}
@@ -102,7 +106,13 @@ const Payment = (plan) => {
                 {plan.plan.item.currency.toUpperCase()}
             </p>
             {/* Payment form can go here */}
-            <button onClick={handlePayment} className="bg-blue-500 text-white px-4 py-2 rounded-md">Proceed to Payment</button>
+            <button 
+             onClick={handlePayment} 
+             className={`px-4 py-2 rounded-md 
+              ${isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            >
+              Proceed to Payment
+            </button>
         </div>
   );
 };

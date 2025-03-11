@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Payment from './payment';
+import { useSelector } from 'react-redux';
 
 
 const PlansDisplay = () => {
@@ -8,6 +9,7 @@ const PlansDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
 
   const handleBuyClick = (plan) => {
       setSelectedPlan(plan);
@@ -38,22 +40,29 @@ const PlansDisplay = () => {
   }
 
   return (
-    <div className="flex flex-wrap justify-center p-6 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 min-h-screen">
-            <h1 className="w-full text-4xl font-extrabold text-purple-800 mb-8 text-center drop-shadow-lg">
+    <div
+      className={`flex flex-wrap justify-center p-6 min-h-screen ${
+        isDarkMode
+          ? 'bg-gray-900 text-white'
+          : 'bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 text-gray-800'
+      }`}
+    >
+            <h1 className={`w-full text-4xl font-extrabold mb-8 text-center drop-shadow-lg ${isDarkMode ? "text-white" : "text-gray-800"}`}>
                 Explore Our Plans
             </h1>
             {selectedPlan ? (
                 <Payment plan={selectedPlan} />
             ) : (
                 plans.map((plan) => (
-                    <div
-                        key={plan.id}
-                        className="bg-white shadow-lg rounded-lg p-6 m-4 w-80 border border-gray-200 hover:shadow-2xl transition-transform transform hover:scale-105"
-                        style={{
-                            backgroundColor: '#f9f9fc', // Subtle light color distinct from background
-                        }}
-                    >
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-3 border-b border-gray-300 pb-2">
+                  <div
+                    key={plan.id}
+                    className={`shadow-lg rounded-lg p-6 m-4 w-80 border hover:shadow-2xl transition-transform transform hover:scale-105 ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700 text-white'
+                        : 'bg-white border-gray-200 text-gray-800'
+                    }`}
+                  >
+                        <h2 className={`text-2xl text-center font-semibold mb-3 border-b border-gray-300 pb-2 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
                             {plan.item.name}
                         </h2>
                         <p className="text-gray-700 mb-4">
