@@ -16,6 +16,8 @@ const SettingsPage = () => {
     newPassword: '',
     confirmPassword: '',
   });
+  const [darkMode, setDarkMode] = useState(false);
+  const { user,token } = useSelector((state) => state.auth);
 
   const userId = 'user123'; // Replace with actual user ID
   const  DisplayMessage=(text)=>{
@@ -45,11 +47,14 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/change-password', {
-        userId,
+      const response = await axios.put('http://localhost:5000/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
-      });
+      },{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
       DisplayMessage(response.data.message);
       setIsPasswordEditing(false);
     } catch (error) {

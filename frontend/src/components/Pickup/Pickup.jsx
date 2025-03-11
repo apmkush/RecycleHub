@@ -19,7 +19,8 @@ const PickupForm = ({ itemValue = '' }) => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(''); // New state for image
   const navigate = useNavigate();
-  const { userId, userType, isLoggedIn } = useContext(UserContext); // Access context variables
+  
+  const { token,isAuthenticated } = useSelector((state) => state.auth); // Access context variables
 
   const DisplayMessage = (text, type = "success") => {
     toast[type](text, {
@@ -43,12 +44,12 @@ const PickupForm = ({ itemValue = '' }) => {
     e.preventDefault();
 
     // Check if the user is logged in
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
+      DisplayMessage("Please log in to submit the form", "error");
       navigate('/login');
       return; // Stop further execution
     }
 
-    // Include userId in the data if necessary
     const formData = new FormData();
     formData.append('item', item);
     formData.append('description', description);
@@ -58,17 +59,18 @@ const PickupForm = ({ itemValue = '' }) => {
     formData.append('weight', weight);
     formData.append('address', address);
     formData.append('email', email);
-    if (userId) formData.append('userId', userId); // Include userId
     if (image) formData.append('image', image);
 
     try {
       const response = await axios.post('http://localhost:5000/addPickup', formData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
 
       if (response.data.success) {
+        console.log('Form submitted successfully');
         DisplayMessage(response.data.message);
         window.location.reload();
       } else {

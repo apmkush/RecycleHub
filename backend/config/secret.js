@@ -1,13 +1,10 @@
 import pkg from 'jsonwebtoken';
 const { sign, verify } = pkg;
-const JWT_KEY = "HaHa";
+import dotenv from "dotenv";
 
-// import dotenv from "dotenv";
+dotenv.config();
 
-// // Load environment variables
-// dotenv.config();
-
-// const JWT_KEY = process.env.JWT_SECRET || "default_secret";
+const JWT_KEY = process.env.JWT_SECRET || "default_secret";
 
 export const generateToken = (userId) => {
   return sign({ user: { id: userId } }, JWT_KEY);

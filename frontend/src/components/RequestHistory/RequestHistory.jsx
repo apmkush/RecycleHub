@@ -9,13 +9,19 @@ const Requestory = () => {
   const [filter, setFilter] = useState('all');
   const [items, setItems] = useState([]);
   const [sortOption, setSortOption] = useState('date');
+  const { token } = useSelector((state) => state.auth); 
 
   const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
 
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/get-requests');
+      const response = await axios.get('http://localhost:5000/get-requests',{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -29,7 +35,7 @@ const Requestory = () => {
 
   // Map item statuses for display purposes
   const displayStatus = {
-    'awaiting pickup': 'Not Accepted',
+    'not accepted': 'Not Accepted',
     'completed': 'Sold',
     'accepted': 'Accepted',
   };
@@ -47,10 +53,17 @@ const Requestory = () => {
   const handleRowClick = (item) => setSelectedItem(item);
 
   const handleRemoveClick =async (item) => {
-    if (item.status === 'awaiting pickup' || item.status === 'accepted') {
+    if (item.status === 'not accepted' || item.status === 'accepted') {
       try {
-        await axios.delete(`http://localhost:5000/delete-request/${item._id}`);
+        await axios.delete(`http://localhost:5000/delete-request/${item._id}`,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
         setRemoveItem(item);
+        console.log("item deleted");
+        
         fetchItems(); // Refresh the items list
       } catch (error) {
         console.error('Error removing item:', error);
@@ -107,7 +120,7 @@ const Requestory = () => {
                 <td className="py-3 px-6 text-center">{item.pincode}</td>
                 <td className="py-3 px-6 text-center">{displayStatus[item.status]}</td>
                 <td className="py-3 px-6 text-center">
-                  {(item.status === 'awaiting pickup' || item.status === 'accepted') ? (
+                  {(item.status === 'not accepted' || item.status === 'accepted') ? (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
