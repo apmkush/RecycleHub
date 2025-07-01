@@ -16,7 +16,7 @@ const SettingsPage = () => {
     newPassword: '',
     confirmPassword: '',
   });
-  const [darkMode, setDarkMode] = useState(false);
+  //const [darkMode, setDarkMode] = useState(false);
   const { user,token } = useSelector((state) => state.auth);
 
   const userId = 'user123'; // Replace with actual user ID

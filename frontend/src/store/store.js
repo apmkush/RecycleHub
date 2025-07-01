@@ -19,7 +19,8 @@ const persistedThemeReducer = persistReducer(themePersistConfig, themeReducer);
 
 const store = configureStore({ 
   reducer: {
-    auth: persistedReducer,
+    auth: persistedAuthReducer,
+    theme: persistedThemeReducer, // Don't forget to add the theme reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
