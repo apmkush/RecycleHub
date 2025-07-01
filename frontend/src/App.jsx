@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext();
 
-export function UserProvider({ children }) {
+export function UserProvider({ children }) {    /// children are the routes of all webpages (see last code part of index.jsx)
   const [userId, setUserId] = useState(null);
   const [userType, setUserType] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);

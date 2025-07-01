@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer,REGISTER , REHYDRATE, PAUSE, PERSIST, PURGE } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Defaults to localStorage for web
-import authReducer from './authSlice.js';
+import authReducer from './authSlice';
 
 // Persist configuration
 const persistConfig = {
@@ -13,7 +13,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 
 const store = configureStore({ 
   reducer: {
-    auth: persistedReducer,
+    auth: persistedReducer,    // reducer which are created is registered here, auth -> slice created
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -12,6 +12,7 @@ import SettingsPage from '../Setting/Setting.jsx';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice.js';
 import Profile from '../Profile/Profile.jsx';
+import NotFound from '../NotFound/NotFound.jsx';
 
 function Account() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -138,7 +139,6 @@ function Account() {
             <Route path="plans" element={<PlansDisplay />} />
             <Route path="billing" element={<BillGenerator />} />
             <Route path="Settings" element={<SettingsPage />} />
-            {/* <Route path="/logout" element={<Navigate to="/" />} /> */}
           </Routes>
         </main>
       </div>
