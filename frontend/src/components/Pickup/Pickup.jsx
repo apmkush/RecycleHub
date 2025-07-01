@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../../App';
+import {useSelector} from 'react-redux'
 
 const PickupForm = ({ itemValue = '' }) => {
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
   // State for each form field
   const [item, setItem] = useState(itemValue);
   const [description, setDescription] = useState('');
@@ -17,7 +19,8 @@ const PickupForm = ({ itemValue = '' }) => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(''); // New state for image
   const navigate = useNavigate();
-  const { userId, userType, isLoggedIn } = useContext(UserContext); // Access context variables
+  
+  const { token,isAuthenticated } = useSelector((state) => state.auth); // Access context variables
 
   const DisplayMessage = (text, type = "success") => {
     toast[type](text, {
@@ -41,12 +44,12 @@ const PickupForm = ({ itemValue = '' }) => {
     e.preventDefault();
 
     // Check if the user is logged in
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
+      DisplayMessage("Please log in to submit the form", "error");
       navigate('/login');
       return; // Stop further execution
     }
 
-    // Include userId in the data if necessary
     const formData = new FormData();
     formData.append('item', item);
     formData.append('description', description);
@@ -56,17 +59,18 @@ const PickupForm = ({ itemValue = '' }) => {
     formData.append('weight', weight);
     formData.append('address', address);
     formData.append('email', email);
-    if (userId) formData.append('userId', userId); // Include userId
     if (image) formData.append('image', image);
 
     try {
       const response = await axios.post('http://localhost:5000/addPickup', formData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
 
       if (response.data.success) {
+        console.log('Form submitted successfully');
         DisplayMessage(response.data.message);
         window.location.reload();
       } else {
@@ -93,17 +97,17 @@ const PickupForm = ({ itemValue = '' }) => {
   };
 
   return (
-    <div className="flex justify-center pt-24 pb-12 bg-gradient-to-r from-blue-100 to-blue-200 min-h-screen">
+    <div className={`flex justify-center pt-24 pb-12 min-h-screen ${isDarkMode ? 'bg-blue-100' : 'bg-gradient-to-r from-blue-100 to-blue-200'}`}>
       <ToastContainer />
-      <div className="w-full max-w-5xl p-10 lg:p-16 bg-white shadow-2xl rounded-lg border-t-4 border-blue-600">
-        <h2 className="text-4xl font-bold mb-10 text-center text-blue-700">Scrap Pickup Form</h2>
+      <div className={`w-full max-w-5xl p-10 lg:p-16 shadow-2xl rounded-lg border-t-4 ${isDarkMode ? 'bg-gray-900 border-gray-600' : 'bg-white border-blue-600'}`}>
+        <h2 className={`text-4xl font-bold mb-10 text-center ${isDarkMode ? 'text-gray-200' : 'text-blue-700'}`}>Scrap Pickup Form</h2>
         <form onSubmit={handleSubmit}>
           {/* Item */}
           <div className="mb-8">
-            <label className="block text-blue-800 font-semibold mb-2">Item</label>
+          <label className={`block font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-blue-800'}`}>Item</label>
             <input
               type="text"
-              className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className={`w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 ${isDarkMode ? 'bg-gray-700 text-gray-200 border-gray-500 focus:ring-gray-500' : 'bg-blue-50 focus:border-blue-500 focus:ring-blue-200'}`}
               placeholder="e.g., Metal, Plastic"
               value={item || ''}
               onChange={(e) => setItem(e.target.value)}
@@ -221,7 +225,7 @@ const PickupForm = ({ itemValue = '' }) => {
           <div className="text-center">
             <button
               type="submit"
-              className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition duration-200 transform hover:scale-105"
+              className={`w-full md:w-auto font-semibold py-3 px-8 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
             >
               Submit
             </button>

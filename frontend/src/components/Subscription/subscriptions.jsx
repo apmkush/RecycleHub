@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const SubscriptionStatus = () => {
   const { user } = useSelector((state) => state.auth);
   const UserId = user._id;
+  const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
   const [subscriptions, setSubscriptions] = useState([]);
 
   const fetchSubscriptions = async () => {
@@ -42,12 +43,12 @@ const SubscriptionStatus = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Subscription Details</h1>
-      <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className={`flex flex-col items-center p-6 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <h1 className={`text-3xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Subscription Details</h1>
+      <div className={`w-full max-w-6xl shadow-lg rounded-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
         {subscriptions && subscriptions.length > 0 ? (
           <table className="w-full text-left border-collapse">
-            <thead className="bg-gray-200">
+            <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}>
               <tr>
                 <th className="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold">Status</th>
                 <th className="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold">Remaining Count</th>

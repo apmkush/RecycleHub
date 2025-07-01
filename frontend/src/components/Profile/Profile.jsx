@@ -16,6 +16,7 @@ const ProfilePage = () => {
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
   const [profileImage, setProfileImage] = useState(null); // State to store selected image
   const [isCustomImage, setIsCustomImage] = useState(false); // Whether custom image is selected
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
     // Fetch user data (replace 'user-id' with actual user ID)
@@ -54,7 +55,11 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-data/${UserId}`, formData);
+      const response = await axios.put(`http://localhost:5000/update-data`, formData,{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
       setUser(response.data);
       toast.success('Personal details updated successfully!', {
         position: 'top-center',
@@ -144,7 +149,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-xl">
+    <div 
+      className={`max-w-6xl mx-auto p-6 rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}
+    >
       <ToastContainer />
 
       {/* Profile Image Section */}
@@ -153,7 +160,7 @@ const ProfilePage = () => {
           <img
             src={imagePreview || 'https://via.placeholder.com/150'}
             alt="Profile"
-            className="h-32 w-32 rounded-full object-cover"
+            className={`h-32 w-32 rounded-full object-cover border-2 ${isDarkMode ? 'border-gray-700' : 'border-gray-300'}`}
           />
           {isEditing && (
             <>
@@ -194,7 +201,7 @@ const ProfilePage = () => {
               name="name"
               value={formData.name}
               onChange={handlePersonalDetailChange}
-              className="w-full mt-2 p-2 border rounded-md"
+              className={`w-full mt-2 p-2 border rounded-md ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'}`}
               disabled={!isEditing}
             />
           </div>
@@ -205,7 +212,7 @@ const ProfilePage = () => {
               name="email"
               value={formData.email}
               onChange={handlePersonalDetailChange}
-              className="w-full mt-2 p-2 border rounded-md"
+              className={`w-full mt-2 p-2 border rounded-md ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'}`}
               disabled={!isEditing}
             />
           </div>
@@ -216,7 +223,7 @@ const ProfilePage = () => {
               name="age"
               value={formData.age}
               onChange={handlePersonalDetailChange}
-              className="w-full mt-2 p-2 border rounded-md"
+              className={`w-full mt-2 p-2 border rounded-md ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'}`}
               disabled={!isEditing}
             />
           </div>
@@ -227,7 +234,7 @@ const ProfilePage = () => {
               name="phone"
               value={formData.phone}
               onChange={handlePersonalDetailChange}
-              className="w-full mt-2 p-2 border rounded-md"
+              className={`w-full mt-2 p-2 border rounded-md ${isDarkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'}`}
               disabled={!isEditing}
             />
           </div>
@@ -236,11 +243,11 @@ const ProfilePage = () => {
         {/* Action Buttons */}
         <div className="flex justify-end">
           {isEditing ? (
-            <button onClick={handleSavePersonalDetails} className="bg-blue-500 text-white py-2 px-6 rounded-lg">
+            <button onClick={handleSavePersonalDetails} className={`py-2 px-6 rounded-lg text-white ${isDarkMode ? 'bg-gray-500' : 'bg-blue-500'}`}>
               Save Changes
             </button>
           ) : (
-            <button onClick={() => setIsEditing(true)} className="bg-green-500 text-white py-2 px-6 rounded-lg">
+            <button onClick={() => setIsEditing(true)} className={`text-white py-2 px-6 rounded-lg ${isDarkMode ? "bg-gray-700" : "bg-green-500"}`}>
               Edit Profile
             </button>
           )}
@@ -307,7 +314,7 @@ const ProfilePage = () => {
             <button onClick={handleAddNewAddress} className="bg-gray-500 text-white py-2 px-4 rounded-lg">
               Add New Address
             </button>
-            <button onClick={handleSaveAddresses} className="bg-blue-500 text-white py-2 px-4 rounded-lg ml-4">
+            <button onClick={handleSaveAddresses} className={`py-2 px-4 rounded-lg ml-4 text-white ${isDarkMode ? 'bg-gray-500' : 'bg-blue-500'}`}>
               Save Addresses
             </button>
           </div>

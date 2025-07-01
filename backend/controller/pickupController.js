@@ -7,6 +7,7 @@ export const addPickup = async (req, res) => {
             item, description, pickupDate, pincode,
             contactNumber, weight, address, email, image
         } = req.body;
+        const RequestedBy = req.user.id;
         
         const newPickup = new Pickup({
             item,
@@ -18,6 +19,7 @@ export const addPickup = async (req, res) => {
             address,
             email,
             image,
+            RequestedBy,
         });
 
         await newPickup.save();
@@ -36,15 +38,28 @@ export const getPickups = async (req, res) => {
         res.json({ message: 'Error fetching scrap items' });
     }
 }
+export const getOrders = async (req, res) => {
+    const userId = req.user.id;
+    try{
+        const data = await Pickup.find({ RequestedBy: userId });
+        // console.log(data);
+        res.json(data);
+    }catch(e){
+        console.log(e);
+        res.json({ message: 'Error fetching scrap items' });
+    }
+}
 export const acceptPickup = async (req, res) => {
     try {
         const { requestId } = req.body;
+        const userId = req.user.id;
         
         // Find the request by ID and update it to accepted
         const updatedRequest = await Pickup.findByIdAndUpdate(
           requestId,
           { status: 'added to cart' },
-          { new: true }
+          { new: true },
+          {AcceptedBy:userId}
         );
     
         if (!updatedRequest) {
@@ -83,6 +98,7 @@ export const acceptPickup = async (req, res) => {
 export const deletePickup = async (req, res) => {
     try {
         await Pickup.findByIdAndDelete(req.params.id);
+        console.log("item deleted");
         res.json({success: true, message: 'Item deleted successfully' });
     } catch (err) {
         console.log(err);

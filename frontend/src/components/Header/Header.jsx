@@ -11,6 +11,7 @@ function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
 
 
 
@@ -42,9 +43,9 @@ function Navbar() {
 
   // Helper function to determine active link style
   const linkClasses = (path) => 
-    `text-gray-700 border-2 border-transparent hover:border-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white font-semibold text-lg flex items-center px-4 py-2 rounded-md ${
-      location.pathname === path ? 'bg-gray-300 border-gray-400' : ''
-    }`;
+    `border-2 border-transparent hover:border-gray-500 hover:bg-gray-100 font-semibold text-lg flex items-center px-4 py-2 rounded-md 
+    ${isDarkMode ? 'text-gray-300 dark:hover:text-white' : 'text-gray-700'} 
+    ${location.pathname === path ? (isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-300 border-gray-400') : ''}`;
 
   // Render navigation links based on user type
   const renderLinks = () => {
@@ -128,12 +129,12 @@ function Navbar() {
   };
 
   return (
-    <header className="bg-gray-50 bg-opacity-90 shadow-lg py-4 dark:bg-gray-800 text-gray-800">
+    <header className={`${isDarkMode ? 'bg-black text-gray-200' : 'bg-gray-50 text-gray-800'} bg-opacity-90 shadow-lg py-4`}>
       <div className="container mx-auto flex justify-between items-center px-4 lg:px-8">
         {/* Left Section - Logo and Recycle Hub */}
         <div className="flex items-center space-x-3 w-full lg:w-[20%]">
           <img src={LogoImage} alt="Logo" className="h-10 w-10" />
-          <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">Recycle Hub</span>
+          <span className={`"text-7xl font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Recycle Hub</span>
         </div>
 
         {/* Middle Section - Navigation Links for unauthenticated users */}
@@ -146,7 +147,7 @@ function Navbar() {
         {/* Right Section - Login/Signup for unauthenticated users */}
         {!isAuthenticated && ( 
           <div className="hidden lg:flex items-center lg:w-[20%] justify-end">
-            <Link to="/login" className="bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600">
+            <Link to="/login" className={`py-2 px-4 rounded-lg ${isDarkMode ? 'bg-purple-700 hover:bg-purple-800' : 'bg-purple-500 hover:bg-purple-600'} text-white`}>
               Login/Register
             </Link>
           </div>
@@ -160,14 +161,14 @@ function Navbar() {
         )}
 
         {/* Mobile Menu Button */}
-        <button className="lg:hidden text-gray-800 dark:text-gray-300" onClick={toggleMobileMenu}>
+        <button className={`lg:hidden ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`} onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-gray-50 bg-opacity-90 dark:bg-gray-800 mt-4">
+        <div className={`lg:hidden ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} bg-opacity-90 mt-4`}>
           <div className="flex flex-col items-start px-6 py-4 space-y-4">
             {renderLinks()}
             {!isAuthenticated && (

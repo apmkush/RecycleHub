@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector , useDispatch } from 'react-redux';
+import {toggleTheme} from '../../store/slices/ThemeSlice.js' ; 
+import { useSearchParams } from 'react-router-dom';
 
 const SettingsPage = () => {
+  const dispatch = useDispatch(); 
+  const darkMode = useSelector((state) => state.theme.darkMode) ; 
+
   const [isPasswordEditing, setIsPasswordEditing] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -11,6 +17,7 @@ const SettingsPage = () => {
     confirmPassword: '',
   });
   const [darkMode, setDarkMode] = useState(false);
+  const { user,token } = useSelector((state) => state.auth);
 
   const userId = 'user123'; // Replace with actual user ID
   const  DisplayMessage=(text)=>{
@@ -40,11 +47,14 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/change-password', {
-        userId,
+      const response = await axios.put('http://localhost:5000/change-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
-      });
+      },{
+        headers: {
+            Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+    });
       DisplayMessage(response.data.message);
       setIsPasswordEditing(false);
     } catch (error) {
@@ -52,23 +62,15 @@ const SettingsPage = () => {
     }
   };
 
-  // Toggle Dark Mode
-  const toggleDarkMode = async () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle('dark', !darkMode);
-    try {
-      await axios.put('http://localhost:5000/update-mode', { userId, darkMode: !darkMode });
-    } catch (error) {
-      console.error('Error updating dark mode:', error);
-    }
+  // Toggle Dark Mode using Redux
+  const handleDarkModeToggle = () => {
+    dispatch(toggleTheme());
   };
 
-  // Handle language change
-
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className={`max-w-6xl mx-auto p-6 ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}> 
       <ToastContainer />
-      <div className="bg-white shadow-xl rounded-lg p-8 mb-8 w-full">
+       
         <h2 className="text-3xl font-bold mb-6 text-center">Account Settings</h2>
 
         {/* Change Password Section */}
@@ -109,18 +111,21 @@ const SettingsPage = () => {
 
           {isPasswordEditing ? (
             <button
-              onClick={savePasswordChange}
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 w-full"
+            onClick={savePasswordChange}
+            className={`py-2 px-4 rounded-lg w-full transition-all 
+            ${darkMode ? 'bg-gray-500 text-black hover:bg-gray-600' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
             >
               Save Password Change
-            </button>
+            </button>          
           ) : (
             <button
-              onClick={() => setIsPasswordEditing(true)}
-              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 w-full"
+            onClick={() => setIsPasswordEditing(true)}
+            className={`py-2 px-4 rounded-lg w-full transition-all 
+            ${darkMode ? 'bg-gray-500 text-black hover:bg-gray-600' : 'bg-green-500 text-white hover:bg-green-600'}`}
             >
               Change Password
             </button>
+
           )}
         </div>
 
@@ -133,13 +138,13 @@ const SettingsPage = () => {
               type="checkbox"
               id="darkMode"
               checked={darkMode}
-              onChange={toggleDarkMode}
+              onChange={handleDarkModeToggle}
               className="rounded-lg"
             />
           </div>
         </div>
 
-      </div>
+      
     </div>
   );
 };

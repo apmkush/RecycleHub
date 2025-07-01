@@ -2,10 +2,14 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faFacebook, faTwitter, faPinterest, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { useSelector } from 'react-redux';
+import { use } from 'react';
 
 function Footer() {
+  const isDarkMode = useSelector((state) =>  state.theme.darkMode); 
+  // console.log(isDarkMode) ; 
   return (
-    <footer className="bg-gray-800 bg-opacity-90 text-gray-300 py-8">
+    <footer className={`${isDarkMode ? 'bg-black text-white' : 'bg-gray-800 text-gray-300'} bg-opacity-90 py-8`}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Footer Section 1 */}

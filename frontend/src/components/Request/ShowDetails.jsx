@@ -1,20 +1,50 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const ShowDetails = ({ details, setAccept, setReject, onClose }) => {
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode); // Get dark mode state
+
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-      <button onClick={onClose} className="absolute top-2 right-2 text-gray-400 text-lg">&times;</button>
+    <div className={`p-8 rounded-lg shadow-lg w-96 relative 
+      ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+      
+      {/* Close Button */}
+      <button 
+        onClick={onClose} 
+        className={`absolute top-2 right-2 text-lg 
+          ${isDarkMode ? 'text-gray-300' : 'text-gray-400'}`}
+      >
+        &times;
+      </button>
 
       {/* Image */}
-      <img src={details.image} alt={details.itemName} className="w-full h-40 object-cover rounded-lg mb-4" />
+      <img 
+        src={details.image} 
+        alt={details.itemName} 
+        className="w-full h-40 object-cover rounded-lg mb-4" 
+      />
 
       {/* Item Details */}
-      <h3 className="text-2xl font-semibold text-gray-800 mb-2 text-center">{details.item}</h3>
-      <p className="text-sm text-gray-600 mb-2"><strong>Weight:</strong> {details.weight} kg</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Price:</strong> ₹{details.price}</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Date of Pickup:</strong> {details.pickupDate}</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Address:</strong> {details.address}</p>
-      <p className="text-sm text-gray-600 mb-2"><strong>Description:</strong> {details.description}</p>
+      <h3 className={`text-2xl font-semibold mb-2 text-center 
+        ${isDarkMode ? 'text-purple-300' : 'text-gray-800'}`}>
+        {details.item}
+      </h3>
+      
+      <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <strong>Weight:</strong> {details.weight} kg
+      </p>
+      <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <strong>Price:</strong> ₹{details.price}
+      </p>
+      <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <strong>Date of Pickup:</strong> {details.pickupDate}
+      </p>
+      <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <strong>Address:</strong> {details.address}
+      </p>
+      <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <strong>Description:</strong> {details.description}
+      </p>
 
       {/* Buttons */}
       <div className="flex justify-center gap-x-4 mt-4">

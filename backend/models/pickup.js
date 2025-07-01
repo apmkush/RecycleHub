@@ -25,6 +25,9 @@ const PickupSchema = new mongoose.Schema({
         type: Number, 
         required: true 
     },
+    price: { 
+        type: Number, 
+    },
     address: { 
         type: String, 
         required: true 
@@ -41,9 +44,18 @@ const PickupSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ['awaiting pickup', 'completed', 'accepted'], 
-        default: 'awaiting pickup' 
+        enum: ['not accepted', 'completed', 'accepted'], 
+        default: 'not accepted' 
     },
+    RequestedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Assuming you have a User model
+        required: true
+      },
+    AcceptedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Assuming you have a User model
+      },
 });
 
 export const Pickup = mongoose.model('Pickup', PickupSchema);

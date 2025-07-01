@@ -1,19 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer,REGISTER , REHYDRATE, PAUSE, PERSIST, PURGE } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Defaults to localStorage for web
-import authReducer from './authSlice';
+import authReducer from './authSlice.js';
+import themeReducer from './slices/ThemeSlice.js'; 
 
 // Persist configuration
-const persistConfig = {
-  key: 'root',
+const authPersistConfig = {
+  key: 'auth',
   storage,
 };
+const themePersistConfig = {
+  key : "theme" , 
+  storage,
+} ; 
 
-const persistedReducer = persistReducer(persistConfig, authReducer);
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedThemeReducer = persistReducer(themePersistConfig, themeReducer);
 
 const store = configureStore({ 
   reducer: {
-    auth: persistedReducer,    // reducer which are created is registered here, auth -> slice created
+    auth: persistedReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -9,7 +9,7 @@ import PlansDisplay from '../Payment/plans.jsx';
 import BillGenerator from '../Billing/billing.jsx';
 import SubscriptionStatus from '../Subscription/subscriptions.jsx';
 import SettingsPage from '../Setting/Setting.jsx';
-import { useDispatch } from 'react-redux';
+import { useSelector , useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice.js';
 import Profile from '../Profile/Profile.jsx';
 import NotFound from '../NotFound/NotFound.jsx';
@@ -19,6 +19,7 @@ function Account() {
   const dispatch = useDispatch();
   const location = useLocation(); // Get current location
   const navigate = useNavigate();
+  const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -33,74 +34,42 @@ function Account() {
   const isActive = (path) => location.pathname.endsWith(path);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className={`flex h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}> 
       {/* Sidebar */}
       <aside
-        className={`w-64 bg-teal-700 text-white p-5 transition-transform duration-300 ease-in-out
+        className={`w-64 ${isDarkMode ? 'bg-black' : 'bg-teal-700'} text-white p-5 transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:sticky top-0 h-screen`}
       >
         <h2 className="text-2xl font-semibold mb-6">Account Portal</h2>
         <nav className="flex flex-col gap-4">
-          <Link
-            to="Profile"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/Profile') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+        <Link 
+          to="Profile" 
+          className={`flex items-center gap-3 p-2 rounded-md ${isActive('/Profile') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}
+        >
             <FiUser />
             <span>My Profile</span>
-          </Link>
-          <Link
-            to="Requestory"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/Requestory') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+        </Link>
+          <Link to="Requestory" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/Requestory') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <HiOutlineClock />
             <span>Request History</span>
           </Link>
-          <Link
-            to="subscriptions"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/subscriptions') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+          <Link to="subscriptions" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/subscriptions') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <HiOutlineClock />
             <span>Subscription Status</span>
           </Link>
-          <Link
-            to="plans"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/plans') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+          <Link to="plans" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/plans') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <HiOutlineClock />
             <span>Plans</span>
           </Link>
-          <Link
-            to="billing"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/billing') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+          <Link to="billing" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/billing') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <HiOutlineClock />
             <span>Billing</span>
           </Link>
-          <Link
-            to="Orders"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/Orders') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+          <Link to="Orders" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/Orders') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <FiShoppingCart />
             <span>Orders</span>
           </Link>
-          <Link
-            to="Settings"
-            className={`flex items-center gap-3 p-2 rounded-md ${
-              isActive('/Settings') ? 'bg-teal-500' : 'hover:bg-teal-600'
-            }`}
-          >
+          <Link to="Settings" className={`flex items-center gap-3 p-2 rounded-md ${isActive('/Settings') ? (isDarkMode ? 'bg-gray-700' : 'bg-teal-500') : (isDarkMode ? 'hover:bg-gray-600' : 'hover:bg-teal-600')}`}>
             <FiLock />
             <span>Privacy and Setting</span>
           </Link>
@@ -118,16 +87,13 @@ function Account() {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <header className="flex items-center justify-between">
-          <button
-            onClick={toggleSidebar}
-            className="md:hidden text-teal-700 focus:outline-none"
-          >
+          <button onClick={toggleSidebar} className={`md:hidden ${isDarkMode ? 'text-white' : 'text-teal-700'} focus:outline-none`}>
             <FiMenu size={24} />
           </button>
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 p-1.5 bg-gray-50 overflow-y-auto">
+        <main className={`flex-1 p-1.5 overflow-y-auto ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-50 text-black'}`}>
           <Routes>
             {/* Redirect "/account" to "/account/Profile" */}
             <Route path="/*" element={<Navigate to="Profile" />} /> {/* Redirects if no section is clicked */}
