@@ -7,8 +7,8 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
-  initialState,
+  name: 'auth',  /// name of this slice
+  initialState,    //// initial state
   reducers: {
     loginSuccess: (state, action) => {
       const { user, token } = action.payload;
