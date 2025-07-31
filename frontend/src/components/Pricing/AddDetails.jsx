@@ -28,7 +28,7 @@ const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
       return;
     }
     try {
-      const response=await axios.post('http://localhost:5000/addItem',formInput,{
+      const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/addItem`,formInput,{
         headers:{
             'Content-Type':'application/json'
         }

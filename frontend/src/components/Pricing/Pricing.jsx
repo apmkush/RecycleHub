@@ -12,7 +12,7 @@ const Pricing = ({userRole}) => {
 
   const fetchScrapItems = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/getPrice');
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/getPrice`);
       setScrapItems(response.data);
     } catch (error) {
       console.error('Error fetching scrap items:', error);

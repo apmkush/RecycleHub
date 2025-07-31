@@ -30,6 +30,7 @@ export const addPickup = async (req, res) => {
     }
 }
 export const getPickups = async (req, res) => {
+    const userId = req.user.id;
     try{
         const data = await Pickup.find();
         res.json(data);

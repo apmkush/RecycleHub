@@ -14,19 +14,6 @@ function Navbar() {
 
 
 
-  // useEffect(() => {
-  //   // Check if user data is in localStorage and update context accordingly
-  //   const storedUserData = localStorage.getItem('user');
-  //   if (storedUserData) {
-  //     const { userId, userType } = JSON.parse(storedUserData);
-  //     setIsLoggedIn(true);
-  //     setUserId(userId);
-  //     setUserType(userType);
-  //   }
-  // }, [setIsLoggedIn, setUserId, setUserType]);
-
-  // setIsLoggedIn(true);
-  // setUserType('admin');
 
   useEffect(() => {
     // Redirect if not logged in
@@ -74,9 +61,9 @@ function Navbar() {
             <Link to="/Pickup" className={linkClasses('/Pickup')}>
               <FaTruck className="mr-2" /> Request Pickup
             </Link>
-            <Link to="/Cart" className={linkClasses('/Cart')}>
+            {/* <Link to="/Cart" className={linkClasses('/Cart')}>
               <FaCartPlus className="mr-2" /> Cart
-            </Link>
+            </Link> */}
             <Link to="/Pricing" className={linkClasses('/Pricing')}>
               <FaTag className="mr-2" /> Pricing
             </Link>

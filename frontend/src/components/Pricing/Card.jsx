@@ -4,6 +4,7 @@ import imageTest from "./images/NonRecyclable/Aluminium.png";
 
 const Card = ({ id, image, price, material, userRole, description }) => {
   // State to handle price editing
+  // const url= import.meta.env.VITE_Backend_URL;
   const [isEditing, setIsEditing] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
   const [isVisible, setIsVisible] = useState(true);               // jaise hi ye false ho to isko database se nikal do 
@@ -17,7 +18,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   // Function to save the updated price
   const savePrice = async () => {
     try {
-      await axios.put(`http://localhost:5000/editPrice/${id}`, { price: currentPrice });
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/${id}`, { price: currentPrice });
       toggleEdit(); // Toggle off edit mode after saving
     } catch (error) {
       console.error('Error updating price:', error);
@@ -25,7 +26,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   };
   const deleteCard = async () => {
     try {
-      await axios.put(`http://localhost:5000/deleteItem/${id}`); 
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/deleteItem/${id}`); 
       setIsVisible(false); 
     } catch (error) {
       console.error('Error deleting card:', error);
