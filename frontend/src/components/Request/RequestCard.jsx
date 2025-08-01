@@ -33,7 +33,7 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const handleAccept =async () => {
     setAccept(true);
     try {
-      const response = await axios.put("http://localhost:5000/accept-request", { requestId: details._id },{
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/accept-request`, { requestId: details._id },{
         headers:{
           'Content-Type':'application/json'
         }
@@ -51,7 +51,7 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const handleReject =async () => {
     setReject(true);
     try {
-      const response = await axios.put("http://localhost:5000/reject-request", { requestId: details._id });
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/reject-request`, { requestId: details._id });
       if(response.data.success){
         DisplayMessage(response.data.message);
       }else{

@@ -22,7 +22,7 @@ const ProfilePage = () => {
     // Fetch user data (replace 'user-id' with actual user ID)
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/get-data`,
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-data`,
           {
             headers: {
                 Authorization: `Bearer ${token}`, // Send JWT token in headers
@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-data`, formData,{
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/update-data`, formData,{
         headers: {
             Authorization: `Bearer ${token}`, // Send JWT token in headers
         },
@@ -88,7 +88,7 @@ const ProfilePage = () => {
 
   const handleSaveAddresses = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/update-addresses/${UserId}`, { addresses });
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/update-addresses/${UserId}`, { addresses });
       setAddresses(response.data.addresses);
       toast.success('Addresses updated successfully!', {
         position: 'top-center',

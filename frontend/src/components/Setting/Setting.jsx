@@ -47,7 +47,7 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await axios.put('http://localhost:5000/change-password', {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/change-password`, {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       },{

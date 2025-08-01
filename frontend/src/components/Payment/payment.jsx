@@ -25,7 +25,7 @@ const Payment = (plan) => {
 
   const handlePayment = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/create-subscription', {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/create-subscription`, {
         plan_id: plan.plan.id,
         total_count: 12,
         quantity: 1,
@@ -71,7 +71,7 @@ const Payment = (plan) => {
       },
       handler: async (response) => {
         try {
-          const res=await axios.post('http://localhost:5000/verify-payment', {
+          const res=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/verify-payment`, {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_subscription_id: response.razorpay_subscription_id,
             razorpay_signature: response.razorpay_signature,

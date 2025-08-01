@@ -14,7 +14,7 @@ const SubscriptionStatus = () => {
 
   const fetchSubscriptions = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/fetch-subscriptions', {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/fetch-subscriptions`, {
             params: {
               UserId
             }

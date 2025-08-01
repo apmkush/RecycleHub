@@ -19,7 +19,7 @@ const PlansDisplay = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/fetch-plans'); // Replace with your API endpoint
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/fetch-plans`); // Replace with your API endpoint
         setPlans(response.data);
       } catch (err) {
         setError('Failed to fetch plans. Please try again.');

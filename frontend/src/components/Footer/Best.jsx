@@ -37,7 +37,7 @@ function BestSteelScrapBuyers() {
       <section className="bg-white shadow-lg rounded-lg p-6 mb-8">
         <h2 className="text-3xl font-semibold text-blue-800 mb-4">How to Get Started</h2>
         <p className="text-gray-700 text-lg leading-relaxed mb-4">
-          Selling your steel scrap with us is simple. <a href="http://localhost:5173/login" className="text-blue-500 hover:underline font-semibold">Register</a> on our platform and create a listing. 
+          Selling your steel scrap with us is simple. <a href="/login" className="text-blue-500 hover:underline font-semibold">Register</a> on our platform and create a listing. 
           We will connect you with local buyers who are ready to offer competitive prices. 
           You can even browse through available buyers and choose the one that best suits your needs.
         </p>

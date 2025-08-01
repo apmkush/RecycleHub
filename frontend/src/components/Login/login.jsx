@@ -60,7 +60,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/login', formInput, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, formInput, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -118,7 +118,7 @@ const Login = () => {
         const userDetails = jwtDecode(token);
         console.log(userDetails);
         // Further token handling can be added here if necessary
-        const response = await axios.get(`http://localhost:5000/google-login`,
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/google-login`,
             {
               headers: {
                   Authorization: `${token}`, // Send JWT token in headers
@@ -148,7 +148,7 @@ const Login = () => {
     const sendOtp = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/send-otp', formInput, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/send-otp`, formInput, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -168,7 +168,7 @@ const Login = () => {
     const verifyOtp = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/verify-otp', { email, otp }, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/verify-otp`, { email, otp }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -193,7 +193,7 @@ const Login = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/reset-password', { email, password }, {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/reset-password`, { email, password }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

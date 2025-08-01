@@ -18,7 +18,7 @@ const PayoutForm = () => {
 
         try {
             setStatus('Processing...');
-            const response = await axios.post('http://localhost:5000/payout', {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/payout`, {
                 account_number: accountNumber,
                 ifsc_code: ifscCode,
                 amount: amount

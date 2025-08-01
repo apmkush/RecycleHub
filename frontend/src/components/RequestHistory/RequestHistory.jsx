@@ -16,7 +16,7 @@ const Requestory = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/get-requests',{
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-requests`,{
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const Requestory = () => {
   const handleRemoveClick =async (item) => {
     if (item.status === 'not accepted' || item.status === 'accepted') {
       try {
-        await axios.delete(`http://localhost:5000/delete-request/${item._id}`,{
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/delete-request/${item._id}`,{
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

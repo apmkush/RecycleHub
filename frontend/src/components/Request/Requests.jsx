@@ -10,7 +10,7 @@ const Requests = () => {
     // Function to fetch requests from the backend
     const fetchRequests = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/get-requests`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-requests`);
             setItems(response.data);
         } catch (error) {
             console.error('Error fetching requests:', error);

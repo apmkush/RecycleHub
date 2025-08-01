@@ -62,7 +62,7 @@ const PickupForm = ({ itemValue = '' }) => {
     if (image) formData.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:5000/addPickup', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/addPickup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

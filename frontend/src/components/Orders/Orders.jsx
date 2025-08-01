@@ -20,7 +20,7 @@ const Orders = () => {
     setError(null);
 
     try {
-      const response = await axios.get('http://localhost:5000/get-orders', {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
