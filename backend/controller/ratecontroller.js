@@ -4,6 +4,7 @@ import {RateModel} from "../models/rate.js";
 export const getPrice = async (req, res) => {
     try{
         const scrapItems = await RateModel.find();
+        // console.log(scrapItems);
         res.json(scrapItems);
     }catch(e){
         console.log(e);

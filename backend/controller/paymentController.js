@@ -69,6 +69,9 @@ export const verifyPayment = async (req, res) => {
 
     try {
       const subscriptions = await SubscriptionModel.find({customer_id:UserId});
+      if (!subscriptions[0]) {
+        return res.status(404).json({ message: "Subscriptions not found" });
+      }
       subscriptionId=subscriptions[0].razorpay_subscription_id;
       // console.log('Subscriptions:', subscriptionId);
     } catch (error) {
