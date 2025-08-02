@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios, { Axios } from 'axios';
+import { backendUrl } from '../../service/url';
 
 const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
   const [image, setImage] = useState(null);
@@ -28,7 +29,7 @@ const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
       return;
     }
     try {
-      const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/addItem`,formInput,{
+      const response=await axios.post(`${backendUrl}/addItem`,formInput,{
         headers:{
             'Content-Type':'application/json'
         }

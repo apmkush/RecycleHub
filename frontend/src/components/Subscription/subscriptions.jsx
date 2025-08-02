@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import{backendUrl}from '../../service/url';
 
 // toast.configure();
 
@@ -14,7 +15,7 @@ const SubscriptionStatus = () => {
 
   const fetchSubscriptions = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/fetch-subscriptions`, {
+        const response = await axios.get(`${backendUrl}/fetch-subscriptions`, {
             params: {
               UserId
             }

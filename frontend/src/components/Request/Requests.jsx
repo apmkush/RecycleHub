@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import RequestCard from './RequestCard';
+import{backendUrl}from '../../service/url';
 
 const Requests = () => {
     const [Items, setItems] = useState([]);
@@ -10,7 +11,7 @@ const Requests = () => {
     // Function to fetch requests from the backend
     const fetchRequests = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-requests`);
+            const response = await axios.get(`${backendUrl}/get-requests`);
             setItems(response.data);
         } catch (error) {
             console.error('Error fetching requests:', error);

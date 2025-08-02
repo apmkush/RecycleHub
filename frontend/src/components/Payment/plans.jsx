@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Payment from './payment';
 import { useSelector } from 'react-redux';
+import{backendUrl}from '../../service/url';
 
 
 const PlansDisplay = () => {
@@ -19,7 +20,7 @@ const PlansDisplay = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/fetch-plans`); // Replace with your API endpoint
+        const response = await axios.get(`${backendUrl}/fetch-plans`); // Replace with your API endpoint
         setPlans(response.data);
       } catch (err) {
         setError('Failed to fetch plans. Please try again.');

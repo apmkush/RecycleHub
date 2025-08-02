@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import{backendUrl}from '../../service/url';
 
 const ProfilePage = () => {
   const[message,setMesssage]=useState(null);
@@ -22,7 +23,7 @@ const ProfilePage = () => {
     // Fetch user data (replace 'user-id' with actual user ID)
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-data`,
+        const response = await axios.get(`${backendUrl}/get-data`,
           {
             headers: {
                 Authorization: `Bearer ${token}`, // Send JWT token in headers
@@ -55,7 +56,7 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/update-data`, formData,{
+      const response = await axios.put(`${backendUrl}/update-data`, formData,{
         headers: {
             Authorization: `Bearer ${token}`, // Send JWT token in headers
         },
@@ -88,7 +89,7 @@ const ProfilePage = () => {
 
   const handleSaveAddresses = async () => {
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/update-addresses/${UserId}`, { addresses });
+      const response = await axios.put(`${backendUrl}/update-addresses/${UserId}`, { addresses });
       setAddresses(response.data.addresses);
       toast.success('Addresses updated successfully!', {
         position: 'top-center',

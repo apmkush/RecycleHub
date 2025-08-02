@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ShowDetails from '../Cart/ShowDetails';
+import{backendUrl}from '../../service/url';
 
 const Orders = () => {
   const darkMode = useSelector((state) => state.theme.darkMode) ; 
@@ -20,7 +21,7 @@ const Orders = () => {
     setError(null);
 
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-orders`, {
+      const response = await axios.get(`${backendUrl}/get-orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

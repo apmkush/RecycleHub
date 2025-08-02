@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import{backendUrl}from '../../service/url';
 //import axios from 'axios'; // Import axios or any other library you use for API requests
 
 function Darkmode() {
@@ -8,7 +9,7 @@ function Darkmode() {
   useEffect(() => {
     const fetchUserTheme = async () => {
       try {
-        const response = await axios.get('/api/user/theme'); 
+        const response = await axios.get(`${backendUrl}/theme`); 
         const userTheme = response.data.theme; // API returns { theme: 'dark' | 'light' }
         
         // Set the theme based on the backend response

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../../App';
 import {useSelector} from 'react-redux'
+import{backendUrl}from '../../service/url';
 
 const PickupForm = ({ itemValue = '' }) => {
   const isDarkMode = useSelector((state) => state.theme.darkMode);
@@ -62,7 +63,7 @@ const PickupForm = ({ itemValue = '' }) => {
     if (image) formData.append('image', image);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/addPickup`, formData, {
+      const response = await axios.post(`${backendUrl}/addPickup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

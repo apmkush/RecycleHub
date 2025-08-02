@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import{backendUrl}from '../../service/url';
 
 const Signup = () => {
   const [message, setMessage] = useState('');
@@ -73,7 +74,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, formInput, {
+      const response = await axios.post(`${backendUrl}/signup`, formInput, {
         headers: {
           'Content-Type': 'application/json',
         },

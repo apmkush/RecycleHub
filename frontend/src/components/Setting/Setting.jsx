@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector , useDispatch } from 'react-redux';
 import {toggleTheme} from '../../store/slices/ThemeSlice.js' ; 
 import { useSearchParams } from 'react-router-dom';
+import{backendUrl}from '../../service/url';
 
 const SettingsPage = () => {
   const dispatch = useDispatch(); 
@@ -47,7 +48,7 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/change-password`, {
+      const response = await axios.put(`${backendUrl}/change-password`, {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       },{

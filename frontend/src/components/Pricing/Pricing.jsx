@@ -4,6 +4,7 @@ import axios, { Axios } from 'axios';;
 import Card from './Card';
 import AddItem from './AddItem';
 import AddDetails from './AddDetails';
+import{backendUrl}from '../../service/url';
 
 const Pricing = ({userRole}) => {
   const [scrapItems, setScrapItems] = React.useState([]);
@@ -12,9 +13,9 @@ const Pricing = ({userRole}) => {
 
   const fetchScrapItems = async () => {
     try {
-      const backendURL = import.meta.env.VITE_BACKEND_URL;
-      console.log(backendURL);
-      const response = await axios.get(`${backendURL}/getPrice`);
+      // const backendURL = import.meta.env.VITE_BACKEND_URL;
+      console.log(backendUrl);
+      const response = await axios.get(`${backendUrl}/getPrice`);
       
       setScrapItems(response.data);
       // console.log(response.data);

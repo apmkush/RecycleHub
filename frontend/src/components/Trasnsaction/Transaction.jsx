@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaDownload, FaSearch, FaSort } from 'react-icons/fa';
 import axios from 'axios';
+import{backendUrl}from '../../service/url';
 
 function Transactions() {
   const [transactions, setTransactions] = useState([]);
@@ -17,7 +18,7 @@ function Transactions() {
     const fetchTransactions = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/transactions`); // Update with your API endpoint
+        const response = await axios.get(`${backendUrl}/transactions`); // Update with your API endpoint
         const data = Array.isArray(response.data) ? response.data : []; // Ensure data is an array
         setTransactions(data);
         setFilteredTransactions(data); // Set initial filtered data

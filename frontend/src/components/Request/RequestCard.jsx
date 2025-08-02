@@ -3,6 +3,7 @@ import ShowDetails from './ShowDetails';
 import axios, { Axios } from 'axios';;
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import{backendUrl}from '../../service/url';
 
 const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +34,7 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const handleAccept =async () => {
     setAccept(true);
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/accept-request`, { requestId: details._id },{
+      const response = await axios.put(`${backendUrl}/accept-request`, { requestId: details._id },{
         headers:{
           'Content-Type':'application/json'
         }
@@ -51,7 +52,7 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const handleReject =async () => {
     setReject(true);
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/reject-request`, { requestId: details._id });
+      const response = await axios.put(`${backendUrl}/reject-request`, { requestId: details._id });
       if(response.data.success){
         DisplayMessage(response.data.message);
       }else{

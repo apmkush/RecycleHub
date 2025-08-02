@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ShowDetails from '../Cart/ShowDetails';
 import { useSelector } from 'react-redux';
+import{backendUrl}from '../../service/url';
 
 const Requestory = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -16,7 +17,7 @@ const Requestory = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/get-requests`,{
+      const response = await axios.get(`${backendUrl}/get-requests`,{
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ const Requestory = () => {
   const handleRemoveClick =async (item) => {
     if (item.status === 'not accepted' || item.status === 'accepted') {
       try {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/delete-request/${item._id}`,{
+        await axios.delete(`${backendUrl}/delete-request/${item._id}`,{
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

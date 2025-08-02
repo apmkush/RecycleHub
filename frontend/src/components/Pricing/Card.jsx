@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import imageTest from "./images/NonRecyclable/Aluminium.png";
+import{backendUrl}from '../../service/url';
 
 const Card = ({ id, image, price, material, userRole, description }) => {
   // State to handle price editing
@@ -18,7 +19,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   // Function to save the updated price
   const savePrice = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/${id}`, { price: currentPrice });
+      await axios.put(`${backendUrl}/${id}`, { price: currentPrice });
       toggleEdit(); // Toggle off edit mode after saving
     } catch (error) {
       console.error('Error updating price:', error);
@@ -26,7 +27,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   };
   const deleteCard = async () => {
     try {
-      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/deleteItem/${id}`); 
+      await axios.put(`${backendUrl}/deleteItem/${id}`); 
       setIsVisible(false); 
     } catch (error) {
       console.error('Error deleting card:', error);
