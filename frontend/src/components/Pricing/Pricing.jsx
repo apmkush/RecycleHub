@@ -14,7 +14,7 @@ const Pricing = ({userRole}) => {
   const fetchScrapItems = async () => {
     try {
       // const backendURL = import.meta.env.VITE_BACKEND_URL;
-      console.log(backendUrl);
+      // console.log(backendUrl);
       const response = await axios.get(`${backendUrl}/getPrice`);
       
       setScrapItems(response.data);

@@ -100,7 +100,7 @@ const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
         <div className="flex justify-end space-x-4 mt-4">
           <button 
             type="button" 
-            onClick={handleInput} 
+            onClick={() => setShowAddDetails(false)} 
             className="text-red-500 font-semibold"
           >
             Cancel
