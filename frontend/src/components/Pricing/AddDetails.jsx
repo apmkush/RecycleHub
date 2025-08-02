@@ -54,8 +54,8 @@ const AddDetails = ({ setShowAddDetails , category,refreshItems }) => {
 
       setFormInput((prev)=>({...prev,...obj}));
       // setImage(imgData.result);
-      console.log(imgData.result);
-      console.log(obj);
+      // console.log(imgData.result);
+      // console.log(obj);
     }
     imgData.onerror = () => {
       console.log("Error: ",Error);

@@ -19,7 +19,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   // Function to save the updated price
   const savePrice = async () => {
     try {
-      await axios.put(`${backendUrl}/${id}`, { price: currentPrice });
+      await axios.put(`${backendUrl}/editPrice/${id}`, { price: currentPrice });
       toggleEdit(); // Toggle off edit mode after saving
     } catch (error) {
       console.error('Error updating price:', error);
