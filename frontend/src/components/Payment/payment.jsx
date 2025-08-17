@@ -59,10 +59,9 @@ const Payment = (plan) => {
       toast.error('Failed to create subscription. Please try again.');
     }
   };
-
   const openRazorpay = (subscription) => {
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY, // Replace with your Razorpay Key ID
+      key: import.meta.env.VITE_RAZORPAY_KEY, 
       subscription_id: subscription.id,
       name: 'Recycle Hub',
       description: 'Subscription Payment',

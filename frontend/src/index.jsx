@@ -61,8 +61,5 @@ const Index = () => {
   );
 };
 
-/// here, data inside UserProvider (component) opening and closing tag is considered as children for UserProvider function(defined
-/// in app.jsx) and these childrens are the routes of all webPages and are passed to UserProvider function.
-/// this is concept of props drilling and passing props as children.
 
 export default Index;
