@@ -56,11 +56,13 @@ const ProfilePage = () => {
 
   const handleSavePersonalDetails = async () => {
     try {
+      console.log("Hello",formData);
       const response = await axios.put(`${backendUrl}/update-data`, formData,{
         headers: {
             Authorization: `Bearer ${token}`, // Send JWT token in headers
         },
     });
+    if(response.data.success){
       setUser(response.data);
       toast.success('Personal details updated successfully!', {
         position: 'top-center',
@@ -71,6 +73,16 @@ const ProfilePage = () => {
         draggable: true,
       });
       setIsEditing(false);
+    }else{
+      toast.error(response.data.message, {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
     } catch (error) {
       console.error('Error saving personal details:', error);
     }
@@ -119,21 +131,22 @@ const ProfilePage = () => {
   // Handle image file selection and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log("Selected file:", file);
+    // console.log("Selected file:", file);
   
     if (file) {
       const reader = new FileReader();
   
       reader.onloadend = () => {
-        // console.log("FileReader result:", reader.result);
+        console.log("FileReader result:", reader.result);
         setProfileImage(file); // Set the selected image file
         setImagePreview(reader.result); // Set the preview of the image
         setIsCustomImage(true); // Mark as custom image
-        console.log(imagePreview);
+        console.log("Image preview:", imagePreview);
       };
   
       if (file.type.startsWith("image/")) {
         reader.readAsDataURL(file);
+
       } else {
         console.error("Unsupported file type:", file.type);
       }

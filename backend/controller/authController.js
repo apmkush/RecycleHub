@@ -282,14 +282,16 @@ export const googleLogin = async (req, res) =>{
 export const updateData = async (req, res) => {
   const { name, email, phone, address, age, profileImage } = req.body;
   const UserId = req.user.id;
-  // console.log("Profile image",address);
+  // console.log("Profile image",req.body);
   try {
     const user = await UserModel.findByIdAndUpdate(
       UserId,
       { name, email, phone, address, age, profileImage },
       { new: true }
     );
-    res.json(user);
+    console.log(user);
+    // res.json(user);
+    return res.json({ success: true, user:user });
   } catch (error) {
     res.json({ message: 'Server error' });
   }

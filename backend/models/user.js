@@ -17,10 +17,9 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    regno:{
-        type:Number,
-        require:true,
-        min:0
+    address:{
+        type:String,
+        default:"",
     },
     profileImage:{
         type:String,

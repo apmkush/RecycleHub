@@ -96,12 +96,12 @@ function Navbar() {
             <Link to="/Home" className={linkClasses('/Home')}>
               <FaHome className="mr-2" /> Home
             </Link>
-            <Link to="/Transactions" className={linkClasses('/Transactions')}>
+            {/* <Link to="/Transactions" className={linkClasses('/Transactions')}>
               <FaMoneyCheck className="mr-2" /> Transactions
-            </Link>
-            <Link to="/Dashboard" className={linkClasses('/Dashboard')}>
+            </Link> */}
+            {/* <Link to="/Dashboard" className={linkClasses('/Dashboard')}>
               <FaTachometerAlt className="mr-2" /> Dashboard
-            </Link>
+            </Link> */}
             <Link to="/Pricing" className={linkClasses('/Pricing')}>
               <FaTag className="mr-2" /> Pricing
             </Link>
