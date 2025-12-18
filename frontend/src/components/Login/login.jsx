@@ -331,6 +331,7 @@ const Login = () => {
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <button
+                                            type="button"
                                             className="text-sm text-blue-500 hover:underline"
                                             onClick={sendOtp}
                                         >

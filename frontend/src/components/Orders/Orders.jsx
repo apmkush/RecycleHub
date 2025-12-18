@@ -25,13 +25,25 @@ const Orders = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      // Handle array response from backend
+      const ordersData = Array.isArray(response.data) ? response.data : [];
+      
       // Extracting only required fields
-      const formattedData = response.data.map((order) => ({
+      const formattedData = ordersData.map((order) => ({
+        _id: order._id,
         item: order.item,
-        date: new Date(order.pickupDate).toLocaleDateString(),
+        itemName: order.item,
+        date: order.pickupDate ? new Date(order.pickupDate).toLocaleDateString() : 'N/A',
         address: order.address,
-        price: order.weight, // Assuming weight is used as price
-        status: order.status,
+        price: order.price || order.weight,
+        weight: order.weight,
+        status: order.status || 'not accepted',
+        description: order.description,
+        image: order.image,
+        pickupDate: order.pickupDate,
+        pincode: order.pincode,
+        contactNumber: order.contactNumber,
+        email: order.email,
       }));
 
       setItems(formattedData);
@@ -51,8 +63,8 @@ const Orders = () => {
   // Filtered items based on selected filter
   const filteredItems = items.filter((item) => {
     if (filter === 'all') return true; // Show all items
-    if (filter === 'ready') return item.status === 'awaiting pickup';
-    if (filter === 'completed') return item.status === 'sold';
+    if (filter === 'ready') return item.status === 'accepted';
+    if (filter === 'completed') return item.status === 'completed';
     return false;
   });
 
@@ -130,23 +142,45 @@ const Orders = () => {
           </tr>
         </thead>
         <tbody>
-          {sortedItems.map((item, index) => (
-            <tr
-              key={index}
-              className={`border-b cursor-pointer transition-all duration-300 
-                ${darkMode ? 'hover:bg-gray-700 border-gray-600' : 'hover:bg-gray-200'}`}
-              onClick={() => setSelectedItem(item)}
-            >
-              <td className="px-4 py-2 flex items-center gap-3">
-                <img src={item.image} alt={item.itemName} className="w-12 h-12 object-cover" />
-                <span>{item.itemName}</span>
+          {sortedItems.length > 0 ? (
+            sortedItems.map((item, index) => (
+              <tr
+                key={index}
+                className={`border-b cursor-pointer transition-all duration-300 
+                  ${darkMode ? 'hover:bg-gray-700 border-gray-600' : 'hover:bg-gray-200'}`}
+                onClick={() => setSelectedItem(item)}
+              >
+                <td className="px-4 py-2 flex items-center gap-3">
+                  {item.image ? (
+                    <img src={item.image} alt={item.itemName} className="w-12 h-12 object-cover rounded" />
+                  ) : (
+                    <div className={`w-12 h-12 rounded flex items-center justify-center ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                      📦
+                    </div>
+                  )}
+                  <span>{item.itemName}</span>
+                </td>
+                <td className="px-4 py-2">{item.date}</td>
+                <td className="px-4 py-2">{item.address}</td>
+                <td className="px-4 py-2">{item.price}</td>
+                <td className="px-4 py-2">
+                  <span className={`px-3 py-1 rounded text-sm font-semibold ${
+                    item.status === 'completed' ? 'bg-green-500 text-white' :
+                    item.status === 'accepted' ? 'bg-blue-500 text-white' :
+                    'bg-yellow-500 text-white'
+                  }`}>
+                    {item.status}
+                  </span>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="px-4 py-6 text-center">
+                <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>No orders found</p>
               </td>
-              <td className="px-4 py-2">{item.date}</td>
-              <td className="px-4 py-2">{item.address}</td>
-              <td className="px-4 py-2">{item.price}</td>
-              <td className="px-4 py-2">{item.status}</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 

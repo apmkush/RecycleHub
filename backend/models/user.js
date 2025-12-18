@@ -1,5 +1,24 @@
 import mongoose from "mongoose";
 
+const addressSchema = new mongoose.Schema({
+    street: {
+        type: String,
+        default: ""
+    },
+    city: {
+        type: String,
+        default: ""
+    },
+    zip: {
+        type: String,
+        default: ""
+    },
+    isPrimary: {
+        type: Boolean,
+        default: false
+    }
+});
+
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -17,10 +36,15 @@ const userSchema=new mongoose.Schema({
         type: String,
         required: true
     },
+    age:{
+        type:Number,
+        default:null,
+    },
     address:{
         type:String,
         default:"",
     },
+    addresses: [addressSchema],
     profileImage:{
         type:String,
         default:"",

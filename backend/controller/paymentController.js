@@ -70,12 +70,13 @@ export const verifyPayment = async (req, res) => {
     try {
       const subscriptions = await SubscriptionModel.find({customer_id:UserId});
       if (!subscriptions[0]) {
-        return res.status(404).json({ message: "Subscriptions not found" });
+        return res.json([]); // Return empty array if no subscription found
       }
       subscriptionId=subscriptions[0].razorpay_subscription_id;
       // console.log('Subscriptions:', subscriptionId);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
+      return res.json([]); // Return empty array on error
     }
     try {
       const allSubscriptions = await razorpayInstance.subscriptions.all();
@@ -86,7 +87,7 @@ export const verifyPayment = async (req, res) => {
       res.json(subscriptions);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
-      res.status(500).json({ error: 'Failed to fetch subscriptions' });
+      res.json([]); // Return empty array instead of 500 error
     }
   };
 

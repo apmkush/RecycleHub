@@ -2,7 +2,8 @@ import { Router } from "express";
 const router = Router();
 import { body } from "express-validator";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { login, signup, verifyotp, sendotp, resetPassword, updateData, getData, changePassword,updateMode, googleLogin } from "../controller/authController.js";
+import { login, signup, verifyotp, sendotp, resetPassword, updateData, getData, changePassword,updateMode, googleLogin, uploadProfilePhoto } from "../controller/authController.js";
+import upload from "../middlewares/uploadMiddleware.js";
 import cors from "cors";
 
 router.use(cors());
@@ -27,5 +28,6 @@ router.put("/update-data",authMiddleware, updateData);
 router.get("/get-data",authMiddleware, getData);
 router.put("/change-password",authMiddleware, changePassword);
 router.put("/update-mode",authMiddleware, updateMode);
+router.post("/upload-profile-photo", authMiddleware, upload.single('profilePhoto'), uploadProfilePhoto);
 
 export default router;

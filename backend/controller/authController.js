@@ -7,6 +7,7 @@ import nodemailer from "nodemailer";
 import {UserModel} from "../models/user.js";
 import { generateToken, verifyToken, generateTempToken } from "../config/secret.js";
 import { OAuth2Client } from "google-auth-library";
+import { uploadToCloudinary } from "../config/cloudinary.js";
 
 export const login = async (req, res) => {
     const data={
@@ -106,8 +107,8 @@ var transporter = nodemailer.createTransport({
       //check if an account is accossiated with entered email id
       const oldUser = await UserModel.findOne({email});
       if (!oldUser) {
-        return res.send({
-          message: "Invaild email id",
+        return res.json({
+          message: "Invalid email id",
           success: false,
         });
       }else{
@@ -141,13 +142,13 @@ var transporter = nodemailer.createTransport({
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-          return res.send({
+          return res.json({
             message: "Something went wrong",
             success: false,
           });
         } else {
           //console.log(link);
-          return res.send({
+          return res.json({
             message: "OTP sent to your email",
             success: true,
           });
@@ -155,7 +156,7 @@ var transporter = nodemailer.createTransport({
       });
     } catch (error) {
         console.log(error);
-        return res.send({
+        return res.json({
           message: "Something went wrong",
           success: false,
         });
@@ -280,20 +281,24 @@ export const googleLogin = async (req, res) =>{
 
 
 export const updateData = async (req, res) => {
-  const { name, email, phone, address, age, profileImage } = req.body;
+  const { name, email, phone, address, age, profileImage, addresses } = req.body;
   const UserId = req.user.id;
   // console.log("Profile image",req.body);
   try {
+    const updateObj = { name, email, phone, address, age, profileImage };
+    if (addresses) {
+      updateObj.addresses = addresses;
+    }
     const user = await UserModel.findByIdAndUpdate(
       UserId,
-      { name, email, phone, address, age, profileImage },
+      updateObj,
       { new: true }
     );
     console.log(user);
-    // res.json(user);
     return res.json({ success: true, user:user });
   } catch (error) {
-    res.json({ message: 'Server error' });
+    console.error('Error updating user:', error);
+    res.json({ success: false, message: 'Server error' });
   }
 
 }
@@ -318,12 +323,12 @@ export const changePassword = async (req, res) => {
 
 // Update Preferences (Dark Mode, Language)
 export const updateMode = async (req, res) => {
-  const {darkMode } = req.body;
+  const { dark } = req.body;
 
   try {
     const user = await UserModel.findByIdAndUpdate(
       req.user.id,
-      { darkMode },
+      { dark },
       { new: true }
     );
     res.json({ message: 'Preferences updated successfully', user });
@@ -331,3 +336,40 @@ export const updateMode = async (req, res) => {
     res.json({ message: 'Error updating preferences', error });
   }
 };
+
+// Upload Profile Photo to Cloudinary
+export const uploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.json({ success: false, message: 'No file uploaded' });
+    }
+
+    const userId = req.user.id;
+    const user = await UserModel.findById(userId);
+    
+    if (!user) {
+      return res.json({ success: false, message: 'User not found' });
+    }
+
+    // Upload to Cloudinary
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      `${user.email}-profile`
+    );
+
+    // Update user with new profile image URL
+    user.profileImage = result.secure_url;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Profile photo updated successfully',
+      profileImage: result.secure_url,
+      user: user
+    });
+  } catch (error) {
+    console.error('Error uploading profile photo:', error);
+    res.json({ success: false, message: 'Error uploading profile photo', error: error.message });
+  }
+};
+
