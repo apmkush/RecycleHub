@@ -41,35 +41,40 @@ export const login = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-    const data = {
-        name:req.body.name,
-        email:req.body.email,
-        phone:req.body.phone,
-        password:req.body.password,
-        confirm_password:req.body.confirm_password,
-        userRole:req.body.role,
-    };
+  const data = {
+    name:req.body.name,
+    email:req.body.email,
+    phone:req.body.phone,
+    password:req.body.password,
+    confirm_password:req.body.confirm_password,
+    userRole:req.body.role,
+  };
     console.log(data);
     try{
         const existingUser = await UserModel.findOne({email: data.email});
         if(data.password!=data.confirm_password){
-            res.json({success:false,message:"Passwords does not match!!"});
+      return res.json({success:false,message:"Passwords does not match!!"});
         }
         else if(existingUser){
-            res.json({success:false,message:"User already exists.Please enter different email"});
+      return res.json({success:false,message:"User already exists.Please enter different email"});
         }else{
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(data.password,saltRounds);
-            data.password = hashedPassword;
-            const userdata = await UserModel.insertMany(data);
+      const userdata = await UserModel.create({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        password: hashedPassword,
+        userRole: data.userRole,
+      });
             // const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
             console.log(userdata);
             const authToken = generateToken(userdata.id);
-            res.json({success:true,message:"Singup successful!!",token:authToken});
+      return res.json({success:true,message:"Singup successful!!",token:authToken});
         }
     }catch(e){
         console.log(e);
-        res.json({success:false,message:"Something went wrong!!"});
+    return res.json({success:false,message:"Something went wrong!!"});
     }
   };
 
