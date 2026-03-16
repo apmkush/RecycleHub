@@ -203,6 +203,10 @@ export const resetPassword = async (req, res) => {
   
       // Find the user by email
       const user = await UserModel.findOne({ email });
+      
+      if (!user) {
+        return res.json({ success: false, message: "Email not found" });
+      }
 
       // Hash the new password
       const saltRounds = 10;

@@ -22,7 +22,7 @@ router.post("/signup", signup);
 router.post("/verify-otp", verifyotp);
 router.post("/send-otp", sendotp);
 router.post("/reset-password", resetPassword);
-router.get("/google-login", googleLogin);
+router.post("/google-login", googleLogin);
 
 router.put("/update-data",authMiddleware, updateData);
 router.get("/get-data",authMiddleware, getData);
