@@ -1,4 +1,5 @@
 import {Pickup} from "../models/pickup.js";
+import {UserModel} from "../models/user.js";
 
 
 export const addPickup = async (req, res) => {
@@ -32,6 +33,15 @@ export const addPickup = async (req, res) => {
 export const getPickups = async (req, res) => {
     const userId = req.user.id;
     try{
+        const user = await UserModel.findById(userId).select("userRole");
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        if (!["admin", "dealer"].includes(user.userRole)) {
+            return res.status(403).json({ success: false, message: "Access denied" });
+        }
+
         const data = await Pickup.find();
         res.json(data);
     }catch(e){
@@ -72,27 +82,27 @@ export const acceptPickup = async (req, res) => {
         res.json({ success: false, message: 'Server error' });
       }
 }
-// export const rejectPickup = async (req, res) => {
-//     try {
-//         const { requestId } = req.body;
-        
-//         // Find the request by ID and update it to rejected
-//         const updatedRequest = await Pickup.findByIdAndUpdate(
-//           requestId,
-//           { status: 'rejected' },
-//           { new: true }
-//         );
-    
-//         if (!updatedRequest) {
-//           return res.json({ success: false, message: 'Request not found' });
-//         }
-    
-//         res.json({ success: true, message: 'Request rejected successfully', updatedRequest });
-//       } catch (error) {
-//         console.error('Error rejecting request:', error);
-//         res.json({ success: false, message: 'Server error' });
-//       }
-// }
+export const rejectPickup = async (req, res) => {
+        try {
+                const { requestId } = req.body;
+
+                // Keep item available by resetting status and accepted dealer.
+                const updatedRequest = await Pickup.findByIdAndUpdate(
+                    requestId,
+                    { status: 'not accepted', AcceptedBy: null },
+                    { new: true, runValidators: true }
+                );
+
+                if (!updatedRequest) {
+                    return res.json({ success: false, message: 'Request not found' });
+                }
+
+                res.json({ success: true, message: 'Request rejected successfully', updatedRequest });
+            } catch (error) {
+                console.error('Error rejecting request:', error);
+                res.json({ success: false, message: 'Server error' });
+            }
+}
 
 
 export const deletePickup = async (req, res) => {
