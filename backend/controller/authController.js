@@ -6,6 +6,7 @@ import crypto from "crypto";
 import { validationResult } from "express-validator";
 import nodemailer from "nodemailer";
 import {UserModel} from "../models/user.js";
+import { OTPModel } from "../models/otp.js";
 import { generateToken, verifyToken, generateTempToken } from "../config/secret.js";
 import { OAuth2Client } from "google-auth-library";
 import { uploadToCloudinary } from "../config/cloudinary.js";
@@ -91,18 +92,12 @@ var transporter = nodemailer.createTransport({
       pass: process.env.password,
     },
   });
-  
-  const otpStore = new Map();
 
-  const generateOTP = (email) => {
+  const generateOTP = async (email) => {
     const OTP = Math.floor(100000 + Math.random() * 900000);
-    // Set expiration time for OTP (e.g., 5 minutes)
-    const expirationTime = Date.now() + 5 * 60 * 1000;
-
-    // Store OTP with email as key and an object for OTP and expiration
-    otpStore.set(email, { OTP, expirationTime });
-
-    console.log(`Generated OTP for ${email}: ${OTP} (Expires at: ${new Date(expirationTime).toLocaleString()})`);
+    await OTPModel.deleteMany({ email });
+    await OTPModel.create({ email, otp: OTP.toString() });
+    console.log(`Generated OTP for ${email}: ${OTP}`);
     return OTP;
   };
 
@@ -122,9 +117,7 @@ var transporter = nodemailer.createTransport({
       }
   
       //generate otp
-      const generatedOtp = generateOTP(email);
-  
-      //save otp
+      const generatedOtp = await generateOTP(email);
   
       //The mail content to be sent to user
       var mailOptions = {
@@ -172,28 +165,22 @@ var transporter = nodemailer.createTransport({
 export const verifyotp=async (req, res) => {
     try{
       const { email, otp } = req.body;
-      const otpData = otpStore.get(email);
+      const otpRecord = await OTPModel.findOne({ email });
 
-      if (!otpData) {
+      if (!otpRecord) {
           return res.json({ success: false, message: "OTP not found or expired" });
       }
-      const { OTP, expirationTime } = otpData;
-
-      // Check if the OTP has expired
-      if (!expirationTime || Date.now() > new Date(expirationTime)) {
-          otpStore.delete(email);  // Remove expired OTP
-          console.log("OTP has expired");
-          return res.json({ success: false, message: "OTP has expired" });
-      }
       
-      if (otp == OTP.toString()) {
-          otpStore.delete(email);  // Remove OTP after successful verification
+      if (otp === otpRecord.otp) {
+          await OTPModel.deleteOne({ _id: otpRecord._id });
           console.log("OTP verified successfully");
           return res.json({ success: true, message: "OTP verified successfully" });
+      } else {
+          return res.json({ success: false, message: "Invalid OTP" });
       }
     }catch(e){
       console.log(e);
-      return res.json({ success: false, message: "Invalid OTP" });
+      return res.json({ success: false, message: "Something went wrong" });
     }
 }
 
