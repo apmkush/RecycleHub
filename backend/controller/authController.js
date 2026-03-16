@@ -82,14 +82,17 @@ export const signup = async (req, res) => {
 
 
 //Authenticate the email id and password from which mail will be sent
+const mailUser = process.env.MAIL_USER || process.env.EMAIL || process.env.email;
+const mailPass = process.env.MAIL_PASS || process.env.EMAIL_PASSWORD || process.env.PASSWORD || process.env.password;
+
 var transporter = nodemailer.createTransport({
     //service: 'gmail',
     host: "smtp.gmail.com",
     port: 587,
     secure: false, // Use `true` for port 465, `false` for all other ports
     auth: {
-      user: process.env.email,
-      pass: process.env.password,
+      user: mailUser,
+      pass: mailPass,
     },
   });
 
@@ -121,7 +124,7 @@ var transporter = nodemailer.createTransport({
   
       //The mail content to be sent to user
       var mailOptions = {
-        from: `RecycleHub <${process.env.email}>`,
+        from: `RecycleHub <${mailUser}>`,
         to: `${email}`,
         subject: "Password Reset",
         text: `Dear User,

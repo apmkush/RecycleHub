@@ -7,12 +7,13 @@ export const authMiddleware = (req, res, next) => {
     try {
         // Get token from request headers
         let token = req.headers.authorization;
-        if (token.startsWith("Bearer ")) {
-            token = token.slice(7);
-          }
 
         if (!token) {
             return res.status(401).json({ success: false, message: "Access denied. No token provided." });
+        }
+
+        if (token.startsWith("Bearer ")) {
+            token = token.slice(7);
         }
 
         // Verify token
