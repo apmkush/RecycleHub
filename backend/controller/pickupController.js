@@ -57,10 +57,9 @@ export const acceptPickup = async (req, res) => {
         
         // Find the request by ID and update it to accepted
         const updatedRequest = await Pickup.findByIdAndUpdate(
-          requestId,
-          { status: 'added to cart' },
-          { new: true },
-          {AcceptedBy:userId}
+                    requestId,
+                    { status: 'accepted', AcceptedBy: userId },
+                    { new: true, runValidators: true }
         );
     
         if (!updatedRequest) {
