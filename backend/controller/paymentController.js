@@ -5,9 +5,12 @@ dotenv.config();
 
 import {SubscriptionModel} from '../models/subscription.js';
 
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID || process.env.REACT_APP_RAZORPAY_KEY_ID;
+const razorpaySecret = process.env.RAZORPAY_SECRET || process.env.REACT_APP_RAZORPAY_SECRET;
+
 const razorpayInstance = new Razorpay({
-  key_id: process.env.REACT_APP_RAZORPAY_KEY_ID,
-  key_secret: process.env.REACT_APP_RAZORPAY_SECRET,
+  key_id: razorpayKeyId,
+  key_secret: razorpaySecret,
 });
 
 
@@ -32,7 +35,10 @@ export const createOrder = async (req, res) => {
 // Verify payment
 export const verifyPayment = async (req, res) => {
     const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature,customer_id } = req.body;
-    const secret = process.env.REACT_APP_RAZORPAY_SECRET;
+    const secret = razorpaySecret;
+    if (!secret) {
+      return res.status(500).json({ success: false, message: 'Razorpay secret is not configured' });
+    }
     console.log('customer_id:',customer_id);
     const generated_signature = crypto
       .createHmac('sha256', secret)

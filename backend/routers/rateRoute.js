@@ -6,7 +6,7 @@ router.use(cors());
 
 router.get("/getPrice", getPrice);
 router.put("/editPrice/:id", editPrice);
-router.put("/deleteItem/:id", deleteItem);
+router.delete("/deleteItem/:id", deleteItem);
 router.post("/addItem", addItem);
 
 

@@ -27,7 +27,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   };
   const deleteCard = async () => {
     try {
-      await axios.put(`${backendUrl}/deleteItem/${id}`); 
+      await axios.delete(`${backendUrl}/deleteItem/${id}`);
       setIsVisible(false); 
     } catch (error) {
       console.error('Error deleting card:', error);
