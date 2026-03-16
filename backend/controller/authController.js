@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcryptjs";
 import axios from "axios";
+import crypto from "crypto";
 import { validationResult } from "express-validator";
 import nodemailer from "nodemailer";
 import {UserModel} from "../models/user.js";
@@ -236,9 +237,12 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 export const googleLogin = async (req, res) =>{
   
   try {
-    const token = req.headers.authorization;
+    let token = req.headers.authorization;
     if (!token) {
         return res.status(400).json({ success: false, message: "Token missing" });
+    }
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7);
     }
 
     // Verify token using Google's API
@@ -260,23 +264,24 @@ export const googleLogin = async (req, res) =>{
     // Check if user exists in the database
     let user = await UserModel.findOne({ email });
 
-    // if (!user) {
-    //     // If user does not exist, create a new one
-    //     user = await UserModel.create({
-    //         googleId: sub,  // Google unique ID
-    //         name,
-    //         email,
-    //         profilePicture: picture, 
-    //     });
-    // }
-
     if (!user) {
-      return res.json({ success: false, message: "User not found" });
+      const randomPassword = crypto.randomBytes(32).toString("hex");
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+      user = await UserModel.create({
+        name: name || email.split("@")[0],
+        email,
+        password: hashedPassword,
+        phone: 0,
+        profileImage: picture || "",
+        userRole: "customer",
+      });
     }
-    user.password=undefined;
+
+    const sanitizedUser = user.toObject ? user.toObject() : user;
+    delete sanitizedUser.password;
     const authToken = generateToken(user.id);
     // Generate a new session token (optional, if you want to maintain session-based auth)
-    return res.json({ success: true, user:user,token:authToken });
+    return res.json({ success: true, user:sanitizedUser,token:authToken });
 
   } catch (error) {
       console.error("Google Auth Error:", error);
