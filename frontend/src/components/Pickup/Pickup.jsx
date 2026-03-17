@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../../App';
 import {useSelector} from 'react-redux'
 import{backendUrl}from '../../service/url';
 
@@ -18,7 +17,8 @@ const PickupForm = ({ itemValue = '' }) => {
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(''); // New state for image
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const navigate = useNavigate();
   
   const { token,isAuthenticated } = useSelector((state) => state.auth); // Access context variables
@@ -66,7 +66,6 @@ const PickupForm = ({ itemValue = '' }) => {
       const response = await axios.post(`${backendUrl}/addPickup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
@@ -86,16 +85,24 @@ const PickupForm = ({ itemValue = '' }) => {
 
   // Handle image selection and base64 conversion
   const handleImageChange = (e) => {
-    const imgData = new FileReader();
-    imgData.readAsDataURL(e.target.files[0]);
-    imgData.onload = () => {
-      setImage(imgData.result);
-      console.log(imgData.result);
-    };
-    imgData.onerror = () => {
-      console.log("Error: ", Error);
-    };
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) {
+      setImage(null);
+      setImagePreview('');
+      return;
+    }
+
+    setImage(selectedFile);
+    setImagePreview(URL.createObjectURL(selectedFile));
   };
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   return (
     <div className={`flex justify-center pt-24 pb-12 min-h-screen ${isDarkMode ? 'bg-blue-100' : 'bg-gradient-to-r from-blue-100 to-blue-200'}`}>
@@ -203,10 +210,10 @@ const PickupForm = ({ itemValue = '' }) => {
               onChange={handleImageChange}
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
-            {image == "" || image == null ? (
+            {!imagePreview ? (
               <p className="text-red-500">Please upload an image</p>
             ) : (
-              <img width={100} height={100} src={image} />
+              <img width={100} height={100} src={imagePreview} alt="Pickup preview" />
             )}
           </div>
 

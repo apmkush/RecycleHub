@@ -9,14 +9,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadToCloudinary = async (fileBuffer, fileName) => {
+export const uploadToCloudinary = async (
+  fileBuffer,
+  fileName,
+  folder = 'recyclehub/profiles'
+) => {
   try {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           resource_type: 'auto',
           public_id: `recyclehub/${fileName}-${Date.now()}`,
-          folder: 'recyclehub/profiles',
+          folder,
         },
         (error, result) => {
           if (error) {

@@ -1,14 +1,25 @@
 import {Pickup} from "../models/pickup.js";
 import {UserModel} from "../models/user.js";
+import { uploadToCloudinary } from "../config/cloudinary.js";
 
 
 export const addPickup = async (req, res) => {
     try {
         const {
             item, description, pickupDate, pincode,
-            contactNumber, weight, address, email, image
+            contactNumber, weight, address, email
         } = req.body;
         const RequestedBy = req.user.id;
+        let image = "";
+
+        if (req.file) {
+            const uploadResult = await uploadToCloudinary(
+                req.file.buffer,
+                `pickup-${RequestedBy}`,
+                'recyclehub/pickups'
+            );
+            image = uploadResult.secure_url;
+        }
         
         const newPickup = new Pickup({
             item,
