@@ -71,6 +71,29 @@ export const getOrders = async (req, res) => {
         res.json({ message: 'Error fetching scrap items' });
     }
 }
+export const getTransactions = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const relatedPickups = await Pickup.find({
+            $or: [{ RequestedBy: userId }, { AcceptedBy: userId }],
+        }).sort({ createdAt: -1 });
+
+        const transactions = relatedPickups.map((pickup) => ({
+            id: pickup._id.toString(),
+            itemLabel: pickup.item,
+            itemCount: 1,
+            date: new Date(pickup.pickupDate || pickup.createdAt).toISOString().split('T')[0],
+            amount: typeof pickup.price === 'number' ? pickup.price : 0,
+            status: pickup.status,
+        }));
+
+        return res.json(transactions);
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        return res.status(500).json({ success: false, message: 'Failed to load transactions' });
+    }
+}
 export const acceptPickup = async (req, res) => {
     try {
         const { requestId } = req.body;

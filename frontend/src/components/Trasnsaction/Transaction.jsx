@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaDownload, FaSearch, FaSort } from 'react-icons/fa';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import{backendUrl}from '../../service/url';
 
 function Transactions() {
@@ -12,13 +13,18 @@ function Transactions() {
   const [error, setError] = useState(null);
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [totalItemsCollected, setTotalItemsCollected] = useState(0);
+  const { token } = useSelector((state) => state.auth);
 
   // Fetch transactions from backend
   useEffect(() => {
     const fetchTransactions = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${backendUrl}/transactions`); // Update with your API endpoint
+        const response = await axios.get(`${backendUrl}/transactions`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = Array.isArray(response.data) ? response.data : []; // Ensure data is an array
         setTransactions(data);
         setFilteredTransactions(data); // Set initial filtered data
@@ -34,13 +40,21 @@ function Transactions() {
       }
     };
 
+    if (!token) {
+      setTransactions([]);
+      setFilteredTransactions([]);
+      setError('Please log in to view transactions.');
+      setLoading(false);
+      return;
+    }
+
     fetchTransactions();
-  }, []);
+  }, [token]);
 
   // Update totals based on transactions array
   const updateTotals = (transactionsArray) => {
     const totalEarnings = transactionsArray.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
-    const totalItems = transactionsArray.reduce((count, transaction) => count + (transaction.items || 0), 0);
+    const totalItems = transactionsArray.reduce((count, transaction) => count + (transaction.itemCount || transaction.items || 0), 0);
     setTotalEarnings(totalEarnings);
     setTotalItemsCollected(totalItems);
   };
@@ -132,8 +146,8 @@ function Transactions() {
                   filteredTransactions.map(transaction => (
                     <tr key={transaction.id} className="text-gray-700 dark:text-gray-300 border-b dark:border-gray-700">
                       <td className="px-4 py-2">{transaction.date}</td>
-                      <td className="px-4 py-2">{transaction.items}</td>
-                      <td className="px-4 py-2">${transaction.amount}</td>
+                      <td className="px-4 py-2">{transaction.itemLabel || transaction.items}</td>
+                      <td className="px-4 py-2">₹{transaction.amount}</td>
                       <td className="px-4 py-2">{transaction.status}</td>
                       <td className="px-4 py-2 text-center">
                         <button className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-300">

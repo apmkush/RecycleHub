@@ -3,12 +3,14 @@ import ShowDetails from './ShowDetails';
 import axios, { Axios } from 'axios';;
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from 'react-redux';
 import{backendUrl}from '../../service/url';
 
 const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [accept, setAccept] = useState(false);
   const [reject, setReject] = useState(false);
+  const { token } = useSelector((state) => state.auth);
 
   const  DisplayMessage=(text)=>{
     toast.success(text, {
@@ -36,6 +38,7 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
     try {
       const response = await axios.put(`${backendUrl}/accept-request`, { requestId: details._id },{
         headers:{
+          Authorization: `Bearer ${token}`,
           'Content-Type':'application/json'
         }
       });
@@ -52,9 +55,15 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
   const handleReject =async () => {
     setReject(true);
     try {
-      const response = await axios.put(`${backendUrl}/reject-request`, { requestId: details._id });
+      const response = await axios.put(`${backendUrl}/reject-request`, { requestId: details._id }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type':'application/json'
+        }
+      });
       if(response.data.success){
         DisplayMessage(response.data.message);
+        refreshpage();
       }else{
         DisplayMessage(response.data.message, "error");
       }
@@ -72,10 +81,10 @@ const RequestCard = ({ details, refreshpage }) => { console.log(details);
         className="bg-white shadow-lg rounded-lg p-4 w-64 mx-auto cursor-pointer"
       >
         {/* Image */}
-        <img src={details.image} alt={details.itemName} className="w-full h-40 object-cover rounded-t-lg" />
+        <img src={details.image} alt={details.item || details.itemName} className="w-full h-40 object-cover rounded-t-lg" />
 
         {/* Item Name */}
-        <h3 className="text-xl font-semibold text-gray-800 mt-4 text-center">{details.itemName}</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mt-4 text-center">{details.item || details.itemName}</h3>
 
         {/* Centered Buttons */}
         <div className="flex justify-center gap-x-4 mt-6">
