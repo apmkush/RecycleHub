@@ -34,12 +34,13 @@ export const createOrder = async (req, res) => {
 
 // Verify payment
 export const verifyPayment = async (req, res) => {
-    const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature,customer_id } = req.body;
+    const { razorpay_payment_id, razorpay_subscription_id, razorpay_signature } = req.body;
+    const customerId = req.user.id;
     const secret = razorpaySecret;
     if (!secret) {
       return res.status(500).json({ success: false, message: 'Razorpay secret is not configured' });
     }
-    console.log('customer_id:',customer_id);
+    console.log('customer_id:',customerId);
     const generated_signature = crypto
       .createHmac('sha256', secret)
       .update(razorpay_payment_id + '|' + razorpay_subscription_id)
@@ -48,7 +49,7 @@ export const verifyPayment = async (req, res) => {
       try {
         const newSubscription = new SubscriptionModel({
           razorpay_subscription_id,
-          customer_id:customer_id, 
+          customer_id:customerId,
         });
     
         const savedSubscription = await newSubscription.save();
@@ -69,31 +70,19 @@ export const verifyPayment = async (req, res) => {
 
   // Fetch subscription details
   export const fetchSubscriptions = async (req, res) => {
-    var subscriptionId;
-    const { UserId } = req.query;
-    console.log(req.query);
+    try {
+      const userId = req.user.id;
+      const subscriptionRecord = await SubscriptionModel.findOne({ customer_id: userId }).sort({ createdAt: -1 });
 
-    try {
-      const subscriptions = await SubscriptionModel.find({customer_id:UserId});
-      if (!subscriptions[0]) {
-        return res.json([]); // Return empty array if no subscription found
+      if (!subscriptionRecord) {
+        return res.json([]);
       }
-      subscriptionId=subscriptions[0].razorpay_subscription_id;
-      // console.log('Subscriptions:', subscriptionId);
+
+      const subscription = await razorpayInstance.subscriptions.fetch(subscriptionRecord.razorpay_subscription_id);
+      return res.json(subscription ? [subscription] : []);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
-      return res.json([]); // Return empty array on error
-    }
-    try {
-      const allSubscriptions = await razorpayInstance.subscriptions.all();
-      const subscriptions = allSubscriptions.items.filter(
-        (sub) => sub.id === subscriptionId
-      );
-      console.log('Subscriptions:', subscriptions);
-      res.json(subscriptions);
-    } catch (error) {
-      console.error('Error fetching subscriptions:', error);
-      res.json([]); // Return empty array instead of 500 error
+      return res.json([]);
     }
   };
 

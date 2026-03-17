@@ -8,7 +8,7 @@ import{backendUrl}from '../../service/url';
 
 const Payment = (plan) => {
   const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
-  const { user } = useSelector((state) => state.auth); // Assuming `user` is fetched from Redux
+  const { user, token } = useSelector((state) => state.auth); // Assuming `user` is fetched from Redux
   // console.log(user._id);
 
   const DisplayMessage = (text) => {
@@ -44,6 +44,10 @@ const Payment = (plan) => {
         name: user.name,
         email: user.email,
         contact: user.phone,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       // console.log('Response Data:', response.data);
@@ -75,7 +79,10 @@ const Payment = (plan) => {
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_subscription_id: response.razorpay_subscription_id,
             razorpay_signature: response.razorpay_signature,
-            customer_id:user._id,
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
           if(res.data.success){
             DisplayMessage('Payment verified and subscription activated.');

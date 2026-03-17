@@ -8,18 +8,17 @@ import{backendUrl}from '../../service/url';
 // toast.configure();
 
 const SubscriptionStatus = () => {
-  const { user } = useSelector((state) => state.auth);
-  const UserId = user._id;
+  const { token } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
   const [subscriptions, setSubscriptions] = useState([]);
 
   const fetchSubscriptions = async () => {
     try {
         const response = await axios.get(`${backendUrl}/fetch-subscriptions`, {
-            params: {
-              UserId
-            }
-          });
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+        });
       setSubscriptions(response.data);
       console.log('Subscriptions:', response.data);
     } catch (error) {
