@@ -22,15 +22,24 @@ const addressSchema = new mongoose.Schema({
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
-        require:true
+        required:true
     },
     email:{
         type:String,
-        require:true
+        required:true,
+        unique:true,
+        lowercase:true,
+        trim:true,
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true,
     },
     phone:{
-        type:Number,
-        require:true
+        type:String,
+        required:true,
+        trim:true,
     },
     password: {
         type: String,

@@ -65,7 +65,7 @@ export const signup = async (req, res) => {
       const userdata = await UserModel.create({
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: String(data.phone || "").trim(),
         password: hashedPassword,
         userRole: data.userRole,
       });
@@ -255,20 +255,36 @@ export const googleLogin = async (req, res) =>{
         return res.status(401).json({ success: false, message: "Invalid token" });
     }
 
-    // Check if user exists in the database
-    let user = await UserModel.findOne({ email });
+    // Check if user exists in the database by googleId or email.
+    let user = await UserModel.findOne({
+      $or: [{ googleId: sub }, { email }],
+    });
 
     if (!user) {
       const randomPassword = crypto.randomBytes(32).toString("hex");
       const hashedPassword = await bcrypt.hash(randomPassword, 10);
       user = await UserModel.create({
+        googleId: sub,
         name: name || email.split("@")[0],
         email,
         password: hashedPassword,
-        phone: 0,
+        phone: "0000000000",
         profileImage: picture || "",
         userRole: "customer",
       });
+    } else {
+      let needsSave = false;
+      if (!user.googleId) {
+        user.googleId = sub;
+        needsSave = true;
+      }
+      if (!user.profileImage && picture) {
+        user.profileImage = picture;
+        needsSave = true;
+      }
+      if (needsSave) {
+        await user.save();
+      }
     }
 
     const sanitizedUser = user.toObject ? user.toObject() : user;
@@ -289,7 +305,10 @@ export const updateData = async (req, res) => {
   const UserId = req.user.id;
   // console.log("Profile image",req.body);
   try {
-    const updateObj = { name, email, phone, address, age, profileImage };
+    const updateObj = { name, email, address, age, profileImage };
+    if (typeof phone !== "undefined") {
+      updateObj.phone = String(phone).trim();
+    }
     if (addresses) {
       updateObj.addresses = addresses;
     }
