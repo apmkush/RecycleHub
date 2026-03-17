@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcryptjs";
 import axios from "axios";
-import crypto from "crypto";
 import { validationResult } from "express-validator";
 import nodemailer from "nodemailer";
 import {UserModel} from "../models/user.js";
@@ -27,6 +26,9 @@ export const login = async (req, res) => {
         if(!check){
             return res.json({success:false,message:"user cannot be found"});
         }
+      if (!check.password) {
+        return res.json({success:false,message:"This account uses Google login"});
+      }
         const isPasswordMatch = await bcrypt.compare(req.body.password,check.password);
         if(isPasswordMatch){
             const authToken = generateToken(check.id);
@@ -261,13 +263,10 @@ export const googleLogin = async (req, res) =>{
     });
 
     if (!user) {
-      const randomPassword = crypto.randomBytes(32).toString("hex");
-      const hashedPassword = await bcrypt.hash(randomPassword, 10);
       user = await UserModel.create({
         googleId: sub,
         name: name || email.split("@")[0],
         email,
-        password: hashedPassword,
         phone: "0000000000",
         profileImage: picture || "",
         userRole: "customer",

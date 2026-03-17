@@ -43,7 +43,10 @@ const userSchema=new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        default: null,
+        required: function () {
+            return !this.googleId;
+        },
     },
     age:{
         type:Number,

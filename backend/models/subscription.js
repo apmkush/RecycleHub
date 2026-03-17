@@ -10,7 +10,7 @@ const SubscriptionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User', // Assuming there's a Dealer model for users who create subscriptions
     required: true,
-    unique: true,
+    index: true,
   },
   createdAt: {
     type: Date,
