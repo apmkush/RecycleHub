@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const JWT_KEY = process.env.JWT_SECRET || "default_secret";
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 export const generateToken = (userId) => {
-  return sign({ user: { id: userId } }, JWT_KEY);
+  return sign({ user: { id: userId } }, JWT_KEY, { expiresIn: JWT_EXPIRES_IN });
 };
 
 export const verifyToken = (token) => {

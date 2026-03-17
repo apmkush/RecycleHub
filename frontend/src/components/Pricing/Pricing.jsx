@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect , useState } from 'react';
 import axios, { Axios } from 'axios';;
+import { useSelector } from 'react-redux';
 import Card from './Card';
 import AddItem from './AddItem';
 import AddDetails from './AddDetails';
@@ -10,6 +11,8 @@ const Pricing = ({userRole}) => {
   const [scrapItems, setScrapItems] = React.useState([]);
   const [showAddDetails, setShowAddDetails] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const { user } = useSelector((state) => state.auth);
+  const effectiveUserRole = user?.userRole || userRole || 'customer';
 
   const fetchScrapItems = async () => {
     try {
@@ -54,11 +57,13 @@ const Pricing = ({userRole}) => {
                 image={item.image}
                 price={item.price}
                 material={item.material}
-                userRole="admin"
+                userRole={effectiveUserRole}
               />
             ))}
-            <AddItem setShowAddDetails = {setShowAddDetails} setSelectedCategory = {setSelectedCategory} category={category}/>
-            {showAddDetails && selectedCategory && (
+            {effectiveUserRole === 'admin' && (
+              <AddItem setShowAddDetails = {setShowAddDetails} setSelectedCategory = {setSelectedCategory} category={category}/>
+            )}
+            {effectiveUserRole === 'admin' && showAddDetails && selectedCategory && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <AddDetails 
                   setShowAddDetails={setShowAddDetails}

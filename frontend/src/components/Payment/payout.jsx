@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import{backendUrl}from '../../service/url';
 
 const PayoutForm = () => {
@@ -7,9 +8,15 @@ const PayoutForm = () => {
     const [ifscCode, setIfscCode] = useState('');
     const [amount, setAmount] = useState('');
     const [status, setStatus] = useState('');
+    const { token } = useSelector((state) => state.auth);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!token) {
+            setStatus('Please login to request payout');
+            return;
+        }
 
         // Validate fields
         if (!accountNumber || !ifscCode || !amount) {
@@ -23,10 +30,17 @@ const PayoutForm = () => {
                 account_number: accountNumber,
                 ifsc_code: ifscCode,
                 amount: amount
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             });
 
-            if (response.data.message === 'Payout initiated successfully') {
-                setStatus('Payout successful!');
+            if (response.data.success) {
+                setStatus(response.data.message || 'Payout request submitted successfully');
+            } else {
+                setStatus(response.data.message || 'Error initiating payout');
             }
         } catch (error) {
             setStatus('Error initiating payout');

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import {SubscriptionModel} from '../models/subscription.js';
+import { PayoutRequestModel } from '../models/payoutRequest.js';
 
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID || process.env.REACT_APP_RAZORPAY_KEY_ID;
 const razorpaySecret = process.env.RAZORPAY_SECRET || process.env.REACT_APP_RAZORPAY_SECRET;
@@ -98,4 +99,32 @@ export const verifyPayment = async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch plans' });
     }
   }
+
+export const createPayoutRequest = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { account_number, ifsc_code, amount } = req.body;
+    const parsedAmount = Number(amount);
+
+    if (!account_number || !ifsc_code || !Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid payout details' });
+    }
+
+    const payoutRequest = await PayoutRequestModel.create({
+      userId,
+      accountNumber: String(account_number).trim(),
+      ifscCode: String(ifsc_code).trim().toUpperCase(),
+      amount: parsedAmount,
+    });
+
+    return res.json({
+      success: true,
+      message: 'Payout request submitted successfully',
+      payoutRequest,
+    });
+  } catch (error) {
+    console.error('Create payout request error:', error);
+    return res.status(500).json({ success: false, message: 'Error initiating payout request' });
+  }
+};
 

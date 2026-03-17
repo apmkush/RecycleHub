@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../store/authSlice.js';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import 'react-toastify/dist/ReactToastify.css';
 import './../../index.css';
 import{backendUrl}from '../../service/url';
@@ -33,8 +32,9 @@ const Login = () => {
     });
 
 
-    const DisplayMessage = (text) => {
-        toast.success(text, {
+    const DisplayMessage = (text, type = 'success') => {
+        const toastFn = type === 'error' ? toast.error : toast.success;
+        toastFn(text, {
             position: "top-center",
             autoClose: 1500,
             hideProgressBar: false,
@@ -70,6 +70,9 @@ const Login = () => {
                 DisplayMessage(response.data.message);
 
                 dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
+                setTimeout(() => {
+                    navigate('/Home');
+                }, 2000);
 
             } else {
                 DisplayMessage(response.data.message, "error");
@@ -79,9 +82,6 @@ const Login = () => {
             console.log(e);
             DisplayMessage("An error has occurred!", "error");
         }
-        setTimeout(() => {
-            navigate('/Home');
-        }, 2000);
     };
     // useEffect(() => {
     //     if (userId && userType) {
@@ -115,31 +115,33 @@ const Login = () => {
 
     const handleLoginSuccess = async (credentialResponse) => {
         const token = credentialResponse.credential;
-        // console.log(token);
-        const userDetails = jwtDecode(token);
-        console.log(userDetails);
-        // Further token handling can be added here if necessary
-        const response = await axios.get(`${backendUrl}/google-login`,
-            {
-              headers: {
-                  Authorization: `${token}`, // Send JWT token in headers
-              },
-          });
-          if(response.data.success){
-            console.log(response.data); 
-            dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
-            DisplayMessage("Login successfully!!");
-            setTimeout(() => {
-                navigate('/Home');
-            }, 2000);
-          }else{
-            console.log(response.data.message);
-          }
+
+        try {
+            const response = await axios.post(`${backendUrl}/google-login`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if(response.data.success){
+                console.log(response.data);
+                dispatch(loginSuccess({ user: response.data.user, token: response.data.token }));
+                DisplayMessage("Login successfully!!");
+                setTimeout(() => {
+                    navigate('/Home');
+                }, 2000);
+            }else{
+                DisplayMessage(response.data.message || "Google login failed", "error");
+            }
+        } catch (error) {
+            console.log(error);
+            DisplayMessage("Google login failed", "error");
+        }
     };
 
     const handleLoginError = () => {
         console.log('Login Failed');
-        DisplayMessage("Login Failed!!");
+        DisplayMessage("Login Failed!!", "error");
     };
 
     const toggleShowPassword = () => {
