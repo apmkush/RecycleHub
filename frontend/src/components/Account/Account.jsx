@@ -19,7 +19,15 @@ function Account() {
   const dispatch = useDispatch();
   const location = useLocation(); // Get current location
   const navigate = useNavigate();
-  const isDarkMode = useSelector((state) => state.theme.darkMode) ; 
+  const isDarkMode = useSelector((state) => state.theme.darkMode);
+  
+  // Verify user is authenticated
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
+  // If not authenticated, redirect to login
+  if (!isAuthenticated || !user) {
+    return <Navigate to="/Login" replace />;
+  } 
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

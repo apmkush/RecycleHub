@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector} from 'react-redux'
 import{backendUrl}from '../../service/url';
+import CategorizationModal from './CategorizationModal';
 
 const PickupForm = ({ itemValue = '' }) => {
   const isDarkMode = useSelector((state) => state.theme.darkMode);
@@ -19,6 +20,7 @@ const PickupForm = ({ itemValue = '' }) => {
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [showCategorizationModal, setShowCategorizationModal] = useState(false);
   const navigate = useNavigate();
   
   const { token,isAuthenticated } = useSelector((state) => state.auth); // Access context variables
@@ -83,7 +85,7 @@ const PickupForm = ({ itemValue = '' }) => {
     }
   };
 
-  // Handle image selection and base64 conversion
+  // Handle image selection and open categorization modal
   const handleImageChange = (e) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) {
@@ -92,8 +94,41 @@ const PickupForm = ({ itemValue = '' }) => {
       return;
     }
 
+    // Check if user is authenticated before opening categorization
+    if (!isAuthenticated) {
+      DisplayMessage("Please log in to use Gemini Vision AI categorization", "error");
+      navigate('/login');
+      return;
+    }
+
+    if (!token) {
+      DisplayMessage("Authentication token not found. Please log in again.", "error");
+      navigate('/login');
+      return;
+    }
+
     setImage(selectedFile);
     setImagePreview(URL.createObjectURL(selectedFile));
+    
+    // Show categorization modal when image is selected
+    setTimeout(() => {
+      setShowCategorizationModal(true);
+    }, 500);
+  };
+
+  // Handle categorization result
+  const handleCategorizationAccept = (categorizedData) => {
+    // Auto-fill form fields with categorized data
+    setItem(categorizedData.item || item);
+    if (categorizedData.weight) setWeight(categorizedData.weight);
+    if (categorizedData.description) setDescription(categorizedData.description);
+    
+    // Show message about which fields were auto-filled
+    const method = categorizedData.geminiCategorized ? 'Gemini Vision' : 'manual entry';
+    toast.success(`Auto-filled using ${method}! You can edit the fields.`, {
+      position: "top-center",
+      autoClose: 3000,
+    });
   };
 
   useEffect(() => {
@@ -107,6 +142,17 @@ const PickupForm = ({ itemValue = '' }) => {
   return (
     <div className={`flex justify-center pt-24 pb-12 min-h-screen ${isDarkMode ? 'bg-blue-100' : 'bg-gradient-to-r from-blue-100 to-blue-200'}`}>
       <ToastContainer />
+      
+      {/* Categorization Modal */}
+      {showCategorizationModal && (
+        <CategorizationModal
+          imageFile={image}
+          imagePreview={imagePreview}
+          onAccept={handleCategorizationAccept}
+          onClose={() => setShowCategorizationModal(false)}
+        />
+      )}
+      
       <div className={`w-full max-w-5xl p-10 lg:p-16 shadow-2xl rounded-lg border-t-4 ${isDarkMode ? 'bg-gray-900 border-gray-600' : 'bg-white border-blue-600'}`}>
         <h2 className={`text-4xl font-bold mb-10 text-center ${isDarkMode ? 'text-gray-200' : 'text-blue-700'}`}>Scrap Pickup Form</h2>
         <form onSubmit={handleSubmit}>
@@ -203,17 +249,21 @@ const PickupForm = ({ itemValue = '' }) => {
 
           {/* Scrap Image */}
           <div className="mb-8">
-            <label className="block text-blue-800 font-semibold mb-2">Scrap Image</label>
+            <label className="block text-blue-800 font-semibold mb-2">Scrap Image <span className="text-green-600 text-sm">(Auto-categorization enabled)</span></label>
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
               className="w-full p-4 bg-blue-50 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
+            <p className="text-sm text-gray-600 mt-2">💡 Uploading an image will trigger automatic categorization using Gemini Vision AI</p>
             {!imagePreview ? (
-              <p className="text-red-500">Please upload an image</p>
+              <p className="text-red-500 mt-2">Please upload an image</p>
             ) : (
-              <img width={100} height={100} src={imagePreview} alt="Pickup preview" />
+              <div className="mt-4">
+                <img width={100} height={100} src={imagePreview} alt="Pickup preview" className="rounded border border-gray-300" />
+                <p className="text-sm text-green-600 mt-2">✓ Image selected - Categorization modal will appear</p>
+              </div>
             )}
           </div>
 

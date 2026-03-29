@@ -21,6 +21,7 @@ import ElectronicScrapInfo from './components/Footer/ElectronicScrapInfo.jsx';
 import Best from './components/Footer/Best.jsx';
 import NotFound from './components/NotFound/NotFound.jsx'
 import { UserProvider } from './App.jsx';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 
 const router = createBrowserRouter([
@@ -30,28 +31,36 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'Home', element: <Home /> },
-      { path: 'Transactions', element: <Transactions /> },
+      
+      // Public routes (no authentication required)
       { path: 'Login', element: <Login /> },
       { path: 'Signup', element: <Signup /> },
-      { path: 'Pickup', element: <PickupForm /> },
-      { path: 'Requests', element: <Requests /> },
-      { path: 'Pricing', element: <Pricing /> },
-      { path: 'Dashboard', element: <Dashboard /> },
-      { path: 'Account/*', element: <Account /> },
-      { path: 'Cart', element: <Cart /> },
-      { path: 'payout', element: <PayoutForm /> },
       { path: 'CopperScrapInfo', element: <CopperScrapInfo /> },
       { path: 'BrassScrapInfo', element: <BrassScrapInfo /> },
       { path: 'ElectronicScrapInfo', element: <ElectronicScrapInfo /> },
       { path: 'Best', element: <Best /> },
-      { path: 'billing', element: <BillGenerator /> },
+      
+      // Customer routes (all authenticated users)
+      { path: 'Transactions', element: <ProtectedRoute><Transactions /></ProtectedRoute> },
+      { path: 'Pickup', element: <ProtectedRoute><PickupForm /></ProtectedRoute> },
+      { path: 'Account/*', element: <ProtectedRoute><Account /></ProtectedRoute> },
+      { path: 'Cart', element: <ProtectedRoute><Cart /></ProtectedRoute> },
+      
+      // Admin & Dealer routes
+      { path: 'Requests', element: <ProtectedRoute requiredRoles={['admin', 'dealer']}><Requests /></ProtectedRoute> },
+      { path: 'Dashboard', element: <ProtectedRoute requiredRoles={['admin', 'dealer']}><Dashboard /></ProtectedRoute> },
+      { path: 'billing', element: <ProtectedRoute requiredRoles={['admin', 'dealer']}><BillGenerator /></ProtectedRoute> },
+      
+      // Admin only routes
+      { path: 'Pricing', element: <ProtectedRoute requiredRoles={['admin']}><Pricing /></ProtectedRoute> },
+      
+      // Dealer only routes
+      { path: 'payout', element: <ProtectedRoute requiredRoles={['dealer']}><PayoutForm /></ProtectedRoute> },
+      
+      // Fallback 404
       { path: '*', element: <NotFound/> },
     ],
   },
-  // {
-  //   path: 'subscriptions',
-  //   element: <Subscriptions />,
-  // },
 ]);
 
 const Index = () => {

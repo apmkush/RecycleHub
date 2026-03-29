@@ -1,58 +1,16 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromCart, updateQuantity, clearCart } from '../../store/slices/cartSlice.js';
+import { toast } from 'react-toastify';
 import ShowDetails from './ShowDetails';
 
 const Cart = () => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [bought, setBought] = useState(false); // Track if items are bought
-
-  const items = [
-    {
-      itemName: 'Laptop',
-      image: './laptop.png',
-      address: '123 Tech Street, Cityville',
-      price: 500,
-      status: 'added to cart',
-      date: '2023-05-21',
-      weight: '2 kg',
-      pickupTime: '10:00 AM',
-      description: 'A slightly used laptop, ready for recycling.',
-    },
-    {
-      itemName: 'Smartphone',
-      image: './smartphone.png',
-      address: '456 Mobile Avenue, Townsville',
-      price: 200,
-      status: 'added to cart',
-      date: '2023-06-15',
-      weight: '0.3 kg',
-      pickupTime: '02:00 PM',
-      description: 'A functional smartphone with minor scratches.',
-    },
-    {
-      itemName: 'Tablet',
-      image: './tablet.png',
-      address: '789 Gadget Street, Metropolis',
-      price: 300,
-      status: 'added to cart',
-      date: '2023-07-10',
-      weight: '0.5 kg',
-      pickupTime: '09:00 AM',
-      description: 'A tablet in good condition, ready for use or recycling.',
-    },
-    {
-      itemName: 'Headphones',
-      image: './headphones.png',
-      address: '101 Audio Lane, Sound City',
-      price: 80,
-      status: 'added to cart',
-      date: '2023-08-05',
-      weight: '0.2 kg',
-      pickupTime: '11:30 AM',
-      description: 'Noise-canceling headphones with minimal wear.',
-    },
-  ];
-
-  const cartItems = items.filter((item) => item.status === 'added to cart');
+  const [bought, setBought] = useState(false);
+  
+  // Get cart from Redux
+  const { items: cartItems, totalPrice } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   const handleRowClick = (item) => {
     setSelectedItem(item);
@@ -63,52 +21,170 @@ const Cart = () => {
   };
 
   const handleBuyClick = () => {
+    if (cartItems.length === 0) {
+      toast.error('Cart is empty!', {
+        position: "top-center",
+        autoClose: 1500,
+      });
+      return;
+    }
     setBought(true);
-    // Additional logic for handling purchase could go here
+    // After successful purchase, clear the cart
+    setTimeout(() => {
+      dispatch(clearCart());
+      setBought(false);
+      toast.success('Purchase completed successfully!', {
+        position: "top-center",
+        autoClose: 1500,
+      });
+    }, 2000);
+  };
+
+  const handleRemoveItem = (itemId) => {
+    dispatch(removeFromCart(itemId));
+    toast.info('Item removed from cart', {
+      position: "top-right",
+      autoClose: 1000,
+    });
+  };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    if (newQuantity > 0) {
+      dispatch(updateQuantity({ id: itemId, quantity: newQuantity }));
+    }
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+    toast.info('Cart cleared', {
+      position: "top-center",
+      autoClose: 1000,
+    });
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-center mb-4">
-        <button
-          onClick={handleBuyClick}
-          className="bg-blue-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-blue-600"
-        >
-          Buy ({cartItems.length}) Items
-        </button>
+    <div className="p-6 max-w-6xl mx-auto">
+      {/* Header with action buttons */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Shopping Cart</h1>
+        <div className="flex gap-3">
+          {cartItems.length > 0 && (
+            <button
+              onClick={handleClearCart}
+              className="bg-red-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-red-600 transition"
+            >
+              Clear Cart
+            </button>
+          )}
+          <button
+            onClick={handleBuyClick}
+            className="bg-blue-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={cartItems.length === 0}
+          >
+            Buy ({cartItems.length}) Items
+          </button>
+        </div>
       </div>
 
-      {bought && <p className="text-green-500 text-center mb-4">Items have been bought!</p>}
+      {bought && (
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+          <p className="text-green-700 font-semibold">✓ Items purchased successfully!</p>
+        </div>
+      )}
 
-      <div className="overflow-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
-          <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th className="py-3 px-6 text-left">Item</th>
-              <th className="py-3 px-6 text-left">Address</th>
-              <th className="py-3 px-6 text-center">Date</th>
-              <th className="py-3 px-6 text-center">Price</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700 text-sm font-light">
-            {cartItems.map((item, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleRowClick(item)}
-              >
-                <td className="py-3 px-6 flex items-center space-x-3">
-                  <img src={item.image} alt={item.itemName} className="w-10 h-10 rounded-full" />
-                  <span>{item.itemName}</span>
-                </td>
-                <td className="py-3 px-6">{item.address}</td>
-                <td className="py-3 px-6 text-center">{item.date}</td>
-                <td className="py-3 px-6 text-center">${item.price}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {cartItems.length === 0 ? (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <p className="text-gray-600 text-lg mb-4">Your cart is empty</p>
+          <p className="text-gray-500">Browse the Pricing page to add items to your cart</p>
+        </div>
+      ) : (
+        <>
+          <div className="overflow-auto">
+            <table className="min-w-full bg-white rounded-lg shadow-md">
+              <thead>
+                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                  <th className="py-3 px-6 text-left">Item</th>
+                  <th className="py-3 px-6 text-left">Price</th>
+                  <th className="py-3 px-6 text-center">Quantity</th>
+                  <th className="py-3 px-6 text-center">Total</th>
+                  <th className="py-3 px-6 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700 text-sm font-light">
+                {cartItems.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleRowClick(item)}
+                  >
+                    <td className="py-3 px-6 flex items-center space-x-3">
+                      {item.image && (
+                        <img src={item.image} alt={item.material} className="w-10 h-10 rounded-full object-cover" />
+                      )}
+                      <span className="font-semibold">{item.material}</span>
+                    </td>
+                    <td className="py-3 px-6">₹{item.price.toFixed(2)}</td>
+                    <td className="py-3 px-6 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleQuantityChange(item.id, item.quantity - 1);
+                          }}
+                          className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-2 py-1 rounded"
+                        >
+                          -
+                        </button>
+                        <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleQuantityChange(item.id, item.quantity + 1);
+                          }}
+                          className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-2 py-1 rounded"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td className="py-3 px-6 text-center font-semibold">₹{(item.price * item.quantity).toFixed(2)}</td>
+                    <td className="py-3 px-6 text-center">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveItem(item.id);
+                        }}
+                        className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition text-xs"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Total Price Summary */}
+          <div className="mt-6 flex justify-end">
+            <div className="bg-gray-50 rounded-lg p-6 w-full max-w-sm border border-gray-200">
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-700">Subtotal:</span>
+                <span className="text-gray-700">₹{totalPrice.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-700">Items:</span>
+                <span className="text-gray-700">{cartItems.length}</span>
+              </div>
+              <div className="border-t border-gray-300 my-3"></div>
+              <div className="flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span className="text-blue-600">₹{totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {selectedItem && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">

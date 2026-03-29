@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../store/slices/cartSlice.js';
+import { ToastContainer, toast } from 'react-toastify';
 import imageTest from "./images/NonRecyclable/Aluminium.png";
 import{backendUrl}from '../../service/url';
 
@@ -9,6 +12,7 @@ const Card = ({ id, image, price, material, userRole, description }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
   const [isVisible, setIsVisible] = useState(true);               // jaise hi ye false ho to isko database se nikal do 
+  const dispatch = useDispatch();
 
   // Function to toggle edit mode
   const toggleEdit = () => setIsEditing(!isEditing);
@@ -32,6 +36,21 @@ const Card = ({ id, image, price, material, userRole, description }) => {
     } catch (error) {
       console.error('Error deleting card:', error);
     }
+  };
+
+  // Handle add to cart
+  const handleAddToCart = () => {
+    dispatch(addToCart({
+      id,
+      image,
+      price: Number(currentPrice),
+      material,
+      description: description || 'Recyclable material',
+    }));
+    toast.success(`${material} added to cart!`, {
+      position: "top-right",
+      autoClose: 1500,
+    });
   };
 
   // Return null if isVisible is false to hide the card
@@ -81,6 +100,16 @@ const Card = ({ id, image, price, material, userRole, description }) => {
               className="mt-2 bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-600 transition"
             >
               {isEditing ? 'Save' : 'Edit Price'}
+            </button>
+          )}
+
+          {/* Add to cart button for all users */}
+          {userRole !== 'admin' && (
+            <button
+              onClick={handleAddToCart}
+              className="mt-2 bg-green-500 text-white py-1 px-4 rounded-lg hover:bg-green-600 transition"
+            >
+              + Cart
             </button>
           )}
         </div>
