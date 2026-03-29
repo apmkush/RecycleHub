@@ -1,5 +1,6 @@
 import { InvoiceModel } from "../models/invoice.js";
 import { Pickup } from "../models/pickup.js";
+import { UserModel } from "../models/user.js";
 
 const normalizeItems = (items) => {
   if (!Array.isArray(items)) {
@@ -25,6 +26,17 @@ const normalizeItems = (items) => {
 export const createInvoice = async (req, res) => {
   try {
     const dealerId = req.user.id;
+    
+    // Verify user is admin or dealer
+    const user = await UserModel.findById(dealerId).select("userRole");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    if (!["admin", "dealer"].includes(user.userRole)) {
+      return res.status(403).json({ success: false, message: "Access denied. Admin or Dealer role required." });
+    }
+
     const { customer, items, pickupId } = req.body;
 
     if (!customer?.name || !customer?.phone) {
@@ -70,6 +82,17 @@ export const createInvoice = async (req, res) => {
 export const getInvoices = async (req, res) => {
   try {
     const dealerId = req.user.id;
+    
+    // Verify user is admin or dealer
+    const user = await UserModel.findById(dealerId).select("userRole");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    if (!["admin", "dealer"].includes(user.userRole)) {
+      return res.status(403).json({ success: false, message: "Access denied. Admin or Dealer role required." });
+    }
+
     const invoices = await InvoiceModel.find({ dealerId })
       .sort({ createdAt: -1 })
       .limit(100);

@@ -5,6 +5,7 @@ dotenv.config();
 
 import {SubscriptionModel} from '../models/subscription.js';
 import { PayoutRequestModel } from '../models/payoutRequest.js';
+import { UserModel } from '../models/user.js';
 
 const razorpayKeyId = process.env.RAZORPAY_KEY_ID || process.env.REACT_APP_RAZORPAY_KEY_ID;
 const razorpaySecret = process.env.RAZORPAY_SECRET || process.env.REACT_APP_RAZORPAY_SECRET;
@@ -103,6 +104,17 @@ export const verifyPayment = async (req, res) => {
 export const createPayoutRequest = async (req, res) => {
   try {
     const userId = req.user.id;
+    
+    // Verify user is dealer or admin
+    const user = await UserModel.findById(userId).select("userRole");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    if (!["dealer", "admin"].includes(user.userRole)) {
+      return res.status(403).json({ success: false, message: "Access denied. Dealer role required." });
+    }
+
     const { account_number, ifsc_code, amount } = req.body;
     const parsedAmount = Number(amount);
 

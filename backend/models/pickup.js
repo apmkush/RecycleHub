@@ -44,7 +44,7 @@ const PickupSchema = new mongoose.Schema({
     },
     status: { 
         type: String, 
-        enum: ['not accepted', 'completed', 'accepted'], 
+        enum: ['not accepted', 'accepted', 'in-progress', 'completed'], 
         default: 'not accepted' 
     },
     RequestedBy: {
