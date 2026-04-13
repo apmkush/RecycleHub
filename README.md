@@ -1,4 +1,4 @@
-# RecycleHub - Intelligent Scrap Recycling Platform
+# RecycleHub - Scrap Recycling Platform
 
 RecycleHub is a comprehensive full-stack platform designed to streamline scrap collection, pricing, and management through user-friendly interfaces and intelligent categorization. It connects customers, dealers, and administrators in a secure, role-based ecosystem for sustainable recycling.
 
@@ -7,7 +7,6 @@ RecycleHub is a comprehensive full-stack platform designed to streamline scrap c
 ## 🌟 Key Features
 
 ### For Customers
-- **Gemini Vision API Integration** - Automatic scrap categorization using AI image recognition
 - **Pickup Schedule** - Schedule scrap pickups with detailed location tracking
 - **Price Lookup** - Check real-time prices for different scrap materials
 - **Transaction History** - View all past transactions and related pickups
@@ -41,7 +40,6 @@ RecycleHub is a comprehensive full-stack platform designed to streamline scrap c
 |-------|-----------|
 | **Frontend** | React 18, Vite, Tailwind CSS, Redux Toolkit, React Router |
 | **Backend** | Node.js, Express.js, MongoDB, Mongoose |
-| **AI/APIs** | Google Generative AI (Gemini Vision), Razorpay, Nodemailer |
 | **Storage** | Cloudinary (image hosting), MongoDB Atlas (database) |
 | **State Management** | Redux with redux-persist (localStorage) |
 
@@ -134,9 +132,6 @@ GOOGLE_CLIENT_ID=your_google_client_id
 RAZORPAY_KEY_ID=your_razorpay_key
 RAZORPAY_SECRET=your_razorpay_secret
 
-# AI Integration
-GEMINI_API_KEY=your_gemini_api_key
-
 # Frontend URLs
 FRONTEND_URL=https://deployed-frontend-url.com
 FRONTEND_DEV_URL=http://localhost:5173
@@ -215,25 +210,19 @@ npm run dev
 
 ## 🎯 Core Implementation Details
 
-### 1. Gemini Vision API Integration
-Automatic scrap categorization using AI:
-```javascript
-// User uploads image → Gemini analyzes → System categorizes and suggests price
-```
-
-### 2. Shopping Cart with Redux
+### 1. Shopping Cart with Redux
 State management persisting to localStorage:
 - Add items from pricing page
 - Update quantities dynamically
 - Clear cart functionality
 - Auto-calculate totals
 
-### 3. Email Notifications
+### 1. Email Notifications
 - OTP for authentication
 - Pickup acceptance notifications to customers
 - Password reset emails
 
-### 4. Protected Routes
+### 1. Protected Routes
 - ProtectedRoute component wraps authenticated routes
 - localStorage persistence for auth state
 - Multi-layer security with role validation
@@ -268,25 +257,3 @@ State management persisting to localStorage:
 - [ ] Rating and review system
 - [ ] Environmental impact metrics
 - [ ] API rate limiting and optimization
-
----
-
-## 🤝 Contributing
-
-This project is actively maintained. For bug reports and feature requests, please create an issue.
-
----
-
-## 📄 License
-
-This project is proprietary software. All rights reserved.
-
----
-
-## 📞 Support
-
-For issues or questions, please contact the development team or create an issue in the repository.
-
----
-
-**Last Updated:** March 2026
