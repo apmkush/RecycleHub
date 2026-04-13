@@ -2,6 +2,8 @@
 
 RecycleHub is a comprehensive full-stack platform designed to streamline scrap collection, pricing, and management through user-friendly interfaces and intelligent categorization. It connects customers, dealers, and administrators in a secure, role-based ecosystem for sustainable recycling.
 
+Deployed Link:- https://recycle-hub-psi.vercel.app
+
 ---
 
 ## 🌟 Key Features
@@ -226,13 +228,6 @@ State management persisting to localStorage:
 - ProtectedRoute component wraps authenticated routes
 - localStorage persistence for auth state
 - Multi-layer security with role validation
-
----
-
-## 📱 Live Deployment
-
-- **Frontend:** https://recycle-hub-psi.vercel.app
-- **Backend:** https://recyclehub-d3gj.onrender.com (configured)
 
 ---
 
